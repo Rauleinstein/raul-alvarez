@@ -125,7 +125,8 @@ button, a, [role="button"], summary { cursor: pointer; }
     --code-var: 270 50% 45%;       /* purple */
     --hero-orb-primary: 187 74% 28% / 0.15;
     --hero-orb-accent: 270 70% 38% / 0.12;
-    --dot-grid: 240 5% 35% / 0.25;
+    /* Line grid on light bg — keep barely visible (home hero + .bg-page-texture) */
+    --dot-grid: 220 10% 52% / 0.055;
   }
 
   /* Dark mode via system preference — CSS-first, no JS needed = 0ms flash */
@@ -216,7 +217,7 @@ button, a, [role="button"], summary { cursor: pointer; }
     --linkedin: 210 91% 40%;
     --hero-orb-primary: 187 74% 28% / 0.15;
     --hero-orb-accent: 270 70% 38% / 0.12;
-    --dot-grid: 240 5% 35% / 0.25;
+    --dot-grid: 220 10% 52% / 0.055;
   }
 
   /* ========== PROFILE: WARM - Orange/Teal ========== */
