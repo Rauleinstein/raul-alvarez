@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback, useMemo, useReducer, useRef } from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
-import { Mail, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, GitFork, Star, Terminal, Lock, Network, Calendar, Percent, UserCheck, Image, TrendingUp, Timer, SkipForward, ThumbsUp, MessageCircle, Share2, ChevronRight, List, ArrowUp } from 'lucide-react'
+import { Mail, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Lock, Network, Calendar, Percent, UserCheck, Image, TrendingUp, Timer, SkipForward, ThumbsUp, MessageCircle, Share2, ChevronRight, List, ArrowUp, Building2 } from 'lucide-react'
 import { translations, seo, type Lang } from './i18n'
+import { LINKEDIN_URL } from './site'
 import { useHomeSeo } from './articles/use-article-seo'
 import { getTechIcon } from './tech-icons'
 
@@ -138,8 +139,12 @@ function useHeroStyles() {
 const GRID = 24                // matches CSS dot grid size
 const SNAKE_COUNT = 3
 const SNAKE_LENGTH = 8         // dots per trail
-const TICK_MS = 180            // movement speed (lower = faster)
+const TICK_MS = 210            // grid step interval (rAF interpolates between steps)
 const DIRS: [number, number][] = [[1,0],[-1,0],[0,1],[0,-1]]
+
+function easeOutQuad(t: number) {
+  return 1 - (1 - t) * (1 - t)
+}
 
 function GridSnakes() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -150,69 +155,214 @@ function GridSnakes() {
     const parent = canvas.parentElement
     if (!parent) return
 
-    const resize = () => {
-      canvas.width = parent.clientWidth
-      canvas.height = parent.clientHeight
+    const ctx = canvas.getContext('2d', { alpha: true })
+    if (!ctx) return
+
+    let cw = 0
+    let ch = 0
+    let dpr = 1
+    const reducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    const syncSize = () => {
+      dpr = Math.min(window.devicePixelRatio || 1, 2)
+      cw = parent.clientWidth
+      ch = parent.clientHeight
+      canvas.width = Math.max(1, Math.floor(cw * dpr))
+      canvas.height = Math.max(1, Math.floor(ch * dpr))
+      canvas.style.width = `${cw}px`
+      canvas.style.height = `${ch}px`
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
-    resize()
-    window.addEventListener('resize', resize)
+    syncSize()
 
-    // Initialize snakes at random grid positions
-    const cols = () => Math.floor(canvas.width / GRID)
-    const rows = () => Math.floor(canvas.height / GRID)
+    const cols = () => Math.max(1, Math.floor(cw / GRID))
+    const rows = () => Math.max(1, Math.floor(ch / GRID))
 
-    type Snake = { trail: [number, number][]; dir: [number, number] }
-    const snakes: Snake[] = Array.from({ length: SNAKE_COUNT }, () => {
-      const x = Math.floor(Math.random() * cols())
-      const y = Math.floor(Math.random() * rows())
-      return { trail: [[x, y]], dir: DIRS[Math.floor(Math.random() * 4)] }
-    })
+    type Snake = {
+      trail: [number, number][]
+      dir: [number, number]
+      lerpFrom: [number, number]
+      lerpTo: [number, number]
+      moveAt: number
+    }
 
-    const tick = () => {
-      const c = cols()
-      const r = rows()
-
-      for (const snake of snakes) {
-        // 30% chance to turn
-        if (Math.random() < 0.3) {
-          snake.dir = DIRS[Math.floor(Math.random() * 4)]
-        }
-        const [hx, hy] = snake.trail[snake.trail.length - 1]
-        let nx = hx + snake.dir[0]
-        let ny = hy + snake.dir[1]
-
-        // Wrap around edges
-        if (nx < 0) nx = c - 1
-        if (nx >= c) nx = 0
-        if (ny < 0) ny = r - 1
-        if (ny >= r) ny = 0
-
-        snake.trail.push([nx, ny])
-        if (snake.trail.length > SNAKE_LENGTH) snake.trail.shift()
+    const mkSnake = (): Snake => {
+      const c = cols(), r = rows()
+      const x = Math.floor(Math.random() * c)
+      const y = Math.floor(Math.random() * r)
+      return {
+        trail: [[x, y]],
+        dir: DIRS[Math.floor(Math.random() * 4)],
+        lerpFrom: [x, y],
+        lerpTo: [x, y],
+        moveAt: 0,
       }
+    }
 
-      // Draw
-      const ctx = canvas.getContext('2d')
-      if (!ctx) return
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+    const snakes: Snake[] = Array.from({ length: SNAKE_COUNT }, mkSnake)
 
+    const stepSnake = (snake: Snake, moveTime: number) => {
+      const c = cols(), r = rows()
+      if (Math.random() < 0.3) snake.dir = DIRS[Math.floor(Math.random() * 4)]
+      const [hx, hy] = snake.trail[snake.trail.length - 1]
+      let nx = hx + snake.dir[0]
+      let ny = hy + snake.dir[1]
+      if (nx < 0) nx = c - 1
+      if (nx >= c) nx = 0
+      if (ny < 0) ny = r - 1
+      if (ny >= r) ny = 0
+      snake.lerpFrom = [hx, hy]
+      snake.lerpTo = [nx, ny]
+      snake.moveAt = moveTime
+      snake.trail.push([nx, ny])
+      if (snake.trail.length > SNAKE_LENGTH) snake.trail.shift()
+    }
+
+    const draw = (time: number) => {
+      ctx.clearRect(0, 0, cw, ch)
+      const tick = reducedMotion ? TICK_MS * 2.2 : TICK_MS
       for (const snake of snakes) {
+        const u = snake.moveAt === 0 ? 1 : Math.min(1, Math.max(0, (time - snake.moveAt) / tick))
+        const e = reducedMotion ? 1 : easeOutQuad(u)
         for (let i = 0; i < snake.trail.length; i++) {
           const [gx, gy] = snake.trail[i]
-          const alpha = ((i + 1) / snake.trail.length) * 0.5
+          const isHead = i === snake.trail.length - 1
+          let px = gx * GRID + GRID / 2
+          let py = gy * GRID + GRID / 2
+          if (isHead) {
+            const [fx, fy] = snake.lerpFrom
+            const [tx, ty] = snake.lerpTo
+            px = (fx + (tx - fx) * e) * GRID + GRID / 2
+            py = (fy + (ty - fy) * e) * GRID + GRID / 2
+          }
+          const alpha = ((i + 1) / snake.trail.length) * 0.48
+          const r = isHead ? 2 : 1.5
           ctx.beginPath()
-          ctx.arc(gx * GRID + GRID / 2, gy * GRID + GRID / 2, 1.5, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(0, 217, 255, ${alpha})`
+          ctx.arc(px, py, r, 0, Math.PI * 2)
+          ctx.fillStyle = `rgba(34, 211, 238, ${alpha})`
           ctx.fill()
         }
       }
     }
 
-    const interval = setInterval(tick, TICK_MS)
-    return () => { clearInterval(interval); window.removeEventListener('resize', resize) }
+    let acc = 0
+    let lastT = performance.now()
+    let rafId = 0
+    const tick = reducedMotion ? TICK_MS * 2.2 : TICK_MS
+
+    const loop = (time: number) => {
+      rafId = requestAnimationFrame(loop)
+      const dt = Math.min(64, time - lastT)
+      lastT = time
+      acc += dt
+      while (acc >= tick) {
+        acc -= tick
+        for (const s of snakes) stepSnake(s, time)
+      }
+      draw(time)
+    }
+
+    const onResize = () => {
+      syncSize()
+      snakes.length = 0
+      snakes.push(...Array.from({ length: SNAKE_COUNT }, mkSnake))
+      acc = 0
+    }
+
+    window.addEventListener('resize', onResize)
+    rafId = requestAnimationFrame(loop)
+
+    return () => {
+      cancelAnimationFrame(rafId)
+      window.removeEventListener('resize', onResize)
+    }
   }, [])
 
   return <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-[1]" />
+}
+
+/** Decorative wireframe meshes — LinkedIn-banner style (hero only) */
+function HomeHeroWireframes() {
+  const dotGrid = (rows: number, cols: number, pitchX: number, pitchY: number, prefix: string) =>
+    Array.from({ length: rows * cols }, (_, i) => {
+      const row = Math.floor(i / cols)
+      const col = i % cols
+      return (
+        <circle
+          key={`${prefix}-${i}`}
+          cx={4 + col * pitchX}
+          cy={4 + row * pitchY}
+          r={0.85}
+          className="home-hero-dot"
+        />
+      )
+    })
+
+  return (
+    <div className="home-hero-wireframes pointer-events-none absolute inset-0 z-0 select-none" aria-hidden>
+      <svg
+        className="home-hero-wire-mesh absolute -left-[min(12%,96px)] top-1/2 w-[min(52vw,480px)] max-w-none h-[min(78vh,560px)] -translate-y-1/2 sm:-left-[min(8%,64px)] sm:w-[min(46vw,520px)] sm:h-[min(85vh,620px)]"
+        viewBox="0 0 420 420"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g className="home-hero-stroke" strokeWidth="0.55" vectorEffect="non-scaling-stroke">
+          <path d="M20 380 L120 80 L280 40 L380 200 L340 380 Z" />
+          <path d="M120 80 L200 220 L280 40" />
+          <path d="M200 220 L380 200 L340 380 L200 360 Z" />
+          <path d="M20 380 L200 360" />
+          <path d="M120 80 L60 240 L200 220" />
+          <path d="M60 240 L20 380" />
+          <path d="M280 40 L320 180 L380 200" />
+          <path d="M320 180 L340 380" />
+          <path d="M200 220 L180 320 L340 380" />
+          <path d="M180 320 L60 240" />
+          <path d="M200 360 L180 320" />
+          <path d="M40 120 L120 80" />
+          <path d="M40 120 L60 240" />
+          <path d="M40 120 L20 380" />
+        </g>
+      </svg>
+      <svg
+        className="absolute left-[3%] top-[10%] w-[120px] h-[44px] opacity-90 hidden sm:block"
+        viewBox="0 0 120 44"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {dotGrid(4, 12, 10, 10, 'tl')}
+      </svg>
+      <svg
+        className="home-hero-wire-sphere absolute right-0 top-[3%] w-[min(38vw,340px)] h-[min(38vw,340px)] max-w-none translate-x-[8%] opacity-90 sm:top-[1%] sm:w-[min(34vw,380px)] sm:h-[min(34vw,380px)] sm:translate-x-[5%]"
+        viewBox="-12 0 212 200"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g className="home-hero-stroke" strokeWidth="0.5" vectorEffect="non-scaling-stroke">
+          <circle cx="70" cy="95" r="78" />
+          <path d="M70 17 A78 78 0 0 1 148 95" />
+          <path d="M148 95 A78 78 0 0 1 70 173" />
+          <path d="M70 17 A78 78 0 0 0 -8 95" />
+          <path d="M-8 95 A78 78 0 0 0 70 173" />
+          <path d="M70 17 L148 95 L70 173 L-8 95 Z" />
+          <path d="M70 17 L70 173" />
+          <path d="M-8 95 L148 95" />
+          <path d="M30 56 L110 56 L148 95 L110 134 L30 134 L-8 95 Z" />
+          <path d="M30 56 L-8 95 L30 134" />
+          <path d="M110 56 L148 95 L110 134" />
+          <path d="M30 56 L110 134" />
+          <path d="M110 56 L30 134" />
+        </g>
+      </svg>
+      <svg
+        className="absolute right-[4%] bottom-[8%] w-[140px] h-[52px] opacity-80 hidden md:block"
+        viewBox="0 0 140 52"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {dotGrid(4, 14, 10, 12, 'br')}
+      </svg>
+    </div>
+  )
 }
 
 
@@ -257,7 +407,6 @@ function useTypewriterRotation(roles: readonly string[], { typeSpeed = 80, delet
 const HOME_TOC_SECTIONS = [
   { id: 'experience', es: 'Experiencia', en: 'Experience' },
   { id: 'projects', es: 'Proyectos', en: 'Projects' },
-  { id: 'speaking', es: 'Compartiendo', en: 'Sharing' },
   { id: 'education', es: 'Formación', en: 'Education' },
   { id: 'tech', es: 'Skills & Stack', en: 'Skills & Stack' },
   { id: 'contact', es: 'Contacto', en: 'Contact' },
@@ -1238,12 +1387,15 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
 
   return (
     <section ref={sectionRef} id="about" className="relative py-16 md:py-24">
-      {/* Vignette horizontal: tapa puntos en el centro, se ven en los bordes */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: 'linear-gradient(90deg, transparent 0%, hsl(var(--background)) 25%, hsl(var(--background)) 75%, transparent 100%)',
-      }} />
-      {/* Fade vertical: transparente arriba → fondo sólido abajo */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background pointer-events-none" />
+      {/* Soft vignette — keeps homepage gradient/grid visible; only gentle dim for readability */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            'linear-gradient(90deg, hsl(var(--background) / 0) 0%, hsl(var(--background) / 0.14) 22%, hsl(var(--background) / 0.22) 50%, hsl(var(--background) / 0.14) 78%, hsl(var(--background) / 0) 100%)',
+        }}
+      />
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-[hsl(var(--background)/0.08)] to-[hsl(var(--background)/0.42)]" />
       <div className="relative z-10 max-w-5xl mx-auto px-6">
         {/* Hook emocional con typewriter reflexivo + botón skip */}
         <div className="relative pb-12">
@@ -1343,20 +1495,12 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
               briefcase: <Briefcase className="w-4 h-4" />,
               folder: <FolderGit2 className="w-4 h-4" />,
               mail: <Mail className="w-4 h-4" />,
-              bot: <Bot className="w-4 h-4" />
             }
             const isHighlight = 'highlight' in item && item.highlight
-            const handleClick = (e: React.MouseEvent) => {
-              if (item.href === '#chat') {
-                e.preventDefault()
-                window.dispatchEvent(new Event('openChat'))
-              }
-            }
             return (
               <a
                 key={item.href}
                 href={item.href}
-                onClick={handleClick}
                 className={isHighlight
                   ? "flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-theme text-white border border-transparent hover:brightness-110 hover:shadow-xl hover:shadow-primary/30 active:brightness-95 transition-all duration-200 text-sm font-medium shadow-lg shadow-primary/25"
                   : "flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border hover:border-primary/50 hover:bg-primary/5 transition-all duration-200 text-sm font-medium"
@@ -1388,6 +1532,17 @@ function CertLogo({ logo }: { logo: string }) {
         <path fill="#F82B60" d="m88.078 91.846-21.904 10.576-2.224 1.075-46.238 22.155c-2.93 1.414-6.672-.722-6.672-3.978V60.088c0-1.178.604-2.195 1.414-2.96a5 5 0 0 1 1.12-.84c1.104-.663 2.68-.84 4.02-.31L87.71 83.76c3.564 1.414 3.844 6.408.368 8.087"/>
         <path fill="#8B8B8B" d="m88.078 91.846-21.904 10.576-53.72-45.295a5 5 0 0 1 1.12-.839c1.104-.663 2.68-.84 4.02-.31L87.71 83.76c3.564 1.414 3.844 6.408.368 8.087"/>
       </svg>
+    ),
+    scrum: (
+      <svg viewBox="0 0 24 24" className="w-6 h-6 text-[#009FDA]" fill="currentColor" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M8 12h8M12 8v8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      </svg>
+    ),
+    trinity: (
+      <span className="flex h-6 w-6 items-center justify-center rounded bg-rose-900/30 text-[10px] font-bold text-rose-100" aria-hidden>
+        T
+      </span>
     ),
     make: (
       <svg viewBox="0 0 24 24" className="w-6 h-6" aria-hidden="true">
@@ -1424,8 +1579,13 @@ function App() {
   const seoData = seo[lang]
   useHomeSeo({ lang, title: seoData.title, description: seoData.description })
 
+  const showCommunitySection =
+    t.speaking.items.length > 0 ||
+    (t.redditPosts?.length ?? 0) > 0 ||
+    t.linkedinPosts.items.length > 0
+
   return (
-    <main className="min-h-screen bg-background bg-[length:24px_24px] [background-image:radial-gradient(circle,hsl(var(--dot-grid))_1px,transparent_1px)]">
+    <main className="min-h-screen overflow-x-clip bg-home-page">
       {/* Skip navigation — accessible keyboard shortcut */}
       <a
         href="#main-content"
@@ -1437,11 +1597,12 @@ function App() {
       <HomeToc lang={lang} />
 
       {/* Hero Section */}
-      <header id="main-content" className="relative overflow-hidden">
+      <header id="main-content" className="relative">
+        <HomeHeroWireframes />
         <GridSnakes />
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/5 to-transparent" />
-        <div className="absolute top-0 right-[max(0px,calc(50%-40rem))] w-[600px] h-[600px] rounded-full blur-3xl -translate-y-1/3 translate-x-1/3 hidden sm:block animate-[hero-glow_8s_ease-in-out_infinite]" style={{ backgroundColor: 'hsl(var(--hero-orb-primary))' }} />
-        <div className="absolute bottom-0 left-[max(0px,calc(50%-40rem))] w-[550px] h-[550px] rounded-full blur-3xl translate-y-1/3 -translate-x-1/3 hidden sm:block animate-[hero-glow_11s_ease-in-out_infinite_reverse]" style={{ backgroundColor: 'hsl(var(--hero-orb-accent))' }} />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
+        <div className="absolute top-0 right-[max(0px,calc(50%-40rem))] w-[520px] h-[520px] rounded-full blur-3xl -translate-y-1/3 translate-x-1/3 hidden sm:block opacity-70 animate-[hero-glow_8s_ease-in-out_infinite]" style={{ backgroundColor: 'hsl(var(--hero-orb-primary))' }} />
+        <div className="absolute bottom-0 left-[max(0px,calc(50%-40rem))] w-[480px] h-[480px] rounded-full blur-3xl translate-y-1/3 -translate-x-1/3 hidden sm:block opacity-65 animate-[hero-glow_11s_ease-in-out_infinite_reverse]" style={{ backgroundColor: 'hsl(var(--hero-orb-accent))' }} />
 
         <div className="relative max-w-5xl mx-auto px-6 py-20 md:py-32">
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
@@ -1460,7 +1621,7 @@ function App() {
                 {/* Inner border */}
                 <div className="absolute inset-2 rounded-full bg-gradient-theme-50 p-[2px]">
                   <div className="w-full h-full rounded-full overflow-hidden">
-                    <img src="/foto-avatar-sm.webp" srcSet="/foto-avatar-sm.webp 192w, /foto-avatar.webp 384w" sizes="(max-width: 768px) 160px, 192px" alt="Santiago Fernández de Valderrama" className="w-full h-full object-cover" width={192} height={192} fetchPriority="high" />
+                    <img src="/raul-alvarez-sm.webp" srcSet="/raul-alvarez-sm.webp 192w, /raul-alvarez.webp 384w" sizes="(max-width: 768px) 160px, 192px" alt="Raúl Álvarez Hinojosa" className="w-full h-full object-cover" width={192} height={192} fetchPriority="high" />
                   </div>
                 </div>
               </div>
@@ -1481,25 +1642,17 @@ function App() {
               className="text-center md:text-left"
             >
               <p className="text-lg text-muted-foreground mb-2">
-                {lang === 'es' ? 'Hola, soy' : "Hi, I'm"} <Link to={lang === 'es' ? '/sobre-mi' : '/about'} className="text-gradient-theme font-semibold hover:opacity-80 transition-opacity">@santifer</Link>,
+                {lang === 'es' ? 'Hola, soy' : "Hi, I'm"} <Link to={lang === 'es' ? '/sobre-mi' : '/about'} className="text-gradient-theme font-semibold hover:opacity-80 transition-opacity">@raulalvarez</Link>,
               </p>
               <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-4 leading-tight">
                 <span className="text-gradient-theme">{hydrated ? roleText : t.greetingRoles[0]}</span>
                 {hydrated && <span className="inline-block w-[3px] h-[0.85em] bg-primary ml-1 rounded-sm translate-y-[2px]" style={{ animation: 'blink 1s step-end infinite' }} />}
                 <br />
-                {lang === 'es' ? (
-                  <>
-                    {t.greeting}
-                    <br />
-                    LLMOps que se <BeamPill>curan solos.</BeamPill>
-                  </>
-                ) : (
-                  <>
-                    {t.greeting} <BeamPill>self-healing</BeamPill>
-                    <br />
-                    {t.role}
-                  </>
-                )}
+                <>
+                  {t.greeting} <BeamPill>{t.heroBeamWord}</BeamPill>
+                  <br />
+                  {t.role}
+                </>
               </h1>
 
               <div className="flex flex-wrap justify-center md:justify-start gap-3">
@@ -1526,7 +1679,7 @@ function App() {
       <StorySection t={t} />
 
       {/* Experience - Con preámbulo de competencias */}
-      <section id="experience" className="py-16 md:py-24 bg-muted/30" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 2000px' }}>
+      <section id="experience" className="relative py-16 md:py-24 section-muted-fade" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 2000px' }}>
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <h2 className="font-display text-2xl font-semibold mb-8 flex items-center gap-3">
@@ -1560,28 +1713,25 @@ function App() {
             </div>
           </AnimatedSection>
 
-          {/* Santifer iRepair - Bento Grid */}
+          {/* Portfolio / case studies — Bento Grid */}
           <AnimatedSection delay={0.1}>
             <div className="mb-12">
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-2">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#888] shrink-0">
-                    <picture>
-                      <source srcSet="/logo-santifer.webp" type="image/webp" />
-                      <img src="/logo-santifer.jpg" alt={t.experience.santifer.company} className="w-full h-full object-cover" width={40} height={40} loading="lazy" decoding="async" />
-                    </picture>
+                  <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0 border border-primary/25">
+                    <Building2 className="w-5 h-5 text-primary" aria-hidden />
                   </div>
-                  <h3 className="font-display text-2xl font-bold">{t.experience.santifer.company}</h3>
+                  <h3 className="font-display text-2xl font-bold">{t.experience.aircury.company}</h3>
                 </div>
-                <Link to={lang === 'en' ? '/santifer-irepair-founder' : '/santifer-irepair'} className="text-sm text-primary hover:underline flex items-center gap-1">
-                  santifer irepair
+                <Link to={t.experience.aircury.siteLink} className="text-sm text-primary hover:underline flex items-center gap-1">
+                  {t.experience.aircury.siteLinkLabel}
                 </Link>
-                <span className="text-sm text-muted-foreground">{t.experience.santifer.location}</span>
+                <span className="text-sm text-muted-foreground">{t.experience.aircury.location}</span>
               </div>
-              <p className="text-primary font-medium mb-1">{t.experience.santifer.role}</p>
-              <p className="text-sm text-muted-foreground mb-4">{t.experience.santifer.period}</p>
+              <p className="text-primary font-medium mb-1">{t.experience.aircury.role}</p>
+              <p className="text-sm text-muted-foreground mb-4">{t.experience.aircury.period}</p>
               <ul className="text-sm text-muted-foreground space-y-1 mb-6">
-                {t.experience.santifer.highlights.map((h, i) => (
+                {t.experience.aircury.highlights.map((h, i) => (
                   <li key={i} className="flex items-start gap-2">
                     <span className="text-primary mt-1">•</span>
                     <span>{h}</span>
@@ -1589,26 +1739,27 @@ function App() {
                 ))}
               </ul>
 
-              {/* Trusted By - Corporate Logos */}
+              {t.experience.aircury.trustedBy.logos.length > 0 && (
               <div className="pt-4 border-t border-border/50">
-                <p className="text-xs text-muted-foreground/60 uppercase tracking-wider mb-4">{t.experience.santifer.trustedBy.label}</p>
+                <p className="text-xs text-muted-foreground/60 uppercase tracking-wider mb-4">{t.experience.aircury.trustedBy.label}</p>
                 <div className="flex flex-wrap items-center gap-x-6 gap-y-3 md:gap-x-8">
-                  {t.experience.santifer.trustedBy.logos.map((logo, i) => (
+                  {t.experience.aircury.trustedBy.logos.map((logo, i) => (
                     <div key={i} className="flex items-center gap-2 hover:opacity-90 transition-opacity duration-200">
                       {'src' in logo ? (
                         <img src={logo.src} alt={logo.name} className="h-5 w-auto shrink-0 invert opacity-60 hover:opacity-80 dark:invert-0 dark:opacity-70 dark:hover:opacity-90" loading="lazy" width={20} height={20} />
                       ) : (
-                        <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 shrink-0 opacity-60 dark:opacity-70" aria-hidden="true" dangerouslySetInnerHTML={{ __html: logo.icon }} />
+                        <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 shrink-0 opacity-60 dark:opacity-70" aria-hidden="true" dangerouslySetInnerHTML={{ __html: logo.icon ?? '' }} />
                       )}
                       <span className="text-sm font-medium opacity-60 dark:opacity-70">{logo.name}</span>
                     </div>
                   ))}
                 </div>
               </div>
+              )}
 
               {/* Deep dive CTA */}
-              <Link to={t.experience.santifer.caseStudyUrl} className="inline-flex items-center gap-2 mt-6 text-sm font-medium text-primary hover:text-primary/80 transition-colors duration-200 group/cta">
-                <span className="px-4 py-2 rounded-lg bg-primary/10 border border-primary/30 group-hover/cta:bg-primary/20 group-hover/cta:border-primary/50 transition-all duration-200">{t.experience.santifer.caseStudyLabel}</span>
+              <Link to={t.experience.aircury.caseStudyUrl} className="inline-flex items-center gap-2 mt-6 text-sm font-medium text-primary hover:text-primary/80 transition-colors duration-200 group/cta">
+                <span className="px-4 py-2 rounded-lg bg-primary/10 border border-primary/30 group-hover/cta:bg-primary/20 group-hover/cta:border-primary/50 transition-all duration-200">{t.experience.aircury.caseStudyLabel}</span>
               </Link>
             </div>
           </AnimatedSection>
@@ -1620,18 +1771,14 @@ function App() {
                 <div className="flex-1 flex flex-col">
                   <div className="flex items-start justify-between mb-4">
                     <div className="w-12 h-12 rounded-xl bg-gold/20 flex items-center justify-center shrink-0">
-                      <svg viewBox="0 0 200 170" className="w-6 h-6" aria-hidden="true">
-                        <path fill="#FCB400" d="M90.039 12.368 24.079 39.66c-3.667 1.519-3.63 6.729.062 8.192l66.235 26.266a24.58 24.58 0 0 0 18.12 0l66.236-26.266c3.69-1.463 3.729-6.673.062-8.192l-65.96-27.292a24.58 24.58 0 0 0-18.795 0"/>
-                        <path fill="#18BFFF" d="M105.312 88.46v65.617c0 3.12 3.147 5.258 6.048 4.108l73.806-28.648a4.42 4.42 0 0 0 2.79-4.108V59.813c0-3.121-3.147-5.258-6.048-4.108l-73.806 28.648a4.42 4.42 0 0 0-2.79 4.108"/>
-                        <path fill="#F82B60" d="m88.078 91.846-21.904 10.576-2.224 1.075-46.238 22.155c-2.93 1.414-6.672-.722-6.672-3.978V60.088c0-1.178.604-2.195 1.414-2.96a5 5 0 0 1 1.12-.84c1.104-.663 2.68-.84 4.02-.31L87.71 83.76c3.564 1.414 3.844 6.408.368 8.087"/>
-                      </svg>
+                      <Shield className="w-6 h-6 text-gold" aria-hidden />
                     </div>
-                    <span className="badge px-3 py-1 bg-gold/20 text-gold">Source of Truth</span>
+                    <span className="badge px-3 py-1 bg-gold/20 text-gold">{t.experience.aircury.businessOS.badge}</span>
                   </div>
-                  <h4 className="font-display text-2xl font-bold mb-4">{t.experience.santifer.businessOS.title}</h4>
-                  <p className="text-muted-foreground mb-6">{t.experience.santifer.businessOS.desc}</p>
+                  <h4 className="font-display text-2xl font-bold mb-4">{t.experience.aircury.businessOS.title}</h4>
+                  <p className="text-muted-foreground mb-6">{t.experience.aircury.businessOS.desc}</p>
                   <ul className="text-sm text-muted-foreground space-y-2">
-                    {t.experience.santifer.businessOS.modules.map((item, i) => {
+                    {t.experience.aircury.businessOS.modules.map((item, i) => {
                       const icons: Record<string, React.ReactNode> = {
                         database: <Database className="w-4 h-4" />,
                         users: <Users className="w-4 h-4" />,
@@ -1639,7 +1786,8 @@ function App() {
                         package: <Package className="w-4 h-4" />,
                         messageSquare: <MessageSquare className="w-4 h-4" />,
                         receipt: <Receipt className="w-4 h-4" />,
-                        calendarCheck: <CalendarCheck className="w-4 h-4" />
+                        calendarCheck: <CalendarCheck className="w-4 h-4" />,
+                        shield: <Shield className="w-4 h-4" />,
                       }
                       return (
                         <li key={i} className="flex items-start gap-3">
@@ -1649,13 +1797,13 @@ function App() {
                       )
                     })}
                   </ul>
-                  <Link to={t.experience.santifer.caseStudyUrl} className="inline-flex items-center gap-2 mt-auto pt-6 text-sm font-medium text-gold hover:text-gold/80 transition-colors duration-200 group/cta">
-                    <span className="px-4 py-2 rounded-lg bg-gold/10 border border-gold/30 group-hover/cta:bg-gold/20 group-hover/cta:border-gold/50 transition-all duration-200">{t.experience.santifer.businessOS.footer}</span>
+                  <Link to={t.experience.aircury.caseStudyUrl} className="inline-flex items-center gap-2 mt-auto pt-6 text-sm font-medium text-gold hover:text-gold/80 transition-colors duration-200 group/cta">
+                    <span className="px-4 py-2 rounded-lg bg-gold/10 border border-gold/30 group-hover/cta:bg-gold/20 group-hover/cta:border-gold/50 transition-all duration-200">{t.experience.aircury.businessOS.footer}</span>
                     <ChevronRight className="w-4 h-4 group-hover/cta:translate-x-0.5 transition-transform duration-200" />
                   </Link>
                 </div>
                 <div className="grid grid-cols-3 lg:flex lg:flex-col gap-2 lg:gap-3 mt-4 lg:mt-0">
-                  {t.experience.santifer.businessOS.metrics.map((metric, i) => (
+                  {t.experience.aircury.businessOS.metrics.map((metric, i) => (
                     <div key={i} className="text-center p-2 lg:p-4 rounded-xl bg-background/50 border border-gold/20">
                       <div className="font-display text-lg lg:text-2xl font-bold text-gold">{metric.value}</div>
                       <div className="text-[10px] lg:text-xs text-muted-foreground leading-tight">{metric.label}</div>
@@ -1675,12 +1823,12 @@ function App() {
                   <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
                     <Bot className="w-6 h-6 text-primary" />
                   </div>
-                  <span className="badge px-3 py-1 bg-primary/10 text-primary">{t.experience.santifer.jacobo.badge}</span>
+                  <span className="badge px-3 py-1 bg-primary/10 text-primary">{t.experience.aircury.jacobo.badge}</span>
                 </div>
-                <h4 className="font-display text-xl font-bold mb-2 group-hover:text-primary transition-colors">{t.experience.santifer.jacobo.title}</h4>
-                <p className="text-muted-foreground text-sm mb-4">{t.experience.santifer.jacobo.desc}</p>
+                <h4 className="font-display text-xl font-bold mb-2 group-hover:text-primary transition-colors">{t.experience.aircury.jacobo.title}</h4>
+                <p className="text-muted-foreground text-sm mb-4">{t.experience.aircury.jacobo.desc}</p>
                 <ul className="text-sm text-muted-foreground space-y-2">
-                  {t.experience.santifer.jacobo.items.map((item, i) => {
+                  {t.experience.aircury.jacobo.items.map((item, i) => {
                     const icons: Record<string, React.ReactNode> = {
                       network: <Network className="w-4 h-4" />,
                       calendar: <Calendar className="w-4 h-4" />,
@@ -1696,8 +1844,8 @@ function App() {
                     )
                   })}
                 </ul>
-                <Link to={t.experience.santifer.jacobo.caseStudyUrl} className="inline-flex items-center gap-2 mt-auto pt-4 text-sm font-medium text-primary hover:text-primary/80 transition-colors duration-200 group/cta">
-                  <span className="px-4 py-2 rounded-lg bg-primary/10 border border-primary/30 group-hover/cta:bg-primary/20 group-hover/cta:border-primary/50 transition-all duration-200">{t.experience.santifer.jacobo.soldWith}</span>
+                <Link to={t.experience.aircury.jacobo.caseStudyUrl} className="inline-flex items-center gap-2 mt-auto pt-4 text-sm font-medium text-primary hover:text-primary/80 transition-colors duration-200 group/cta">
+                  <span className="px-4 py-2 rounded-lg bg-primary/10 border border-primary/30 group-hover/cta:bg-primary/20 group-hover/cta:border-primary/50 transition-all duration-200">{t.experience.aircury.jacobo.soldWith}</span>
                   <ChevronRight className="w-4 h-4 group-hover/cta:translate-x-0.5 transition-transform duration-200" />
                 </Link>
               </div>
@@ -1710,12 +1858,12 @@ function App() {
                   <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center">
                     <Layout className="w-6 h-6 text-accent" />
                   </div>
-                  <span className="badge px-3 py-1 bg-accent/10 text-accent">{t.experience.santifer.webSeo.badge}</span>
+                  <span className="badge px-3 py-1 bg-accent/10 text-accent">{t.experience.aircury.webSeo.badge}</span>
                 </div>
-                <h4 className="font-display text-xl font-bold mb-2 group-hover:text-accent transition-colors">{t.experience.santifer.webSeo.title}</h4>
-                <p className="text-muted-foreground text-sm mb-4">{t.experience.santifer.webSeo.desc}</p>
+                <h4 className="font-display text-xl font-bold mb-2 group-hover:text-accent transition-colors">{t.experience.aircury.webSeo.title}</h4>
+                <p className="text-muted-foreground text-sm mb-4">{t.experience.aircury.webSeo.desc}</p>
                 <ul className="text-sm text-muted-foreground space-y-2">
-                  {t.experience.santifer.webSeo.items.map((item, i) => {
+                  {t.experience.aircury.webSeo.items.map((item, i) => {
                     const icons: Record<string, React.ReactNode> = {
                       fileText: <FileText className="w-4 h-4" />,
                       image: <Image className="w-4 h-4" />,
@@ -1731,8 +1879,8 @@ function App() {
                     )
                   })}
                 </ul>
-                <Link to={t.experience.santifer.webSeo.caseStudyUrl} className="inline-flex items-center gap-2 mt-auto pt-4 text-sm font-medium text-accent hover:text-accent/80 transition-colors duration-200 group/cta">
-                  <span className="px-4 py-2 rounded-lg bg-accent/10 border border-accent/30 group-hover/cta:bg-accent/20 group-hover/cta:border-accent/50 transition-all duration-200">{t.experience.santifer.webSeo.codeAvailable}</span>
+                <Link to={t.experience.aircury.webSeo.caseStudyUrl} className="inline-flex items-center gap-2 mt-auto pt-4 text-sm font-medium text-accent hover:text-accent/80 transition-colors duration-200 group/cta">
+                  <span className="px-4 py-2 rounded-lg bg-accent/10 border border-accent/30 group-hover/cta:bg-accent/20 group-hover/cta:border-accent/50 transition-all duration-200">{t.experience.aircury.webSeo.codeAvailable}</span>
                   <ChevronRight className="w-4 h-4 group-hover/cta:translate-x-0.5 transition-transform duration-200" />
                 </Link>
               </div>
@@ -1743,20 +1891,20 @@ function App() {
               <div className="h-full p-5 rounded-2xl bg-gradient-to-r from-success/10 to-success/5 border border-success/30 hover:border-success/50 transition-colors duration-200">
                 <div className="flex items-center gap-3 mb-2">
                   <Zap className="w-5 h-5 text-success" />
-                  <span className="font-display font-bold text-success">{t.experience.santifer.exit}</span>
+                  <span className="font-display font-bold text-success">{t.experience.aircury.exit}</span>
                 </div>
-                <p className="text-sm text-muted-foreground">{t.experience.santifer.exitDesc}</p>
+                <p className="text-sm text-muted-foreground">{t.experience.aircury.exitDesc}</p>
               </div>
             </AnimatedSection>
 
             {/* ERP card */}
             <AnimatedSection delay={0.3}>
-              <Link to={t.experience.santifer.erp.caseStudyUrl} className="block h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200 flex flex-col group/card">
+              <Link to={t.experience.aircury.erp.caseStudyUrl} className="block h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200 flex flex-col group/card">
                 <Database className="w-5 h-5 text-primary mb-3" />
-                <p className="font-medium text-sm mb-1">{t.experience.santifer.erp.title}</p>
-                <p className="text-sm text-muted-foreground">{t.experience.santifer.erp.desc}</p>
+                <p className="font-medium text-sm mb-1">{t.experience.aircury.erp.title}</p>
+                <p className="text-sm text-muted-foreground">{t.experience.aircury.erp.desc}</p>
                 <div className="flex items-center justify-between mt-auto pt-3">
-                  <span className="text-xs font-medium text-primary">{t.experience.santifer.erp.metric}</span>
+                  <span className="text-xs font-medium text-primary">{t.experience.aircury.erp.metric}</span>
                   <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/0 group-hover/card:text-primary group-hover/card:translate-x-0.5 transition-all duration-200" />
                 </div>
               </Link>
@@ -1764,12 +1912,12 @@ function App() {
 
             {/* GPTs card */}
             <AnimatedSection delay={0.35}>
-              <Link to={t.experience.santifer.gpts.caseStudyUrl} className="block h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200 flex flex-col group/card">
+              <Link to={t.experience.aircury.gpts.caseStudyUrl} className="block h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200 flex flex-col group/card">
                 <Bot className="w-5 h-5 text-accent mb-3" />
-                <p className="font-medium text-sm mb-1">{t.experience.santifer.gpts.title}</p>
-                <p className="text-sm text-muted-foreground">{t.experience.santifer.gpts.desc}</p>
+                <p className="font-medium text-sm mb-1">{t.experience.aircury.gpts.title}</p>
+                <p className="text-sm text-muted-foreground">{t.experience.aircury.gpts.desc}</p>
                 <div className="flex items-center justify-between mt-auto pt-3">
-                  <span className="text-xs font-medium text-primary">{t.experience.santifer.gpts.metric}</span>
+                  <span className="text-xs font-medium text-primary">{t.experience.aircury.gpts.metric}</span>
                   <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/0 group-hover/card:text-primary group-hover/card:translate-x-0.5 transition-all duration-200" />
                 </div>
               </Link>
@@ -1777,12 +1925,12 @@ function App() {
 
             {/* Reservas card */}
             <AnimatedSection delay={0.4}>
-              <Link to={t.experience.santifer.reservas.caseStudyUrl} className="block h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200 flex flex-col group/card">
+              <Link to={t.experience.aircury.reservas.caseStudyUrl} className="block h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200 flex flex-col group/card">
                 <Timer className="w-5 h-5 text-primary mb-3" />
-                <p className="font-medium text-sm mb-1">{t.experience.santifer.reservas.title}</p>
-                <p className="text-sm text-muted-foreground">{t.experience.santifer.reservas.desc}</p>
+                <p className="font-medium text-sm mb-1">{t.experience.aircury.reservas.title}</p>
+                <p className="text-sm text-muted-foreground">{t.experience.aircury.reservas.desc}</p>
                 <div className="flex items-center justify-between mt-auto pt-3">
-                  <span className="text-xs font-medium text-accent">{t.experience.santifer.reservas.metric}</span>
+                  <span className="text-xs font-medium text-accent">{t.experience.aircury.reservas.metric}</span>
                   <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/0 group-hover/card:text-primary group-hover/card:translate-x-0.5 transition-all duration-200" />
                 </div>
               </Link>
@@ -1790,12 +1938,12 @@ function App() {
 
             {/* CRM card */}
             <AnimatedSection delay={0.45}>
-              <Link to={t.experience.santifer.crm.caseStudyUrl} className="block h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200 flex flex-col group/card">
+              <Link to={t.experience.aircury.crm.caseStudyUrl} className="block h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200 flex flex-col group/card">
                 <Users className="w-5 h-5 text-accent mb-3" />
-                <p className="font-medium text-sm mb-1">{t.experience.santifer.crm.title}</p>
-                <p className="text-sm text-muted-foreground">{t.experience.santifer.crm.desc}</p>
+                <p className="font-medium text-sm mb-1">{t.experience.aircury.crm.title}</p>
+                <p className="text-sm text-muted-foreground">{t.experience.aircury.crm.desc}</p>
                 <div className="flex items-center justify-between mt-auto pt-3">
-                  <span className="text-xs font-medium text-primary">{t.experience.santifer.crm.metric}</span>
+                  <span className="text-xs font-medium text-primary">{t.experience.aircury.crm.metric}</span>
                   <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/0 group-hover/card:text-primary group-hover/card:translate-x-0.5 transition-all duration-200" />
                 </div>
               </Link>
@@ -1803,79 +1951,54 @@ function App() {
 
             {/* GenAI Marketing card */}
             <AnimatedSection delay={0.5}>
-              <Link to={t.experience.santifer.genAI.caseStudyUrl} className="block h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200 flex flex-col group/card">
+              <Link to={t.experience.aircury.genAI.caseStudyUrl} className="block h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200 flex flex-col group/card">
                 <Sparkles className="w-5 h-5 text-primary mb-3" />
-                <p className="font-medium text-sm mb-1">{t.experience.santifer.genAI.title}</p>
-                <p className="text-sm text-muted-foreground">{t.experience.santifer.genAI.desc}</p>
+                <p className="font-medium text-sm mb-1">{t.experience.aircury.genAI.title}</p>
+                <p className="text-sm text-muted-foreground">{t.experience.aircury.genAI.desc}</p>
                 <div className="flex items-center justify-between mt-auto pt-3">
-                  <span className="text-xs font-medium text-accent">{t.experience.santifer.genAI.metric}</span>
+                  <span className="text-xs font-medium text-accent">{t.experience.aircury.genAI.metric}</span>
                   <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/0 group-hover/card:text-primary group-hover/card:translate-x-0.5 transition-all duration-200" />
                 </div>
               </Link>
             </AnimatedSection>
           </div>
 
-          {/* LICO Cosmetics */}
+          {/* chess24 */}
           <AnimatedSection delay={0.5} className="mt-16">
             <div className="mb-6">
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-2">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#F5F3EE] flex items-center justify-center shrink-0">
-                    <picture>
-                      <source srcSet="/logo-lico.webp" type="image/webp" />
-                      <img src="/logo-lico.png" alt={t.experience.lico.company} className="w-full h-full object-contain p-1" width={40} height={40} loading="lazy" decoding="async" />
-                    </picture>
+                  <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center shrink-0 border border-border">
+                    <Globe className="w-5 h-5 text-muted-foreground" aria-hidden />
                   </div>
-                  <h3 className="font-display text-2xl font-bold">{t.experience.lico.company}</h3>
+                  <h3 className="font-display text-2xl font-bold">{t.experience.chess24.company}</h3>
                 </div>
-                <a href="https://licocosmetics.es" target="_blank" rel="noopener noreferrer nofollow" className="text-sm text-accent hover:underline flex items-center gap-1">
-                  licocosmetics.es <ExternalLink className="w-3 h-3" aria-hidden="true" />
+                <a href={t.experience.chess24.website} target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline flex items-center gap-1">
+                  {t.experience.chess24.websiteLabel} <ExternalLink className="w-3 h-3" aria-hidden="true" />
                 </a>
-                <span className="text-sm text-muted-foreground">{t.experience.lico.location}</span>
+                <span className="text-sm text-muted-foreground">{t.experience.chess24.location}</span>
               </div>
-              <p className="text-accent font-medium mb-1">{t.experience.lico.role}</p>
-              <p className="text-sm text-muted-foreground mb-4">{t.experience.lico.period}</p>
-              <p className="text-muted-foreground">{t.experience.lico.desc}</p>
-
-              {/* Testimonial */}
-              <a href="https://www.linkedin.com/in/santifer/details/recommendations/" target="_blank" rel="noopener noreferrer" className="block group">
-                <blockquote className="mt-6 p-4 rounded-xl bg-accent/5 border border-accent/10 group-hover:border-[hsl(var(--linkedin)/0.3)] transition-colors">
-                  <p className="text-sm text-muted-foreground italic mb-4">
-                    "{t.experience.lico.testimonial.quote}"
-                  </p>
-                  <footer className="flex items-center gap-3">
-                    <picture>
-                      <source srcSet="/juan-sabate.webp" type="image/webp" />
-                      <img src="/juan-sabate.jpeg" alt={t.experience.lico.testimonial.author} className="w-10 h-10 rounded-full object-cover" width={40} height={40} loading="lazy" decoding="async" />
-                    </picture>
-                    <div className="flex-1">
-                      <span className="text-sm font-medium text-foreground block">{t.experience.lico.testimonial.author}</span>
-                      <span className="text-xs text-muted-foreground">{t.experience.lico.testimonial.role}</span>
-                    </div>
-                    <LinkedInLogo className="w-4 h-4 text-[hsl(var(--linkedin))]" />
-                  </footer>
-                </blockquote>
-              </a>
+              <p className="text-primary font-medium mb-1">{t.experience.chess24.role}</p>
+              <p className="text-sm text-muted-foreground mb-4">{t.experience.chess24.period}</p>
+              <p className="text-muted-foreground">{t.experience.chess24.desc}</p>
             </div>
           </AnimatedSection>
 
-          {/* Everis */}
-          <AnimatedSection delay={0.6} className="mt-16">
+          {/* ByBubbly */}
+          <AnimatedSection delay={0.55} className="mt-16">
             <div className="mb-6">
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-2">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl overflow-hidden bg-white flex items-center justify-center shrink-0 p-1.5">
-                    <picture>
-                      <source srcSet="/logo-everis.webp" type="image/webp" />
-                      <img src="/logo-everis.jpg" alt={t.experience.everis.company} className="w-full h-full object-contain" width={40} height={40} loading="lazy" decoding="async" />
-                    </picture>
+                  <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center shrink-0 border border-border">
+                    <Package className="w-5 h-5 text-muted-foreground" aria-hidden />
                   </div>
-                  <h3 className="font-display text-2xl font-bold">{t.experience.everis.company}</h3>
+                  <h3 className="font-display text-2xl font-bold">{t.experience.bybubbly.company}</h3>
                 </div>
+                <span className="text-sm text-muted-foreground">{t.experience.bybubbly.location}</span>
               </div>
-              <p className="text-primary font-medium mb-1">{t.experience.everis.role}</p>
-              <p className="text-sm text-muted-foreground mb-2">{t.experience.everis.period}</p>
-              <p className="text-muted-foreground">{t.experience.everis.desc}</p>
+              <p className="text-primary font-medium mb-1">{t.experience.bybubbly.role}</p>
+              <p className="text-sm text-muted-foreground mb-2">{t.experience.bybubbly.period}</p>
+              <p className="text-muted-foreground">{t.experience.bybubbly.desc}</p>
             </div>
             <div className="mt-6 p-6 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 border border-primary/20">
               <div className="flex items-start gap-4">
@@ -1883,37 +2006,35 @@ function App() {
                   <Bot className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-display font-bold mb-2">{t.experience.everis.tesauro.title}</h4>
-                  <p className="text-sm text-muted-foreground">{t.experience.everis.tesauro.desc}</p>
+                  <h4 className="font-display font-bold mb-2">{t.experience.bybubbly.tesauro.title}</h4>
+                  <p className="text-sm text-muted-foreground">{t.experience.bybubbly.tesauro.desc}</p>
                 </div>
               </div>
             </div>
+          </AnimatedSection>
 
-            {/* Testimonial */}
-            <a href="https://www.linkedin.com/in/santifer/details/recommendations/" target="_blank" rel="noopener noreferrer" className="block group">
-              <blockquote className="mt-6 p-4 rounded-xl bg-primary/5 border border-primary/10 group-hover:border-[hsl(var(--linkedin)/0.3)] transition-colors">
-                <p className="text-sm text-muted-foreground italic mb-4">
-                  "{t.experience.everis.testimonial.quote}"
-                </p>
-                <footer className="flex items-center gap-3">
-                  <picture>
-                    <source srcSet="/manuel-lopez.webp" type="image/webp" />
-                    <img src="/manuel-lopez.jpeg" alt={t.experience.everis.testimonial.author} className="w-10 h-10 rounded-full object-cover" width={40} height={40} loading="lazy" decoding="async" />
-                  </picture>
-                  <div className="flex-1">
-                    <span className="text-sm font-medium text-foreground block">{t.experience.everis.testimonial.author}</span>
-                    <span className="text-xs text-muted-foreground">{t.experience.everis.testimonial.role}</span>
+          {/* RedEduca */}
+          <AnimatedSection delay={0.6} className="mt-16">
+            <div className="mb-6">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-2">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center shrink-0 border border-border">
+                    <GraduationCap className="w-5 h-5 text-muted-foreground" aria-hidden />
                   </div>
-                  <LinkedInLogo className="w-4 h-4 text-[hsl(var(--linkedin))]" />
-                </footer>
-              </blockquote>
-            </a>
+                  <h3 className="font-display text-2xl font-bold">{t.experience.rededuca.company}</h3>
+                </div>
+                <span className="text-sm text-muted-foreground">{t.experience.rededuca.location}</span>
+              </div>
+              <p className="text-primary font-medium mb-1">{t.experience.rededuca.role}</p>
+              <p className="text-sm text-muted-foreground mb-2">{t.experience.rededuca.period}</p>
+              <p className="text-muted-foreground">{t.experience.rededuca.desc}</p>
+            </div>
           </AnimatedSection>
         </div>
       </section>
 
-      {/* Projects & Claude Code */}
-      <section id="projects" className="py-16 md:py-24" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 1500px' }}>
+      {/* Projects */}
+      <section id="projects" className="relative py-16 md:py-24 section-continuity-soft" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 1500px' }}>
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <div className="flex items-center justify-between mb-12">
@@ -1937,459 +2058,67 @@ function App() {
             </div>
           </AnimatedSection>
 
-          {/* SA Playbook - Premium Card */}
-          <AnimatedSection delay={0.05} className="mb-8">
-            <div className="p-8 rounded-2xl bg-gradient-to-br from-gold/15 via-gold/5 to-transparent border border-gold/30 hover:border-gold/50 transition-colors duration-200 group relative overflow-hidden">
-              {/* Subtle glow effect */}
-              <div className="absolute -top-24 -right-24 w-48 h-48 bg-gold/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-              <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 relative">
-                <div className="flex-1 flex flex-col">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-gold/20 flex items-center justify-center shrink-0">
-                      <Terminal className="w-6 h-6 text-gold" />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Lock className="w-3 h-3 text-gold" />
-                      <span className="badge px-3 py-1 bg-gold/20 text-gold">{t.projects.saPlaybook.badge}</span>
-                    </div>
-                  </div>
-                  <h3 className="font-display text-2xl font-bold mb-1">{t.projects.saPlaybook.title}</h3>
-                  <p className="text-sm text-gold font-medium mb-4">{t.projects.saPlaybook.tagline}</p>
-                  <p className="text-muted-foreground mb-6">{t.projects.saPlaybook.desc}</p>
-
-                  {/* Tech badges */}
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {['Claude Code', 'Airtable', 'Shopify', 'Make.com', 'Bash', 'MCP'].map((tech) => (
-                      <span key={tech} className="px-2 py-1 rounded-md text-xs bg-gold/10 text-gold border border-gold/20">{tech}</span>
-                    ))}
-                  </div>
-
-                  <ul className="text-sm text-muted-foreground space-y-2">
-                    {t.projects.saPlaybook.features.map((item, i) => {
-                      const icons: Record<string, React.ReactNode> = {
-                        zap: <Zap className="w-4 h-4" />,
-                        shield: <Shield className="w-4 h-4" />,
-                        fileText: <FileText className="w-4 h-4" />,
-                        git: <GitBranch className="w-4 h-4" />
-                      }
-                      return (
-                        <li key={i} className="flex items-start gap-3">
-                          <span className="text-gold mt-0.5">{icons[item.icon]}</span>
-                          <span>{item.text}</span>
-                        </li>
-                      )
-                    })}
-                  </ul>
-                  <a href="#contact" className="inline-flex items-center gap-2 text-xs font-medium italic mt-auto pt-6 text-gold hover:underline transition-colors duration-200">
-                    <Lock className="w-3 h-3" />
-                    {t.projects.saPlaybook.footer}
-                  </a>
-                </div>
-
-                {/* Right side - visual element */}
-                <div className="hidden lg:flex flex-col items-center justify-center p-6 rounded-xl bg-gold/5 border border-gold/10 min-w-[180px]">
-                  <div className="text-4xl mb-3 opacity-80">
-                    <svg viewBox="0 0 24 24" className="w-16 h-16 text-gold" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-                      <path d="M4 17l6-6-6-6M12 19h8" />
-                    </svg>
-                  </div>
-                  <span className="text-xs text-gold font-medium text-center">Systems Thinking<br/>for SAs</span>
-                </div>
-              </div>
-            </div>
-          </AnimatedSection>
-
-          {/* Projects Grid with Dependency Lines */}
-          {(() => {
-            // Tipo para proyecto
-            type Project = {
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {(t.projects.items as readonly {
               title: string
               badge: string
               badgeBuilding: string
               desc: string
               tech: readonly string[]
               link: string
-              isDependency?: boolean
-              dependencyRole?: string
               caseStudyUrl?: string
               caseStudyLabel?: string
-              stars?: string
-              forks?: string
-            }
-
-            // Separar proyectos
-            const allProjects = t.projects.items as readonly Project[]
-            const contentDigest = allProjects.find(p => p.title === 'Content Digest')!
-            const lifeOS = allProjects.find(p => p.title === 'Life OS')!
-            const careerOps = allProjects.find(p => p.title === 'Career Ops')!
-            const santiferIo = allProjects.find(p => p.title === 'santifer.io')!
-            const selfHealingChatbot = allProjects.find(p => p.title === 'Self-Healing Chatbot')!
-            // Tools que dependen de santifer.io
-            const claudeEye = allProjects.find(p => p.title === 'Claude Eye')!
-            const claudeable = allProjects.find(p => p.title === 'Claudeable')!
-            // Fila 4: Claude Pulse + ProjectOS Predict
-            const claudePulse = allProjects.find(p => p.title === 'Claude Pulse')!
-            const projectOSPredict = allProjects.find(p => p.title === 'ProjectOS Predict')!
-
-            // Helper para parsear **bold** a elementos con estilo
-            const parseBold = (text: string): React.ReactNode[] => {
-              return text.split(/\*\*(.*?)\*\*/g).map((part, i) =>
-                i % 2 === 1 ? <strong key={i} className="text-tool font-semibold">{part}</strong> : part
-              )
-            }
-
-            // Refs para cada tarjeta (para calcular posiciones de conexiones)
-            const containerRef = useRef<HTMLDivElement>(null)
-            const cardRefs = {
-              contentDigest: useRef<HTMLDivElement>(null),
-              lifeOS: useRef<HTMLDivElement>(null),
-              careerOps: useRef<HTMLDivElement>(null),
-              santiferIo: useRef<HTMLDivElement>(null),
-              selfHealingChatbot: useRef<HTMLDivElement>(null),
-              claudeEye: useRef<HTMLDivElement>(null),
-              claudeable: useRef<HTMLDivElement>(null),
-              claudePulse: useRef<HTMLDivElement>(null),
-              projectOSPredict: useRef<HTMLDivElement>(null),
-            }
-
-            // Hook para calcular líneas de conexión SVG
-            const [lines, setLines] = useState<string[]>([])
-            const { ref: visibilityRef, isInView: isVisible } = useInView(0.1)
-
-            useEffect(() => {
-              if (!isVisible || !containerRef.current) return
-
-              const calculate = () => {
-                const container = containerRef.current!.getBoundingClientRect()
-                const isMobile = window.innerWidth < 768 // Tailwind md breakpoint
-
-                type Edge = 'top' | 'bottom' | 'left' | 'right'
-                const getPoint = (ref: React.RefObject<HTMLDivElement | null>, edge: Edge, ratio = 0.5) => {
-                  const rect = ref.current?.getBoundingClientRect()
-                  if (!rect) return null
-                  const x = rect.left - container.left
-                  const y = rect.top - container.top
-                  switch (edge) {
-                    case 'top': return { x: x + rect.width * ratio, y }
-                    case 'bottom': return { x: x + rect.width * ratio, y: y + rect.height }
-                    case 'left': return { x, y: y + rect.height * ratio }
-                    case 'right': return { x: x + rect.width, y: y + rect.height * ratio }
-                  }
-                }
-
-                // Definir conexiones según el grafo
-                type Connection = {
-                  from: React.RefObject<HTMLDivElement | null>
-                  fromEdge: Edge
-                  fromRatio?: number
-                  to: React.RefObject<HTMLDivElement | null>
-                  toEdge: Edge
-                  toRatio?: number
-                }
-
-                // En móvil: conexiones verticales simples (tarjetas apiladas)
-                // En desktop: grafo complejo con conexiones horizontales y diagonales
-                const connections: Connection[] = isMobile ? [
-                  // Móvil: flujo vertical simple
-                  { from: cardRefs.lifeOS, fromEdge: 'bottom', to: cardRefs.careerOps, toEdge: 'top' },
-                  { from: cardRefs.careerOps, fromEdge: 'bottom', to: cardRefs.santiferIo, toEdge: 'top' },
-                  { from: cardRefs.santiferIo, fromEdge: 'bottom', to: cardRefs.selfHealingChatbot, toEdge: 'top' },
-                  { from: cardRefs.selfHealingChatbot, fromEdge: 'bottom', to: cardRefs.claudeEye, toEdge: 'top' },
-                  { from: cardRefs.claudeEye, fromEdge: 'bottom', to: cardRefs.claudeable, toEdge: 'top' },
-                  { from: cardRefs.claudeable, fromEdge: 'bottom', to: cardRefs.claudePulse, toEdge: 'top' },
-                  { from: cardRefs.claudePulse, fromEdge: 'bottom', to: cardRefs.contentDigest, toEdge: 'top' },
-                  { from: cardRefs.contentDigest, fromEdge: 'bottom', to: cardRefs.projectOSPredict, toEdge: 'top' },
-                ] : [
-                  // Desktop: grafo complejo
-                  // Fila 1: Life OS ↔ Career Ops (horizontal)
-                  { from: cardRefs.lifeOS, fromEdge: 'right', to: cardRefs.careerOps, toEdge: 'left' },
-                  // Fila 1 → Fila 2: diagonales hacia santifer.io + chatbot
-                  { from: cardRefs.lifeOS, fromEdge: 'bottom', to: cardRefs.santiferIo, toEdge: 'top' },
-                  { from: cardRefs.careerOps, fromEdge: 'bottom', to: cardRefs.selfHealingChatbot, toEdge: 'top' },
-                  // Fila 2: santifer.io ↔ chatbot (horizontal)
-                  { from: cardRefs.santiferIo, fromEdge: 'right', to: cardRefs.selfHealingChatbot, toEdge: 'left' },
-                  // Fila 2 → Fila 3: hacia tools
-                  { from: cardRefs.santiferIo, fromEdge: 'bottom', to: cardRefs.claudeEye, toEdge: 'top' },
-                  { from: cardRefs.selfHealingChatbot, fromEdge: 'bottom', to: cardRefs.claudeable, toEdge: 'top' },
-                  // Fila 3 → Fila 4
-                  { from: cardRefs.claudeEye, fromEdge: 'bottom', to: cardRefs.claudePulse, toEdge: 'top' },
-                  { from: cardRefs.claudeable, fromEdge: 'bottom', to: cardRefs.contentDigest, toEdge: 'top' },
-                  // Fila 4 → Fila 5: diagonales hacia ProjectOS
-                  { from: cardRefs.claudePulse, fromEdge: 'bottom', to: cardRefs.projectOSPredict, toEdge: 'top', toRatio: 0.25 },
-                  { from: cardRefs.contentDigest, fromEdge: 'bottom', to: cardRefs.projectOSPredict, toEdge: 'top', toRatio: 0.75 },
-                ]
-
-                const paths = connections.map(conn => {
-                  const start = getPoint(conn.from, conn.fromEdge, conn.fromRatio ?? 0.5)
-                  const end = getPoint(conn.to, conn.toEdge, conn.toRatio ?? 0.5)
-                  if (!start || !end) return ''
-
-                  // Móvil: líneas rectas simples | Desktop: curvas Bézier
-                  if (isMobile) {
-                    return `M ${start.x} ${start.y} L ${end.x} ${end.y}`
-                  }
-
-                  // Determinar si es conexión horizontal o vertical
-                  const isHorizontal = conn.fromEdge === 'left' || conn.fromEdge === 'right'
-                  if (isHorizontal) {
-                    // Curva Bézier horizontal
-                    const midX = (start.x + end.x) / 2
-                    return `M ${start.x} ${start.y} C ${midX} ${start.y}, ${midX} ${end.y}, ${end.x} ${end.y}`
-                  } else {
-                    // Curva Bézier vertical
-                    const midY = (start.y + end.y) / 2
-                    return `M ${start.x} ${start.y} C ${start.x} ${midY}, ${end.x} ${midY}, ${end.x} ${end.y}`
-                  }
-                }).filter(Boolean)
-
-                setLines(paths)
-              }
-
-              // Delay para dar tiempo a las animaciones de entrada (AnimatedSection ~0.6s)
-              const initialTimeout = setTimeout(calculate, 700)
-
-              // Debounce para resize
-              let resizeTimeout: ReturnType<typeof setTimeout>
-              const debouncedCalc = () => {
-                clearTimeout(resizeTimeout)
-                resizeTimeout = setTimeout(calculate, 100)
-              }
-              window.addEventListener('resize', debouncedCalc)
-              return () => {
-                window.removeEventListener('resize', debouncedCalc)
-                clearTimeout(initialTimeout)
-                clearTimeout(resizeTimeout)
-              }
-            }, [isVisible, lang])
-
-            // Componente de tarjeta de proyecto
-            const ProjectCard = ({ project, variant = 'default', cardRef }: {
-              project: Project,
-              variant?: 'default' | 'highlight' | 'tool' | 'tool-static',
-              cardRef?: React.RefObject<HTMLDivElement | null> | ((el: HTMLDivElement | null) => void)
-            }) => {
-              const isHighlight = variant === 'highlight'
-              const isTool = variant === 'tool' || variant === 'tool-static'
-              const hasHover = variant !== 'tool-static'
-
+            }[]).map((project, i) => {
+              const parseBold = (text: string): React.ReactNode[] =>
+                text.split(/\*\*(.*?)\*\*/g).map((part, j) =>
+                  j % 2 === 1 ? <strong key={j} className="text-primary font-semibold">{part}</strong> : part
+                )
               return (
-                <div
-                  ref={cardRef}
-                  className={`h-full p-6 rounded-2xl transition-colors duration-200 flex flex-col ${hasHover ? 'group' : ''} ${
-                    isHighlight
-                      ? 'bg-gradient-to-br from-accent/5 to-transparent border-2 border-accent/50 hover:border-accent/70'
-                      : isTool
-                      ? `bg-card border border-tool/30 ${hasHover ? 'hover:border-tool/50' : ''}`
-                      : 'bg-card border border-border hover:border-primary/30'
-                  }`}
-                >
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className={`font-display text-xl font-bold transition-colors ${
-                      isTool ? 'group-hover:text-tool' : 'group-hover:text-primary'
-                    }`}>{project.title}</h3>
-                    <div className="flex items-center gap-2">
-                      <span className={`badge px-2 py-0.5 ${
-                        isTool
-                          ? 'bg-tool/10 text-tool'
-                          : isHighlight
-                          ? 'bg-accent/10 text-accent'
-                          : 'bg-primary/10 text-primary'
-                      }`}>{project.badge}</span>
-                      {project.badgeBuilding && (
-                        <span className="badge px-2 py-0.5 bg-success/5 text-success flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse-dot"></span>
-                          {project.badgeBuilding}
-                        </span>
-                      )}
+                <AnimatedSection key={project.title} delay={0.05 + i * 0.05}>
+                  <div className="h-full p-6 rounded-2xl bg-card border border-border hover:border-primary/30 transition-colors duration-200 flex flex-col">
+                    <div className="flex items-start justify-between mb-3 gap-2">
+                      <h3 className="font-display text-lg font-bold text-foreground">{project.title}</h3>
+                      <span className="badge px-2 py-0.5 bg-primary/10 text-primary shrink-0">{project.badge}</span>
                     </div>
-                  </div>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {parseBold(project.desc)}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.tech.map((tech) => (
-                      <span key={tech} className={`px-2 py-1 rounded-md text-xs ${
-                        isTool
-                          ? 'bg-tool/10 text-tool'
-                          : 'bg-muted text-muted-foreground'
-                      }`}>{tech}</span>
-                    ))}
-                  </div>
-                  <div className="flex flex-col gap-3 mt-auto">
-                    {project.caseStudyUrl && (
-                      <Link
-                        to={project.caseStudyUrl}
-                        className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:text-accent/80 transition-colors duration-200 group/cta"
-                      >
-                        <span className="px-4 py-2 rounded-lg bg-accent/10 border border-accent/30 group-hover/cta:bg-accent/20 group-hover/cta:border-accent/50 transition-all duration-200">{project.caseStudyLabel}</span>
-                        <ChevronRight className="w-4 h-4 group-hover/cta:translate-x-0.5 transition-transform duration-200" />
-                      </Link>
-                    )}
-                    {project.link && (
-                      <div className="flex items-center gap-3">
+                    <p className="text-sm text-muted-foreground mb-4 flex-1">{parseBold(project.desc)}</p>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.tech.map((tech) => (
+                        <span key={tech} className="px-2 py-1 rounded-md text-xs bg-muted text-muted-foreground">{tech}</span>
+                      ))}
+                    </div>
+                    <div className="flex flex-col gap-2 mt-auto">
+                      {project.caseStudyUrl && (
+                        <Link
+                          to={project.caseStudyUrl}
+                          className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:text-accent/80"
+                        >
+                          <span className="px-3 py-1.5 rounded-lg bg-accent/10 border border-accent/30">{project.caseStudyLabel}</span>
+                          <ChevronRight className="w-4 h-4" />
+                        </Link>
+                      )}
+                      {project.link && (
                         <a
                           href={`https://${project.link}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={`inline-flex items-center gap-2 text-xs ${
-                            isTool ? 'text-tool hover:text-tool' : 'text-primary'
-                          } hover:underline`}
+                          className="inline-flex items-center gap-2 text-xs text-primary hover:underline"
                         >
-                          {project.link.includes('github.com') ? (
-                            <>
-                              <Github className="w-4 h-4" />
-                              {t.projects.viewCode}
-                            </>
-                          ) : (
-                            <>
-                              <ExternalLink className="w-4 h-4" aria-hidden="true" />
-                              {t.projects.viewPrototype}
-                            </>
-                          )}
+                          {project.link.includes('github.com') ? <Github className="w-4 h-4" /> : <ExternalLink className="w-4 h-4" aria-hidden />}
+                          {project.link.includes('github.com') ? t.projects.viewCode : t.projects.viewPrototype}
                         </a>
-                        {project.stars && (
-                          <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                            <Star className="w-3.5 h-3.5 text-yellow-500" />
-                            {project.stars}
-                          </span>
-                        )}
-                        {project.forks && (
-                          <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                            <GitFork className="w-3.5 h-3.5" />
-                            {project.forks}
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )
-            }
-
-
-            return (
-              <div ref={(el) => { containerRef.current = el; visibilityRef(el) }} className="mb-12 relative">
-                {/* SVG de conexiones - absoluto, z-0 para quedar detrás */}
-                <svg
-                  className="absolute inset-0 pointer-events-none"
-                  style={{ zIndex: 0, overflow: 'visible' }}
-                >
-                  {lines.map((d, i) => (
-                    <path
-                      key={i}
-                      d={d}
-                      className="dependency-line"
-                      stroke="hsl(var(--primary))"
-                      strokeWidth="1.5"
-                      fill="none"
-                      strokeDasharray="4 4"
-                      style={{
-                        opacity: isVisible ? 0.6 : 0,
-                        transition: `opacity 0.6s ease-out ${i * 0.1}s`
-                      }}
-                    />
-                  ))}
-                </svg>
-
-                {/* Fila 1: Life OS + Career Ops */}
-                <div className="grid md:grid-cols-2 gap-6 mb-6 relative z-10">
-                  <AnimatedSection delay={0.1}>
-                    <ProjectCard project={lifeOS} cardRef={cardRefs.lifeOS} />
-                  </AnimatedSection>
-                  <AnimatedSection delay={0.15}>
-                    <ProjectCard project={careerOps} cardRef={cardRefs.careerOps} />
-                  </AnimatedSection>
-                </div>
-
-                {/* Fila 2: santifer.io + Self-Healing Chatbot (highlight) */}
-                <div className="grid md:grid-cols-2 gap-6 mb-6 relative z-10">
-                  <AnimatedSection delay={0.2}>
-                    <ProjectCard project={santiferIo} variant="highlight" cardRef={cardRefs.santiferIo} />
-                  </AnimatedSection>
-                  <AnimatedSection delay={0.25}>
-                    <ProjectCard project={selfHealingChatbot} variant="highlight" cardRef={cardRefs.selfHealingChatbot} />
-                  </AnimatedSection>
-                </div>
-
-                {/* Fila 3: Claude Eye + Claudeable — tools */}
-                <div className="grid md:grid-cols-2 gap-6 mb-6 relative z-10">
-                  <AnimatedSection delay={0.25}>
-                    <ProjectCard project={claudeEye} variant="tool-static" cardRef={cardRefs.claudeEye} />
-                  </AnimatedSection>
-                  <AnimatedSection delay={0.3}>
-                    <ProjectCard project={claudeable} variant="tool-static" cardRef={cardRefs.claudeable} />
-                  </AnimatedSection>
-                </div>
-
-                {/* Fila 4: Claude Pulse + Content Digest */}
-                <div className="grid md:grid-cols-2 gap-6 mb-6 relative z-10">
-                  <AnimatedSection delay={0.35}>
-                    <ProjectCard project={claudePulse} variant="tool-static" cardRef={cardRefs.claudePulse} />
-                  </AnimatedSection>
-                  <AnimatedSection delay={0.4}>
-                    <ProjectCard project={contentDigest} cardRef={cardRefs.contentDigest} />
-                  </AnimatedSection>
-                </div>
-
-                {/* Fila 5: ProjectOS Predict (full width) */}
-                <div className="relative z-10">
-                  <AnimatedSection delay={0.45}>
-                    <ProjectCard project={projectOSPredict} cardRef={cardRefs.projectOSPredict} />
-                  </AnimatedSection>
-                </div>
-              </div>
-            )
-          })()}
-
-          {/* Claude Code Power User */}
-          <AnimatedSection delay={0.3}>
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-accent/10 to-primary/10 border border-accent/20">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center shrink-0">
-                  <Sparkles className="w-6 h-6 text-accent" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="font-display font-bold">{t.claudeCode.title}</h3>
-                    <span className="badge px-2 py-0.5 bg-accent/10 text-accent">{t.claudeCode.badge}</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{t.claudeCode.desc}</p>
-                  {t.claudeCode.highlights && (
-                    <ul className="mt-3 space-y-1.5">
-                      {(t.claudeCode.highlights as readonly string[]).map((h: string, i: number) => (
-                        <li key={i} className="text-xs text-muted-foreground flex gap-2">
-                          <span className="text-accent mt-0.5 shrink-0">›</span>
-                          <span>{h}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  {t.claudeCode.certs && (
-                    <div className="flex flex-wrap gap-2 mt-3">
-                      {t.claudeCode.certs.map((cert: { title: string; url: string }, i: number) => (
-                        <a
-                          key={i}
-                          href={cert.url}
-                          target="_blank"
-                          rel="noopener noreferrer nofollow"
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent/10 text-xs text-muted-foreground hover:text-accent hover:bg-accent/20 transition-colors"
-                        >
-                          <BadgeCheck className="w-3.5 h-3.5" />
-                          {cert.title}
-                        </a>
-                      ))}
+                      )}
                     </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </AnimatedSection>
+                  </div>
+                </AnimatedSection>
+              )
+            })}
+          </div>
         </div>
       </section>
 
       {/* Sharing — Teaching + LinkedIn */}
-      <section id="speaking" className="py-16 md:py-24 bg-muted/30" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 800px' }}>
+      {showCommunitySection && (
+      <section id="speaking" className="relative py-16 md:py-24 section-muted-fade" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 800px' }}>
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <h2 className="font-display text-2xl font-semibold mb-8 flex items-center gap-3">
@@ -2474,7 +2203,7 @@ function App() {
                   className="flex flex-col p-5 rounded-2xl bg-card border border-border/50 border-t-2 border-t-[#FF4500] hover:border-border transition-colors group"
                 >
                   <div className="flex gap-3">
-                    <img src="/foto-avatar.webp" alt="" role="presentation" width={384} height={384} className="w-10 h-10 rounded-full shrink-0 mt-0.5" />
+                    <img src="/raul-alvarez-sm.webp" alt="" role="presentation" width={192} height={192} className="w-10 h-10 rounded-full shrink-0 mt-0.5" />
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between items-start gap-2">
                         <p className="text-sm text-foreground leading-relaxed">{rp.hook}<span className="text-muted-foreground">...</span> <span className="text-[#FF4500] group-hover:text-[#FF4500] transition-colors">ver más</span></p>
@@ -2515,7 +2244,7 @@ function App() {
                   className="flex flex-col p-5 rounded-2xl bg-card border border-border/50 border-t-2 border-t-[hsl(var(--linkedin))] hover:border-border transition-colors group h-full"
                 >
                   <div className="flex gap-3 flex-1">
-                    <img src="/foto-avatar.webp" alt="" role="presentation" width={384} height={384} className="w-10 h-10 rounded-full shrink-0 mt-0.5" />
+                    <img src="/raul-alvarez-sm.webp" alt="" role="presentation" width={192} height={192} className="w-10 h-10 rounded-full shrink-0 mt-0.5" />
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between items-start gap-2">
                         <p className="text-sm text-foreground leading-relaxed">{post.hook}<span className="text-muted-foreground">...</span> <span className="text-[hsl(var(--linkedin))] group-hover:text-[hsl(var(--linkedin))] transition-colors">ver más</span></p>
@@ -2541,45 +2270,12 @@ function App() {
               </AnimatedSection>
             ))}
           </div>
-
-          {/* AI Fluency Educator card */}
-          {t.speaking.aiFluency && (
-            <AnimatedSection delay={0.3}>
-              <div className="mt-16 p-6 rounded-2xl bg-gradient-to-br from-accent/10 to-primary/10 border border-accent/20">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center shrink-0">
-                    <GraduationCap className="w-6 h-6 text-accent" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2 flex-wrap">
-                      <h3 className="font-display font-bold">{t.speaking.aiFluency.title}</h3>
-                      <span className="badge px-2 py-0.5 bg-accent/10 text-accent text-xs">{t.speaking.aiFluency.badge}</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground mb-4">{t.speaking.aiFluency.desc}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {t.speaking.aiFluency.certs.map((cert: { title: string; url: string }, i: number) => (
-                        <a
-                          key={i}
-                          href={cert.url}
-                          target="_blank"
-                          rel="noopener noreferrer nofollow"
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent/10 text-xs text-muted-foreground hover:text-accent hover:bg-accent/20 transition-colors"
-                        >
-                          <BadgeCheck className="w-3.5 h-3.5" />
-                          {cert.title}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </AnimatedSection>
-          )}
         </div>
       </section>
+      )}
 
       {/* Education & Certifications */}
-      <section id="education" className="py-16 md:py-24" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 1000px' }}>
+      <section id="education" className="relative py-16 md:py-24 section-continuity-soft" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 1000px' }}>
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12">
             {/* Education */}
@@ -2603,44 +2299,9 @@ function App() {
                           <h3 className="font-display font-semibold mt-1 group-hover:text-primary transition-colors">{item.title}</h3>
                           <p className="text-sm text-muted-foreground mt-1">
                             {item.desc}
-                            {('projectLink' in item && item.projectLink) && (
-                              <>
-                                {' '}
-                                <a
-                                  href={`https://${item.projectLink}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1 text-primary hover:underline"
-                                >
-                                  {item.projectLabel}
-                                  <ExternalLink className="w-3 h-3" aria-hidden="true" />
-                                </a>
-                              </>
-                            )}
                           </p>
                         </div>
                       </div>
-                      {/* Testimonial if exists */}
-                      {'testimonial' in item && item.testimonial && (
-                        <a href="https://www.linkedin.com/in/santifer/details/recommendations/" target="_blank" rel="noopener noreferrer" className="block group">
-                          <blockquote className="mt-4 p-4 rounded-xl bg-primary/5 border border-primary/10 group-hover:border-[hsl(var(--linkedin)/0.3)] transition-colors">
-                            <p className="text-sm text-muted-foreground italic mb-4">
-                              "{item.testimonial.quote}"
-                            </p>
-                            <footer className="flex items-center gap-3">
-                              <picture>
-                                <source srcSet={item.testimonial.photo.replace(/\.(png|jpg|jpeg)$/i, '.webp')} type="image/webp" />
-                                <img src={item.testimonial.photo} alt={item.testimonial.author} className="w-10 h-10 rounded-full object-cover" width={40} height={40} loading="lazy" decoding="async" />
-                              </picture>
-                              <div className="flex-1">
-                                <span className="text-sm font-medium text-foreground block">{item.testimonial.author}</span>
-                                <span className="text-xs text-muted-foreground">{item.testimonial.role}</span>
-                              </div>
-                              <LinkedInLogo className="w-4 h-4 text-[hsl(var(--linkedin))]" />
-                            </footer>
-                          </blockquote>
-                        </a>
-                      )}
                     </div>
                   </AnimatedSection>
                 ))}
@@ -2661,9 +2322,7 @@ function App() {
 
               <div className="space-y-1 rounded-xl overflow-hidden border border-border">
                 {t.certifications.items.map((cert, i) => {
-                  // Alternate background by logical group: 0-3 tech, 4-7 fluency, 8-10 airtable, 11 make
-                  const group = i < 4 ? 0 : i < 8 ? 1 : i < 11 ? 2 : 3
-                  const isAlt = group % 2 === 1
+                  const isAlt = i % 2 === 1
                   return (
                   <AnimatedSection key={i} delay={0.1 + i * 0.05}>
                     <a
@@ -2691,7 +2350,7 @@ function App() {
       </section>
 
       {/* Skills */}
-      <section id="tech" className="py-16 md:py-24 bg-muted/30" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 600px' }}>
+      <section id="tech" className="relative py-16 md:py-24 section-muted-fade" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 600px' }}>
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <h2 className="font-display text-2xl font-semibold mb-12 flex items-center gap-3">
@@ -2760,10 +2419,14 @@ function App() {
 
       {/* Footer CTA */}
       <footer id="contact" className="relative py-16 md:py-24">
-        {/* Vignette horizontal — zona limpia central, puntos en bordes */}
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'linear-gradient(90deg, transparent 0%, hsl(var(--background)) 25%, hsl(var(--background)) 75%, transparent 100%)',
-        }} />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-[hsl(var(--background)/0.07)] to-[hsl(var(--background)/0.38)]" />
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(90deg, hsl(var(--background) / 0) 0%, hsl(var(--background) / 0.1) 22%, hsl(var(--background) / 0.14) 50%, hsl(var(--background) / 0.1) 78%, hsl(var(--background) / 0) 100%)',
+          }}
+        />
         <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
           <AnimatedSection>
             <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
@@ -2783,7 +2446,18 @@ function App() {
                 {t.cta.contact}
               </a>
               <a
-                href="https://linkedin.com/in/santifer/"
+                href="/raul_alvarez_cv.pdf"
+                download
+                target="_blank"
+                rel="noopener"
+                aria-label={t.cvPdfAria}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-primary text-primary font-semibold hover:bg-primary/10 transition-all duration-200"
+              >
+                <Download className="w-4 h-4 shrink-0" aria-hidden="true" />
+                {t.cvPdfLabel}
+              </a>
+              <a
+                href={LINKEDIN_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border hover:border-primary/50 transition-colors duration-200 hover:bg-primary/5"
@@ -2795,7 +2469,7 @@ function App() {
             </div>
           </AnimatedSection>
           <p className="mt-12 text-xs text-muted-foreground">
-            &copy; {new Date().getFullYear()} Santiago Fernández de Valderrama
+            &copy; {new Date().getFullYear()} Raúl Alvarez
             <span className="mx-2 text-border">|</span>
             <Link to={lang === 'es' ? '/privacidad' : '/privacy'} className="hover:text-primary transition-colors">
               {lang === 'es' ? 'Privacidad' : 'Privacy'}

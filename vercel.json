@@ -46,14 +46,6 @@
           "value": "interesting-problems"
         },
         {
-          "key": "X-Built-With",
-          "value": "Claude Code"
-        },
-        {
-          "key": "X-Evals",
-          "value": "71"
-        },
-        {
           "key": "X-Resume",
           "value": "/llms.txt"
         }
@@ -61,35 +53,36 @@
     }
   ],
   "redirects": [
-    { "source": "/jacobo", "destination": "/agente-ia-jacobo", "permanent": true },
     { "source": "/en/", "destination": "/en", "permanent": true },
     { "source": "/:path+/", "destination": "/:path+", "permanent": true }
   ],
   "rewrites": [
     { "source": "/en", "destination": "/en/index.html" },
-    { "source": "/n8n-para-pms", "destination": "/n8n-para-pms/index.html" },
-    { "source": "/n8n-for-pms", "destination": "/n8n-for-pms/index.html" },
-    { "source": "/agente-ia-jacobo", "destination": "/agente-ia-jacobo/index.html" },
-    { "source": "/ai-agent-jacobo", "destination": "/ai-agent-jacobo/index.html" },
-    { "source": "/business-os-para-airtable", "destination": "/business-os-para-airtable/index.html" },
-    { "source": "/business-os-for-airtable", "destination": "/business-os-for-airtable/index.html" },
-    { "source": "/seo-programatico", "destination": "/seo-programatico/index.html" },
-    { "source": "/programmatic-seo", "destination": "/programmatic-seo/index.html" },
-    { "source": "/santifer-irepair", "destination": "/santifer-irepair/index.html" },
-    { "source": "/santifer-irepair-founder", "destination": "/santifer-irepair-founder/index.html" },
-    { "source": "/chatbot-que-se-cura-solo", "destination": "/chatbot-que-se-cura-solo/index.html" },
-    { "source": "/self-healing-chatbot", "destination": "/self-healing-chatbot/index.html" },
-    { "source": "/career-ops", "destination": "/career-ops/index.html" },
-    { "source": "/career-ops-system", "destination": "/career-ops-system/index.html" },
-    { "source": "/sobre-mi", "destination": "/index.html" },
-    { "source": "/about", "destination": "/index.html" },
-    { "source": "/privacidad", "destination": "/index.html" },
-    { "source": "/privacy", "destination": "/index.html" }
-  ],
-  "crons": [
-    {
-      "path": "/api/cron/evaluate",
-      "schedule": "0 8 * * *"
-    }
+    { "source": "/sobre-mi", "destination": "/sobre-mi/index.html" },
+    { "source": "/about", "destination": "/about/index.html" },
+    { "source": "/privacidad", "destination": "/privacidad/index.html" },
+    { "source": "/privacy", "destination": "/privacy/index.html" },
+    { "source": "/custodio-digital", "destination": "/custodio-digital/index.html" },
+    { "source": "/custodio-digital-en", "destination": "/custodio-digital-en/index.html" },
+    { "source": "/powermark", "destination": "/powermark/index.html" },
+    { "source": "/powermark-en", "destination": "/powermark-en/index.html" },
+    { "source": "/cityhunts", "destination": "/cityhunts/index.html" },
+    { "source": "/cityhunts-en", "destination": "/cityhunts-en/index.html" },
+    { "source": "/el-caso-munford", "destination": "/el-caso-munford/index.html" },
+    { "source": "/el-caso-munford-en", "destination": "/el-caso-munford-en/index.html" },
+    { "source": "/feria-libro-granada", "destination": "/feria-libro-granada/index.html" },
+    { "source": "/feria-libro-granada-en", "destination": "/feria-libro-granada-en/index.html" },
+    { "source": "/cgv-seguros", "destination": "/cgv-seguros/index.html" },
+    { "source": "/cgv-seguros-en", "destination": "/cgv-seguros-en/index.html" },
+    { "source": "/esdrujula-ediciones", "destination": "/esdrujula-ediciones/index.html" },
+    { "source": "/esdrujula-ediciones-en", "destination": "/esdrujula-ediciones-en/index.html" },
+    { "source": "/entradasytickets", "destination": "/entradasytickets/index.html" },
+    { "source": "/entradasytickets-en", "destination": "/entradasytickets-en/index.html" },
+    { "source": "/atlantis", "destination": "/atlantis/index.html" },
+    { "source": "/atlantis-en", "destination": "/atlantis-en/index.html" },
+    { "source": "/omega-protocol", "destination": "/omega-protocol/index.html" },
+    { "source": "/omega-protocol-en", "destination": "/omega-protocol-en/index.html" },
+    { "source": "/dungeonkeeper", "destination": "/dungeonkeeper/index.html" },
+    { "source": "/dungeonkeeper-en", "destination": "/dungeonkeeper-en/index.html" }
   ]
 }

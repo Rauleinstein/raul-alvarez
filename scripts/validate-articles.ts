@@ -26,13 +26,17 @@ const FIX_MODE = process.argv.includes('--fix')
 
 /** Map article id → source file (relative to root) */
 const SOURCE_MAP: Record<string, string> = {
-  'n8n-for-pms': 'src/N8nForPMs.tsx',
-  'jacobo': 'src/JacoboAgent.tsx',
-  'business-os': 'src/BusinessOS.tsx',
-  'programmatic-seo': 'src/ProgrammaticSeo.tsx',
-  'santifer-irepair': 'src/SantiferIRepair.tsx',
-  'self-healing-chatbot': 'src/SelfHealingChatbot.tsx',
-  'career-ops': 'src/CareerOps.tsx',
+  'custodio-digital': 'src/ArticleStub.tsx',
+  'powermark': 'src/ArticleStub.tsx',
+  'cityhunts': 'src/ArticleStub.tsx',
+  'munford': 'src/ArticleStub.tsx',
+  'feria-libro-granada': 'src/ArticleStub.tsx',
+  'cgv-seguros': 'src/ArticleStub.tsx',
+  'esdrujula-ediciones': 'src/ArticleStub.tsx',
+  'entradasytickets': 'src/ArticleStub.tsx',
+  'atlantis': 'src/ArticleStub.tsx',
+  'omega-protocol': 'src/ArticleStub.tsx',
+  'dungeonkeeper': 'src/ArticleStub.tsx',
 }
 
 // ---------------------------------------------------------------------------

@@ -1,7 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { getEsSlugs } from './articles/registry';
 
 const STORAGE_KEY = 'ambient-music';
 const VOL_DEFAULT = 0.3;
@@ -188,26 +186,30 @@ function MutedBars() {
   );
 }
 
-/** N7 insignia — from official Wikimedia SVG, scaled to 20px inline */
-function N7Badge() {
+/** Skyrim-inspired dragon sigil for the music tooltip */
+function SkyrimBadge() {
   return (
-    <svg width="32" height="12" viewBox="0 0 652 252" aria-hidden="true">
-      {/* N and 7 letterforms */}
-      <path d="M37 128.5V223h24.5H86v-69.5C86 86.516 86.067 84 87.852 84c1.019 0 3.353 1.012 5.188 2.25 1.834 1.237 25.188 28.105 51.898 59.706C189 198.088 194.204 203.891 201.099 208.575c4.18 2.84 11.155 6.532 15.5 8.206C230.901 222.289 236.891 223 268.958 223H298V128.5 34h-26.5H245v66.5V167h-4.25c-4.97-.022-10.85-2.484-15.695-6.569-1.895-1.598-8.725-9.083-15.178-16.634C177.423 105.797 134.773 56.713 128.833 50.5c-3.681-3.85-9.087-8.443-12.013-10.208C107.288 34.545 103.083 34 68.29 34H37v94.5M313 56v22h79.083c43.496 0 78.934.367 78.75.816-.183.449-27.333 26.848-60.333 58.664s-66.363 64.258-74.139 71.868L322.221 223h42.299 42.299l70.591-72.12L548 78.761V56.38 34H430.5 313v22" fill="currentColor" fillRule="evenodd" />
-      {/* Red triangle of the 7 */}
-      <path d="M581.988 56.25L581.976 78.5 520.238 140.537c-33.956 34.12-66.23 66.633-71.719 72.25L438.538 223h92.231H623V128.5 34h-20.5H582l-.012 22.25" fill="#e42c2c" fillRule="evenodd" />
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className="shrink-0 text-black [.dark_&]:text-white"
+    >
+      <path
+        d="M12.17 1.5c-.47 1.67-1.6 2.88-2.7 3.95-1.29 1.25-2.68 2.37-3.67 3.92-.83 1.31-1.25 2.72-1.35 4.26-.15 2.35.49 4.51 1.72 6.48.37.58.84 1.1 1.36 1.56-.31-1.41-.26-2.74.23-4.01.45-1.15 1.22-2.09 2.14-2.89.55-.48 1.16-.91 1.71-1.39.83-.72 1.45-1.56 1.66-2.67.31.51.56 1.02.72 1.58.28.98.23 1.95-.08 2.91-.38 1.14-1.07 2.07-1.87 2.93-.77.82-1.6 1.58-2.27 2.49-.63.86-.99 1.79-1.04 2.86-.04.75.07 1.48.32 2.19.04.11.08.22.15.41.51-.74 1.08-1.33 1.8-1.79.6-.38 1.25-.65 1.94-.84 1-.27 2.01-.47 2.98-.81 1.67-.57 2.92-1.57 3.66-3.22.52-1.15.68-2.37.59-3.62-.12-1.65-.61-3.19-1.3-4.68-.38-.81-.81-1.6-1.14-2.43-.55-1.39-.8-2.82-.61-4.32.02-.18.05-.36.09-.63-.77.74-1.55 1.32-2.45 1.72-.88.38-1.8.58-2.78.62.58-.69 1.21-1.32 1.69-2.08.58-.92.95-1.94.97-3.07.01-.32-.03-.64-.06-.94-.01-.14-.08-.28-.16-.53Z"
+        fill="currentColor"
+      />
+      <path
+        d="M15.68 6.12c-.74.82-1.59 1.43-2.6 1.83.97.15 1.89.05 2.76-.35.89-.41 1.56-1.05 2.16-1.87-.84.17-1.59.3-2.32.39Z"
+        fill="hsl(var(--background))"
+      />
     </svg>
   );
 }
 
 /** Tooltip styled as a comm transmission */
-function CommTooltip({ playing, lang, dismissed }: { playing: boolean; lang: 'es' | 'en'; dismissed?: boolean }) {
-  const text = playing
-    ? 'Uncharted Worlds'
-    : dismissed
-      ? (lang === 'es' ? 'Sin respuesta. Normandy fuera.' : 'Logging off. Normandy out.')
-      : (lang === 'es' ? 'Comandante, tenemos una señal' : 'Commander, we have a signal');
-
+function CommTooltip() {
   return (
     <motion.div
       initial={{ opacity: 0, x: -8 }}
@@ -217,12 +219,9 @@ function CommTooltip({ playing, lang, dismissed }: { playing: boolean; lang: 'es
       className="absolute left-full ml-3 bottom-1 whitespace-nowrap pointer-events-none"
     >
       <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border/50 shadow-lg" style={{ backgroundColor: 'hsl(var(--background) / 0.97)', backdropFilter: 'blur(12px)' }}>
-        <N7Badge />
+        <SkyrimBadge />
         <span className="text-xs text-muted-foreground font-mono tracking-wide">
-          {text}
-          {!dismissed && !playing && (
-            <span className="inline-block w-[2px] h-[0.85em] ml-1 align-middle relative -top-[1px]" style={{ backgroundColor: 'hsl(var(--foreground) / 0.7)', animation: 'terminal-blink 1s step-end infinite' }} />
-          )}
+          Far Horizons
         </span>
       </div>
     </motion.div>
@@ -237,7 +236,6 @@ export default function MusicToggle() {
   const [hovered, setHovered] = useState(false);
   const [autoShow, setAutoShow] = useState(false);
   const [incoming, setIncoming] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const ctxRef = useRef<AudioContext | null>(null);
@@ -245,11 +243,6 @@ export default function MusicToggle() {
   const interactedRef = useRef(false);
   const chatOpenRef = useRef(false);
   const wasPlayingRef = useRef(false);
-
-  // Detect lang reactively from route
-  const { pathname } = useLocation();
-  const esSlugs = getEsSlugs();
-  const lang = esSlugs.has(pathname) ? 'es' : 'en';
 
   useEffect(() => {
     const audio = new Audio('/audio/ambient-loop.mp3');
@@ -321,21 +314,14 @@ export default function MusicToggle() {
       setIncoming(true);
     }, AUTO_SHOW_DELAY);
 
-    // After 6s: swap to farewell message
-    const farewellTimer = setTimeout(() => {
-      if (interactedRef.current) return;
-      setDismissed(true);
-    }, AUTO_SHOW_DELAY + 6000);
-
     // After 9s: dismiss everything
     const dismissTimer = setTimeout(() => {
       setAutoShow(false);
       setIncoming(false);
-      setDismissed(false);
       try { localStorage.setItem(SEEN_KEY, '1'); } catch {}
     }, AUTO_SHOW_DELAY + 9000);
 
-    return () => { clearTimeout(showTimer); clearTimeout(farewellTimer); clearTimeout(dismissTimer); };
+    return () => { clearTimeout(showTimer); clearTimeout(dismissTimer); };
   }, [playing]);
 
   const toggle = useCallback(() => {
@@ -393,7 +379,7 @@ export default function MusicToggle() {
         )}
       </AnimatePresence>
       <AnimatePresence>
-        {showTooltip && <CommTooltip playing={playing} lang={lang} dismissed={dismissed} />}
+        {showTooltip && <CommTooltip />}
       </AnimatePresence>
       {/* Pulse ring — same style as chat avatar */}
       {incoming && (

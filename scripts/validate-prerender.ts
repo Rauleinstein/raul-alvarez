@@ -335,10 +335,17 @@ function validateGlobalFiles(): Issue[] {
   const imageExts = new Set(['.webp', '.png', '.jpg', '.jpeg'])
   const isHdImage = (name: string) => name.includes('-hd.') || name.includes('-hd-') || name.includes('-full.')
   const exceptionsPath = resolve(root, 'scripts', 'image-budget-exceptions.json')
-  const imageExceptions = new Set<string>()
+  /** Relative path from dist/ → max size in bytes before error (default 500KB). */
+  const imageExceptionMaxBytes = new Map<string, number>()
   if (existsSync(exceptionsPath)) {
-    const data = JSON.parse(readFileSync(exceptionsPath, 'utf-8'))
-    for (const e of data.exceptions) imageExceptions.add(e.path)
+    const data = JSON.parse(readFileSync(exceptionsPath, 'utf-8')) as {
+      exceptions?: Array<{ path: string; maxKb?: number }>
+    }
+    const defaultExceptMax = 500 * 1024
+    for (const e of data.exceptions ?? []) {
+      const maxBytes = e.maxKb != null ? Math.round(e.maxKb * 1024) : defaultExceptMax
+      imageExceptionMaxBytes.set(e.path, maxBytes)
+    }
   }
   function scanImages(dir: string) {
     if (!existsSync(dir)) return
@@ -358,10 +365,15 @@ function validateGlobalFiles(): Issue[] {
               issues.push({ severity: 'error', msg: `HD image too large: ${relPath} (${sizeKB}KB > 1MB)`, skill: '/seo images' })
             }
             // No warn for HD images 200-1MB — they need to be big for zoom
-          } else if (imageExceptions.has(relPath)) {
-            // Excepted images: only error if >500KB
-            if (size > 500 * 1024) {
-              issues.push({ severity: 'error', msg: `Excepted image too large: ${relPath} (${sizeKB}KB > 500KB)`, skill: '/seo images' })
+          } else if (imageExceptionMaxBytes.has(relPath)) {
+            const maxBytes = imageExceptionMaxBytes.get(relPath)!
+            const maxKb = Math.round(maxBytes / 1024)
+            if (size > maxBytes) {
+              issues.push({
+                severity: 'error',
+                msg: `Excepted image too large: ${relPath} (${sizeKB}KB > ${maxKb}KB)`,
+                skill: '/seo images',
+              })
             }
           } else {
             // Regular images: strict thresholds

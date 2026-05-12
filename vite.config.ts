@@ -21,8 +21,7 @@ export default defineConfig({
             if (id.includes('motion')) {
               return 'vendor-motion'
             }
-            // react-markdown and its deps (remark, rehype, mdast, micromark, unified, unist, hast)
-            // are NOT in manualChunks — they bundle with FloatingChat's lazy chunk automatically
+            // react-markdown and its deps bundle with article lazy chunks
           }
         },
       },

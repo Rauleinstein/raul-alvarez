@@ -1,23 +1,19 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { MapPin, Mail, ExternalLink, Award, GraduationCap, Briefcase, ChevronRight, Clock, Newspaper, HelpCircle, Users } from 'lucide-react'
+import { MapPin, Mail, ExternalLink, Award, GraduationCap, Briefcase, ChevronRight, Clock, Newspaper, HelpCircle, Users, FileDown } from 'lucide-react'
 import { aboutContent, type AboutLang } from './about-i18n'
+import { translations } from './i18n'
+import { aboutProfilePageJsonLd } from './profile-jsonld'
+import { DISPLAY_NAME, GITHUB_URL, LINKEDIN_URL } from './site'
 
 const SOCIAL_LINKS = [
-  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/santifer' },
-  { name: 'GitHub', url: 'https://github.com/santifer' },
-  { name: 'YouTube', url: 'https://www.youtube.com/@santifer_io' },
-  { name: 'X / Twitter', url: 'https://x.com/santifer' },
-  { name: 'Dev.to', url: 'https://dev.to/santifer' },
-  { name: 'Substack', url: 'https://santifer.substack.com' },
-  { name: 'Stack Overflow', url: 'https://stackoverflow.com/users/32541743' },
-  { name: 'ORCID', url: 'https://orcid.org/0009-0006-2192-7210' },
-  { name: 'Crunchbase', url: 'https://www.crunchbase.com/person/santiago-fernandez-de-valderrama' },
-  { name: 'Wikidata', url: 'https://www.wikidata.org/wiki/Q138710224' },
+  { name: 'LinkedIn', url: LINKEDIN_URL },
+  { name: 'GitHub', url: GITHUB_URL },
 ]
 
 export default function AboutPage({ lang = 'es' }: { lang?: AboutLang }) {
   const t = aboutContent[lang]
+  const homeT = translations[lang]
   const altSlug = t.altSlug
 
   useEffect(() => {
@@ -30,12 +26,12 @@ export default function AboutPage({ lang = 'es' }: { lang?: AboutLang }) {
 
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement
     if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical) }
-    canonical.href = `https://santifer.io/${t.slug}`
+    canonical.href = `https://raul-alvarez.es/${t.slug}`
 
     const hreflangs = [
-      { lang: 'es', href: 'https://santifer.io/sobre-mi' },
-      { lang: 'en', href: 'https://santifer.io/about' },
-      { lang: 'x-default', href: 'https://santifer.io/sobre-mi' },
+      { lang: 'es', href: 'https://raul-alvarez.es/sobre-mi' },
+      { lang: 'en', href: 'https://raul-alvarez.es/about' },
+      { lang: 'x-default', href: 'https://raul-alvarez.es/sobre-mi' },
     ]
     document.querySelectorAll('link[hreflang]').forEach(el => el.remove())
     for (const hl of hreflangs) {
@@ -48,78 +44,7 @@ export default function AboutPage({ lang = 'es' }: { lang?: AboutLang }) {
 
     let script = document.querySelector('script[data-about-jsonld]') as HTMLScriptElement
     if (!script) { script = document.createElement('script'); script.type = 'application/ld+json'; script.dataset.aboutJsonld = ''; document.head.appendChild(script) }
-    script.textContent = JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'ProfilePage',
-      dateModified: '2026-03-27',
-      mainEntity: {
-        '@type': 'Person',
-        '@id': 'https://santifer.io/#person',
-        name: 'Santiago Fernández de Valderrama Aparicio',
-        alternateName: ['Santiago Fernández de Valderrama', 'santifer', 'Santi'],
-        url: 'https://santifer.io',
-        image: 'https://santifer.io/foto-avatar.png',
-        email: 'hola@santifer.io',
-        jobTitle: ['AI Product Manager', 'Solutions Architect (No/Low-Code & AI)', 'AI Forward Deployed Engineer'],
-        knowsAbout: [
-          { '@type': 'Thing', name: 'Artificial Intelligence', url: 'https://en.wikipedia.org/wiki/Artificial_intelligence' },
-          { '@type': 'Thing', name: 'Machine Learning', url: 'https://en.wikipedia.org/wiki/Machine_learning' },
-          { '@type': 'Thing', name: 'Multi-Agent System', url: 'https://en.wikipedia.org/wiki/Multi-agent_system' },
-          { '@type': 'Thing', name: 'Retrieval-Augmented Generation', url: 'https://en.wikipedia.org/wiki/Retrieval-augmented_generation' },
-          { '@type': 'Thing', name: 'No-code development platform', url: 'https://en.wikipedia.org/wiki/No-code_development_platform' },
-          { '@type': 'Thing', name: 'Prompt Engineering' },
-          { '@type': 'SoftwareApplication', name: 'Airtable', url: 'https://airtable.com' },
-          { '@type': 'SoftwareApplication', name: 'n8n', url: 'https://n8n.io' },
-          { '@type': 'SoftwareApplication', name: 'Claude API', url: 'https://docs.anthropic.com' },
-        ],
-        hasCredential: [
-          { '@type': 'EducationalOccupationalCredential', name: 'Introduction to Model Context Protocol', recognizedBy: { '@type': 'Organization', name: 'Anthropic' }, url: 'https://verify.skilljar.com/c/4pxam3irsioq' },
-          { '@type': 'EducationalOccupationalCredential', name: 'Claude Code in Action', recognizedBy: { '@type': 'Organization', name: 'Anthropic' }, url: 'https://verify.skilljar.com/c/eijx7hwc2x89' },
-          { '@type': 'EducationalOccupationalCredential', name: 'Advanced MCP Topics', recognizedBy: { '@type': 'Organization', name: 'Anthropic' }, url: 'https://verify.skilljar.com/c/eiovmq5qaeyd' },
-          { '@type': 'EducationalOccupationalCredential', name: 'Building with the Claude API', recognizedBy: { '@type': 'Organization', name: 'Anthropic' }, url: 'https://verify.skilljar.com/c/s4bu5znz53vm' },
-          { '@type': 'EducationalOccupationalCredential', name: 'AI Fluency: Framework & Foundations', recognizedBy: { '@type': 'Organization', name: 'Anthropic' }, url: 'https://verify.skilljar.com/c/d6rhfox7ktq6' },
-          { '@type': 'EducationalOccupationalCredential', name: 'Teaching AI Fluency', recognizedBy: { '@type': 'Organization', name: 'Anthropic' }, url: 'https://verify.skilljar.com/c/x3bzuoz99rq5' },
-          { '@type': 'EducationalOccupationalCredential', name: 'AI App Builder Certification', recognizedBy: { '@type': 'Organization', name: 'Airtable' }, url: 'https://verify.skilljar.com/c/gwg7ak9qgf7r' },
-          { '@type': 'EducationalOccupationalCredential', name: 'Airtable Builder Certification', recognizedBy: { '@type': 'Organization', name: 'Airtable' }, url: 'https://verify.skilljar.com/c/id2e4zgqtasv' },
-          { '@type': 'EducationalOccupationalCredential', name: 'Airtable Admin Certification', recognizedBy: { '@type': 'Organization', name: 'Airtable' }, url: 'https://verify.skilljar.com/c/u3r8kgn5wdit' },
-          { '@type': 'EducationalOccupationalCredential', name: 'Make Advanced', recognizedBy: { '@type': 'Organization', name: 'Make Academy' }, url: 'https://www.credly.com/badges/d27b8174-ef20-46bd-9d81-ee05e9c349e8' },
-        ],
-        alumniOf: [
-          { '@type': 'EducationalOrganization', name: 'Maven - AI Product Management Bootcamp' },
-          { '@type': 'EducationalOrganization', name: 'BIGSEO - Master en Inteligencia Artificial' },
-          { '@type': 'EducationalOrganization', name: 'ETSI - Universidad de Sevilla' },
-        ],
-        founder: {
-          '@type': 'Organization',
-          name: 'Santifer iRepair',
-          url: 'https://santiferirepair.es',
-          foundingDate: '2009',
-        },
-        sameAs: [
-          'https://www.linkedin.com/in/santifer',
-          'https://github.com/santifer',
-          'https://x.com/santifer',
-          'https://dev.to/santifer',
-          'https://santifer.substack.com',
-          'https://contentdigest.santifer.io',
-          'https://www.youtube.com/@santifer_io',
-          'https://stackoverflow.com/users/32541743',
-          'https://orcid.org/0009-0006-2192-7210',
-          'https://www.crunchbase.com/person/santiago-fernandez-de-valderrama',
-          'https://huggingface.co/santifer',
-          'https://www.wikidata.org/wiki/Q138710224',
-          'https://www.facebook.com/santifer.io/',
-        ],
-        subjectOf: {
-          '@type': 'NewsArticle',
-          headline: 'Salir de compras: Una solución exprés para el teléfono',
-          publisher: { '@type': 'NewsMediaOrganization', name: 'Diario de Sevilla' },
-          datePublished: '2014-06-19',
-          url: 'https://www.diariodesevilla.es/vivirensevilla/Salir-compras-solucion-expres-telefono_0_817718799.html',
-        },
-        address: { '@type': 'PostalAddress', addressLocality: 'Sevilla', addressCountry: 'ES' },
-      },
-    })
+    script.textContent = JSON.stringify(aboutProfilePageJsonLd)
 
     return () => {
       script?.remove()
@@ -128,19 +53,19 @@ export default function AboutPage({ lang = 'es' }: { lang?: AboutLang }) {
   }, [lang, t])
 
   return (
-    <div className="min-h-screen bg-background text-foreground bg-[length:24px_24px] [background-image:radial-gradient(circle,hsl(var(--dot-grid))_1px,transparent_1px)]">
+    <div className="min-h-screen bg-page-texture text-foreground">
       <main className="max-w-2xl mx-auto px-4 sm:px-6 py-12 md:py-20">
 
         {/* Header */}
         <header className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-10">
           <img
-            src="/foto-avatar-sm.webp"
-            srcSet="/foto-avatar-sm.webp 192w, /foto-avatar.webp 384w"
+            src="/raul-alvarez-sm.webp"
+            srcSet="/raul-alvarez-sm.webp 192w, /raul-alvarez.webp 384w"
             sizes="96px"
-            alt="Santiago Fernández de Valderrama"
+            alt={DISPLAY_NAME}
             className="w-24 h-24 rounded-full border-2 border-border shadow-lg"
-            width={96}
-            height={96}
+            width={192}
+            height={192}
           />
           <div className="text-center sm:text-left">
             <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-1">
@@ -257,6 +182,7 @@ export default function AboutPage({ lang = 'es' }: { lang?: AboutLang }) {
         </section>
 
         {/* Press */}
+        {t.press.length > 0 && (
         <section className="mb-10">
           <h2 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
             <Newspaper className="w-4 h-4 text-primary" />
@@ -278,8 +204,10 @@ export default function AboutPage({ lang = 'es' }: { lang?: AboutLang }) {
             </a>
           ))}
         </section>
+        )}
 
         {/* Community */}
+        {t.community.length > 0 && (
         <section className="mb-10">
           <h2 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
             <Users className="w-4 h-4 text-primary" />
@@ -303,6 +231,7 @@ export default function AboutPage({ lang = 'es' }: { lang?: AboutLang }) {
             ))}
           </div>
         </section>
+        )}
 
         {/* FAQ */}
         <section className="mb-10">
@@ -335,6 +264,18 @@ export default function AboutPage({ lang = 'es' }: { lang?: AboutLang }) {
             {t.email}
           </a>
 
+          <a
+            href="/raul_alvarez_cv.pdf"
+            download
+            target="_blank"
+            rel="noopener"
+            aria-label={homeT.cvPdfAria}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-primary text-primary text-sm font-semibold hover:bg-primary/10 transition-colors mb-4 w-full sm:w-auto justify-center"
+          >
+            <FileDown className="w-4 h-4 shrink-0" aria-hidden="true" />
+            {homeT.cvPdfLabel}
+          </a>
+
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {SOCIAL_LINKS.map((link) => (
               <a
@@ -364,7 +305,7 @@ export default function AboutPage({ lang = 'es' }: { lang?: AboutLang }) {
         {/* Footer */}
         <footer className="mt-8 text-center">
           <p className="text-xs text-muted-foreground">
-            &copy; {new Date().getFullYear()} Santiago Fernández de Valderrama. {lang === 'es' ? 'Todos los derechos reservados.' : 'All rights reserved.'}
+            &copy; {new Date().getFullYear()} {DISPLAY_NAME}. {lang === 'es' ? 'Todos los derechos reservados.' : 'All rights reserved.'}
           </p>
         </footer>
       </main>

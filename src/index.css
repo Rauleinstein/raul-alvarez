@@ -344,7 +344,7 @@ button, a, [role="button"], summary { cursor: pointer; }
     letter-spacing: 0.01em;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* No transition — instant theme switch for clean dot grid + orb change */
+    /* No transition — instant theme switch for page texture + orb change */
   }
 
   /* Accesibilidad: tamaños mínimos WCAG AA */
@@ -403,6 +403,91 @@ button, a, [role="button"], summary { cursor: pointer; }
   .bg-accent\/20 { background-color: hsl(var(--accent) / 0.2); }
   .bg-card { background-color: hsl(var(--card)); }
   .bg-border { background-color: hsl(var(--border)); }
+
+  /* Line grid (graph paper) — same 24px rhythm & --dot-grid tint as former dot pattern */
+  .bg-page-texture {
+    background-color: hsl(var(--background));
+    background-image:
+      linear-gradient(hsl(var(--dot-grid)) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--dot-grid)) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /*
+   * Homepage-only: LinkedIn-style tech backdrop (royal blue → navy → black),
+   * subtle structural grid, vignette for readable center. Does not replace
+   * .bg-page-texture (about + articles keep the graph paper look).
+   */
+  html:not(.light) .bg-home-page {
+    background-color: hsl(222 47% 4%);
+    background-image:
+      /* Edge vignette — keeps hero copy readable */
+      radial-gradient(
+        ellipse 100% 88% at 50% 32%,
+        hsl(220 28% 12% / 0) 0%,
+        hsl(222 38% 5% / 0.62) 58%,
+        hsl(225 50% 2% / 0.96) 100%
+      ),
+      /* Structural line grid (24px rhythm matches GridSnakes) */
+      linear-gradient(hsl(0 0% 100% / 0.034) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(0 0% 100% / 0.034) 1px, transparent 1px),
+      /* Royal blue → navy → black */
+      linear-gradient(
+        108deg,
+        hsl(226 62% 26%) 0%,
+        hsl(230 48% 11%) 40%,
+        hsl(238 32% 5%) 72%,
+        hsl(0 0% 0%) 100%
+      );
+    background-size: 100% 100%, 24px 24px, 24px 24px, 100% 100%;
+    background-repeat: no-repeat, repeat, repeat, no-repeat;
+  }
+
+  html.light .bg-home-page {
+    background-color: hsl(220 20% 96%);
+    background-image:
+      radial-gradient(ellipse 90% 70% at 50% 30%, hsl(0 0% 100% / 0.5) 0%, transparent 60%),
+      linear-gradient(hsl(var(--dot-grid)) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--dot-grid)) 1px, transparent 1px),
+      linear-gradient(
+        108deg,
+        hsl(215 55% 92%) 0%,
+        hsl(220 28% 96%) 45%,
+        hsl(230 22% 94%) 100%
+      );
+    background-size: 100% 100%, 24px 24px, 24px 24px, 100% 100%;
+    background-position: center, 0 0, 0 0, center;
+    background-repeat: no-repeat, repeat, repeat, no-repeat;
+  }
+
+  /*
+   * Homepage section bands — vertical feather so muted blocks blend into
+   * bg-home-page (avoids hard horizontal seams between sections).
+   */
+  .section-muted-fade {
+    background-image: linear-gradient(
+      to bottom,
+      hsl(var(--muted) / 0) 0%,
+      hsl(var(--muted) / 0.16) 7%,
+      hsl(var(--muted) / 0.26) 16%,
+      hsl(var(--muted) / 0.32) 28%,
+      hsl(var(--muted) / 0.32) 72%,
+      hsl(var(--muted) / 0.26) 84%,
+      hsl(var(--muted) / 0.16) 93%,
+      hsl(var(--muted) / 0) 100%
+    );
+  }
+
+  /* Clear strips between muted bands — tiny tonal shift, no hard line */
+  .section-continuity-soft {
+    background-image: linear-gradient(
+      to bottom,
+      hsl(var(--muted) / 0.05) 0%,
+      transparent 14%,
+      transparent 86%,
+      hsl(var(--muted) / 0.045) 100%
+    );
+  }
 
   .text-foreground { color: hsl(var(--foreground)); }
   .text-muted-foreground { color: hsl(var(--muted-foreground)); }
@@ -606,6 +691,20 @@ section[id], footer[id] {
     0%, 100% { opacity: 0.6; }
     50% { opacity: 0.7; }
   }
+}
+
+/* Homepage hero wireframes — theme-aware strokes & dot grids */
+.home-hero-wireframes .home-hero-stroke {
+  stroke: hsl(0 0% 100% / 0.11);
+}
+html.light .home-hero-wireframes .home-hero-stroke {
+  stroke: hsl(220 28% 38% / 0.24);
+}
+.home-hero-wireframes .home-hero-dot {
+  fill: hsl(0 0% 100% / 0.12);
+}
+html.light .home-hero-wireframes .home-hero-dot {
+  fill: hsl(220 25% 45% / 0.28);
 }
 
 /* =============================================================

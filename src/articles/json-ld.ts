@@ -1,3 +1,5 @@
+import { SITE_URL, SITE_HOST, DISPLAY_NAME, EMAIL, socialSameAs } from '../site'
+
 type Lang = 'es' | 'en'
 
 interface JsonLdOptions {
@@ -37,28 +39,19 @@ interface JsonLdOptions {
 
 const PERSON = {
   '@type': 'Person',
-  '@id': 'https://santifer.io/#person',
-  name: 'Santiago Fernández de Valderrama Aparicio',
-  url: 'https://santifer.io',
-  jobTitle: 'AI Product Manager',
-  sameAs: [
-    'https://www.linkedin.com/in/santifer',
-    'https://github.com/santifer',
-    'https://x.com/santifer',
-    'https://dev.to/santifer',
-    'https://santifer.substack.com',
-    'https://contentdigest.santifer.io',
-    'https://www.youtube.com/@santifer_io',
-    'https://www.wikidata.org/wiki/Q138710224',
-    'https://www.facebook.com/santifer.io/',
-  ],
+  '@id': `${SITE_URL}/#person`,
+  name: DISPLAY_NAME,
+  url: SITE_URL,
+  email: EMAIL,
+  jobTitle: ['AI Architect', 'AI Solutions Engineer', 'Head of AI Architecture @ Aircury'],
+  sameAs: socialSameAs,
 }
 
 const WEBSITE = {
   '@type': 'WebSite',
-  '@id': 'https://santifer.io/#website',
-  name: 'santifer.io',
-  url: 'https://santifer.io',
+  '@id': `${SITE_URL}/#website`,
+  name: SITE_HOST,
+  url: SITE_URL,
 }
 
 export function buildArticleJsonLd(opts: JsonLdOptions) {
@@ -71,7 +64,7 @@ export function buildArticleJsonLd(opts: JsonLdOptions) {
       headline: opts.headline,
       alternativeHeadline: opts.alternativeHeadline,
       description: opts.description,
-      author: { '@id': 'https://santifer.io/#person' },
+      author: { '@id': `${SITE_URL}/#person` },
       ...(opts.publisher ? {
         publisher: {
           '@type': 'Organization',
@@ -86,7 +79,7 @@ export function buildArticleJsonLd(opts: JsonLdOptions) {
       mainEntityOfPage: opts.url,
       image: opts.images,
       inLanguage,
-      isPartOf: { '@id': 'https://santifer.io/#website' },
+      isPartOf: { '@id': `${SITE_URL}/#website` },
       ...(opts.about ? { about: opts.about } : {}),
       ...(opts.extra || {}),
       ...(opts.citation ? { citation: opts.citation } : {}),
@@ -101,7 +94,7 @@ export function buildArticleJsonLd(opts: JsonLdOptions) {
     {
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: opts.breadcrumbHome, item: 'https://santifer.io' },
+        { '@type': 'ListItem', position: 1, name: opts.breadcrumbHome, item: SITE_URL },
         { '@type': 'ListItem', position: 2, name: opts.breadcrumbCurrent, item: opts.url },
       ],
     },
