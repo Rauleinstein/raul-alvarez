@@ -1,0 +1,45 @@
+{
+  "sources": [
+    {
+      "logoId": "custodio-digital",
+      "origin": "https://custodio.digital"
+    },
+    {
+      "logoId": "powermark",
+      "origin": "https://www.smartgrade.co.uk"
+    },
+    {
+      "logoId": "feria-libro-granada",
+      "origin": "https://ferialibrogranada.es"
+    },
+    {
+      "logoId": "cgv-seguros",
+      "origin": "https://cgvseguros.com"
+    },
+    {
+      "logoId": "esdrujula",
+      "origin": "https://esdrujula.es"
+    },
+    {
+      "logoId": "munford",
+      "prefetchUrls": [
+        "https://play.google.com/favicon.ico"
+      ]
+    },
+    {
+      "logoId": "entradasytickets",
+      "origin": "https://entradasytickets.com"
+    },
+    {
+      "logoId": "atlantis",
+      "origin": "https://etsiit.ugr.es"
+    },
+    {
+      "logoId": "omega-protocol",
+      "origin": "https://omega-protocol.net",
+      "prefetchUrls": [
+        "https://omega-protocol.net/assets/Logo_old.png"
+      ]
+    }
+  ]
+}

@@ -2058,6 +2058,7 @@ function App() {
               desc: string
               tech: readonly string[]
               link: string
+              logoSrc?: string
               caseStudyUrl?: string
               caseStudyLabel?: string
             }[]).map((project, i) => {
@@ -2068,9 +2069,26 @@ function App() {
               return (
                 <AnimatedSection key={project.title} delay={0.05 + i * 0.05}>
                   <div className="h-full p-6 rounded-2xl bg-card border border-border hover:border-primary/30 transition-colors duration-200 flex flex-col">
-                    <div className="flex items-start justify-between mb-3 gap-2">
-                      <h3 className="font-display text-lg font-bold text-foreground">{project.title}</h3>
-                      <span className="badge px-2 py-0.5 bg-primary/10 text-primary shrink-0">{project.badge}</span>
+                    <div className="flex items-start gap-3 mb-3">
+                      <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center shrink-0 border border-border overflow-hidden">
+                        {project.logoSrc ? (
+                          <img
+                            src={project.logoSrc}
+                            alt=""
+                            className="w-full h-full object-contain p-1.5"
+                            loading="lazy"
+                            width={40}
+                            height={40}
+                            decoding="async"
+                          />
+                        ) : (
+                          <Package className="w-5 h-5 text-muted-foreground" aria-hidden />
+                        )}
+                      </div>
+                      <div className="flex flex-1 min-w-0 items-start justify-between gap-2">
+                        <h3 className="font-display text-lg font-bold text-foreground">{project.title}</h3>
+                        <span className="badge px-2 py-0.5 bg-primary/10 text-primary shrink-0">{project.badge}</span>
+                      </div>
                     </div>
                     <p className="text-sm text-muted-foreground mb-4 flex-1">{parseBold(project.desc)}</p>
                     <div className="flex flex-wrap gap-2 mb-4">

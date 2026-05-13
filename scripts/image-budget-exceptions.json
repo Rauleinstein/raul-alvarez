@@ -9,6 +9,11 @@
       "path": "og-image.png",
       "maxKb": 400,
       "reason": "Primary OG/Twitter PNG fallback; WebP variant is preferred at runtime."
+    },
+    {
+      "path": "logos/projects/omega-protocol.png",
+      "maxKb": 450,
+      "reason": "Project card logo from omega-protocol.net asset; small display only."
     }
   ]
 }
