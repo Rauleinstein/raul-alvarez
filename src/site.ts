@@ -8,5 +8,9 @@ export const HANDLE = '@raulalhi'
 export const LINKEDIN_URL = 'https://www.linkedin.com/in/raulalvarezhinojosa/'
 export const GITHUB_URL = 'https://github.com/Rauleinstein'
 
+/** Upstream template this site was forked from */
+export const FORK_SOURCE_URL = 'https://github.com/santifer/cv-santiago' as const
+export const FORK_SOURCE_REPO = 'santifer/cv-santiago' as const
+
 /** SameAs for JSON-LD */
 export const socialSameAs: string[] = [LINKEDIN_URL, GITHUB_URL]

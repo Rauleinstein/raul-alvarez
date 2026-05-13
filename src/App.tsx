@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback, useMemo, useReducer, useRef } from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
-import { Mail, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Lock, Network, Calendar, Percent, UserCheck, Image, TrendingUp, Timer, SkipForward, ThumbsUp, MessageCircle, Share2, ChevronRight, List, ArrowUp, Building2 } from 'lucide-react'
+import { Mail, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Bot, Zap, Database, Layout, FolderGit2, Sparkles, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Lock, Network, Calendar, Percent, UserCheck, Image, TrendingUp, Timer, SkipForward, ThumbsUp, MessageCircle, Share2, ChevronRight, List, ArrowUp, Building2 } from 'lucide-react'
 import { translations, seo, type Lang } from './i18n'
-import { LINKEDIN_URL } from './site'
+import { FORK_SOURCE_REPO, FORK_SOURCE_URL, LINKEDIN_URL } from './site'
 import { useHomeSeo } from './articles/use-article-seo'
 import { getTechIcon } from './tech-icons'
 
@@ -1625,14 +1625,6 @@ function App() {
                   </div>
                 </div>
               </div>
-              <motion.div
-                initial={hydrated ? { scale: 0 } : false}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
-                className="absolute -bottom-1 -right-1 w-10 h-10 rounded-full bg-gradient-theme flex items-center justify-center shadow-lg border-2 border-background"
-              >
-                <BadgeCheck className="w-6 h-6 text-white" />
-              </motion.div>
             </motion.div>
 
             <motion.div
@@ -2474,6 +2466,19 @@ function App() {
             <Link to={lang === 'es' ? '/privacidad' : '/privacy'} className="hover:text-primary transition-colors">
               {lang === 'es' ? 'Privacidad' : 'Privacy'}
             </Link>
+          </p>
+          <p className="mt-4 max-w-xl mx-auto text-[11px] leading-relaxed text-muted-foreground/75">
+            {t.forkAttribution}{' '}
+            <a
+              href={FORK_SOURCE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground underline decoration-border underline-offset-2 hover:text-primary hover:decoration-primary transition-colors"
+              aria-label={t.forkAttributionLinkAria}
+            >
+              {FORK_SOURCE_REPO}
+            </a>
+            .
           </p>
         </div>
       </footer>

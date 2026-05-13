@@ -19,6 +19,10 @@ Static-first portfolio with Spanish and English routes, lazy-loaded case-study p
 - **Performance & SEO** — Pre-render + hydrate, `llms.txt` validation script, article validation, sitemap generation
 - **Identity** — Centralized in `src/site.ts` (canonical URL, email, social links)
 
+## Origin
+
+This project was forked from [santifer/cv-santiago](https://github.com/santifer/cv-santiago).
+
 ---
 
 ## Tech stack
@@ -147,6 +151,10 @@ Portfolio pensado como sitio estático con rutas en español e inglés, páginas
 - **Casos de estudio** — Registro en `src/articles/registry.ts`; contenido vía `ArticleStub` y utilidades SEO compartidas
 - **Rendimiento y SEO** — Prerender + hidratación, script de validación de `llms.txt`, validación de artículos, sitemap
 - **Identidad** — Centralizada en `src/site.ts` (URL canónica, email, redes)
+
+## Origen
+
+Este proyecto es un fork de [santifer/cv-santiago](https://github.com/santifer/cv-santiago).
 
 ---
 

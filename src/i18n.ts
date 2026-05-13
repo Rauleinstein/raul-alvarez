@@ -384,6 +384,8 @@ export const translations = {
       desc: 'Abierto a roles de AI Architect / AI Solutions Engineer / liderazgo técnico en IA, remoto EU.',
       contact: 'Contactar',
     },
+    forkAttribution: 'Este sitio es un fork de',
+    forkAttributionLinkAria: 'Repositorio cv-santiago en GitHub (se abre en una pestaña nueva)',
     ui: {
       languageBanner: 'This site is available in English',
       languageBannerSwitch: 'Switch to EN',
@@ -796,6 +798,8 @@ export const translations = {
       desc: 'Open to AI Architect / AI Solutions Engineer / technical leadership in AI, EU remote.',
       contact: 'Contact',
     },
+    forkAttribution: 'This site was forked from',
+    forkAttributionLinkAria: 'cv-santiago repository on GitHub (opens in a new tab)',
     ui: {
       languageBanner: 'Este sitio está disponible en español',
       languageBannerSwitch: 'Cambiar a ES',
