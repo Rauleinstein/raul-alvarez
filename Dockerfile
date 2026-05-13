@@ -15,7 +15,8 @@ FROM nginx:1.27-alpine AS runner
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-EXPOSE 3123
+# Listen on 80 inside the container — Traefik/Dokploy default. For a public port like 3123, map 3123:80 in the UI, not a custom listen here.
+EXPOSE 80
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD wget -qO- http://127.0.0.1:3123/ >/dev/null || exit 1
+    CMD wget -qO- http://127.0.0.1/ >/dev/null || exit 1
