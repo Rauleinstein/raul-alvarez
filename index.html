@@ -4,6 +4,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Before React Router: nginx often serves .../index.html at /path/ but routes are /path -->
+    <script>
+      (function () {
+        var p = location.pathname
+        if (p.length > 1 && p.endsWith('/')) {
+          history.replaceState(null, '', p.replace(/\/+$/, '') + location.search + location.hash)
+        }
+      })()
+    </script>
 
     <!-- LCP Image Preload (avatar = Largest Contentful Paint element) -->
     <link rel="preload" href="/raul-alvarez-sm.webp" as="image" type="image/webp" imagesrcset="/raul-alvarez-sm.webp 192w, /raul-alvarez.webp 384w" imagesizes="(max-width: 768px) 160px, 192px" fetchpriority="high" />
