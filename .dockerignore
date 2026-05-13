@@ -1,0 +1,12 @@
+node_modules
+dist
+.git
+.github
+.cursor
+*.md
+.env
+.env.*
+coverage
+*.log
+evals
+tests
