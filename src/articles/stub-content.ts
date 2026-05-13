@@ -1,4 +1,12 @@
 /** Bilingual body copy for stub case-study pages + prerender JSON-LD FAQ */
+export type StubScreenshot = {
+  src: string
+  alt: string
+  caption: string
+  width?: number
+  height?: number
+}
+
 export type StubLangBlock = {
   kicker: string
   intro: string
@@ -7,6 +15,9 @@ export type StubLangBlock = {
   cta: string
   faqHeading: string
   faq: readonly { q: string; a: string }[]
+  /** Optional public-site captures (paths under `/public`). */
+  screenshotsHeading?: string
+  screenshots?: readonly StubScreenshot[]
 }
 
 export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLangBlock }> = {
@@ -14,18 +25,28 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
     es: {
       kicker: 'Custodio Digital · custodio.digital',
       intro:
-        'Custodio Digital es un spin-off de **Aircury** para custodia institucional de activos digitales: trazabilidad fuerte, **RBAC**, flujos **multisig**, auditoría y cumplimiento. Lideré el producto como **CTO**, alineando arquitectura de seguridad, operaciones y gobernanza con equipos gubernamentales y partners.',
-      tech: ['AWS', 'Seguridad', 'RBAC', 'Multisig', 'Auditoría on-chain', 'Symfony / Node'],
+        'Custodio Digital es un spin-off de **Aircury** orientado a **administraciones y fuerzas de seguridad**: cadena de custodia digital **inalterable**, claves únicas por dispositivo incautado (evita mezclar activos entre investigaciones), metadatos (imágenes, vídeo, geolocalización) en el registro, despliegue **on-premise** en el centro de datos del organismo e integración con **HSM**. El producto se declara alineado con **RGPD**, **MiCA**, **ISO/IEC 27001** y el **Esquema Nacional de Seguridad (ENS)**. Lideré el producto como **CTO** junto al equipo en Granada (sede en Calle Recogidas 35).',
+      tech: [
+        'AWS',
+        'HSM',
+        'RBAC',
+        'Multisig',
+        'Trazabilidad / auditoría',
+        'On-premise',
+        'ENS · ISO 27001 · MiCA / RGPD',
+        'Symfony / Node',
+      ],
       links: [
         { label: 'Sitio público', href: 'https://custodio.digital' },
         { label: 'Aircury', href: 'https://www.aircury.com' },
+        { label: 'Contacto Custodio (info@custodio.digital)', href: 'mailto:info@custodio.digital' },
       ],
-      cta: 'Estoy redactando el caso técnico completo (arquitectura, amenazas mitigadas y lecciones). Si te interesa profundizar o una charla con el equipo, escribe a hola@raul-alvarez.es.',
+      cta: 'Estoy redactando el caso técnico completo (arquitectura, amenazas mitigadas y lecciones). Si te interesa profundizar o una charla con el equipo, escribe a me@raul-alvarez.es.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
         {
           q: '¿Qué problema resuelve Custodio Digital?',
-          a: 'Digitaliza la custodia y el ciclo de vida de activos digitales sensibles con controles fuertes (roles, aprobaciones y trazabilidad) pensados para entornos institucionales.',
+          a: 'Da trazabilidad verificable del decomiso a la transferencia final de criptoactivos y evidencias asociadas, con controles institucionales (roles, aprobaciones, custodia de claves en HSM) y opción on-premise.',
         },
         {
           q: '¿Cuál fue tu rol?',
@@ -33,25 +54,63 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         },
         {
           q: '¿Hay documentación pública del caso?',
-          a: 'Esta página resume el caso técnico; el artículo largo se ampliará aquí con arquitectura y aprendizajes.',
+          a: 'Esta página resume el caso técnico con capturas del sitio público; el artículo largo ampliará arquitectura y aprendizajes.',
+        },
+        {
+          q: '¿Dónde está la empresa?',
+          a: 'Según el sitio público, la sede está en Calle Recogidas 35, 1A, 18005 Granada, España, con contacto telefónico +34 623 002 236.',
+        },
+      ],
+      screenshotsHeading: 'Capturas del sitio público',
+      screenshots: [
+        {
+          src: '/articles/custodio-digital/home-hero.jpg',
+          alt: 'Página principal de custodio.digital: propuesta de valor de custodia institucional.',
+          caption: 'Inicio — mensaje de custodia integral y trazabilidad para administraciones.',
+          width: 1280,
+          height: 800,
+        },
+        {
+          src: '/articles/custodio-digital/features-chain.jpg',
+          alt: 'Sección de funcionalidades: cadena de custodia digital y claves únicas.',
+          caption: 'Funciones — cadena de custodia inalterable y generación de claves por dispositivo.',
+          width: 1280,
+          height: 800,
+        },
+        {
+          src: '/articles/custodio-digital/compliance-hsm.jpg',
+          alt: 'Cumplimiento normativo e integración HSM en custodio.digital.',
+          caption: 'Cumplimiento e infraestructura — RGPD, MiCA, ISO 27001, ENS y módulos HSM / on-premise.',
+          width: 1280,
+          height: 800,
         },
       ],
     },
     en: {
       kicker: 'Custodio Digital · custodio.digital',
       intro:
-        'Custodio Digital is an **Aircury** spin-off for institutional digital-asset custody: strong traceability, **RBAC**, **multisig** flows, auditability, and compliance. I led the product as **CTO**, aligning security architecture, operations, and governance with government teams and partners.',
-      tech: ['AWS', 'Security', 'RBAC', 'Multisig', 'On-chain audit trail', 'Symfony / Node'],
+        'Custodio Digital is an **Aircury** spin-off built for **governments and law enforcement**: an **unalterable** digital chain of custody, **unique private keys per seized device** (so assets from different investigations do not mix), optional **metadata** (images, video, geolocation) in the record, **on-premise** deployment in the agency’s data centre, and **HSM** integration. The public positioning cites alignment with **GDPR**, **MiCA**, **ISO/IEC 27001**, and Spain’s **National Security Framework (ENS)**. I led the product as **CTO** with the Granada-based team (office at Calle Recogidas 35).',
+      tech: [
+        'AWS',
+        'HSM',
+        'RBAC',
+        'Multisig',
+        'Traceability / audit',
+        'On-premise',
+        'ENS · ISO 27001 · MiCA / GDPR',
+        'Symfony / Node',
+      ],
       links: [
         { label: 'Public site', href: 'https://custodio.digital' },
         { label: 'Aircury', href: 'https://www.aircury.com' },
+        { label: 'Custodio contact (info@custodio.digital)', href: 'mailto:info@custodio.digital' },
       ],
       cta: 'A full technical write-up (architecture, threat model, and lessons learned) is in progress. For a deeper walkthrough, email hola@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
         {
           q: 'What problem does Custodio solve?',
-          a: 'It digitizes custody and lifecycle for sensitive digital assets with strong controls (roles, approvals, traceability) suited to institutional environments.',
+          a: 'It provides verifiable traceability from seizure through final transfer of crypto assets and related evidence, with institutional controls (roles, approvals, HSM-backed keys) and optional on-premise hosting.',
         },
         {
           q: 'What was your role?',
@@ -59,47 +118,167 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         },
         {
           q: 'Is there public documentation yet?',
-          a: 'This page summarizes the case study; the long article will expand here with architecture and lessons learned.',
+          a: 'This page summarizes the case study with screenshots from the public marketing site; a longer article will add architecture detail.',
+        },
+        {
+          q: 'Where is the company based?',
+          a: 'Per the public site: Calle Recogidas 35, 1A, 18005 Granada, Spain; phone +34 623 002 236.',
+        },
+      ],
+      screenshotsHeading: 'Screenshots from the public site',
+      screenshots: [
+        {
+          src: '/articles/custodio-digital/home-hero.jpg',
+          alt: 'custodio.digital homepage: institutional digital asset custody positioning.',
+          caption: 'Homepage — full-lifecycle custody and traceability messaging.',
+          width: 1280,
+          height: 800,
+        },
+        {
+          src: '/articles/custodio-digital/features-chain.jpg',
+          alt: 'Feature section: digital chain of custody and per-device key generation.',
+          caption: 'Product features — unalterable chain of custody and unique keys per seized device.',
+          width: 1280,
+          height: 800,
+        },
+        {
+          src: '/articles/custodio-digital/compliance-hsm.jpg',
+          alt: 'Compliance and HSM integration section on custodio.digital.',
+          caption: 'Compliance & infrastructure — GDPR, MiCA, ISO 27001, ENS, HSM, and on-premise delivery.',
+          width: 1280,
+          height: 800,
         },
       ],
     },
   },
   powermark: {
     es: {
-      kicker: 'PowerMark · Aircury EdTech',
+      kicker: 'PowerMark · Aircury × Smartgrade (Powermark)',
       intro:
-        '**PowerMark** es la plataforma de evaluación asistida por IA de **Aircury**: **OCR** y **PLN** para calificar respuestas manuscritas y test, integrada con **Smartgrade**. Diseñé y supervisé pipelines de inferencia, calidad de datos y despliegue seguro junto a equipos pedagógicos.',
-      tech: ['OCR', 'NLP', 'IA generativa', 'Integraciones EdTech', 'Observabilidad'],
-      links: [{ label: 'Smartgrade', href: 'https://www.smartgrade.com' }],
-      cta: 'El caso detallado (métricas, evals del modelo y operación en aula) llegará pronto. ¿Colaboración o demo? hola@raul-alvarez.es.',
+        'En el ecosistema **Smartgrade**, **Powermark** es su herramienta de **auto-corrección con IA**: según su página pública en Reino Unido, orienta a reducir el tiempo de corrección (clientes citan ahorros del **65 % al 90 %** frente al marcado manual), marca en tiempo real evaluaciones **HeadStart Primary** Reading y GPS u otras **online personalizadas**, con precisión declarada típicamente **94–97 %**, sin enviar **datos identificables** de alumnos a los modelos, con **informes agregados** para clase/cohorte y **moderación y anulación** por el profesorado (respuestas de baja confianza destacadas). En **Aircury** diseñé y supervisé la pila **PowerMark** (**OCR** + **PLN**) integrada con Smartgrade para respuestas manuscritas y test: inferencia, calidad de datos y despliegue con equipos pedagógicos.',
+      tech: [
+        'OCR',
+        'PLN / NLP',
+        'Auto-corrección asistida',
+        'Moderación docente',
+        'Privacidad y cumplimiento',
+        'Integración EdTech',
+        'Observabilidad',
+      ],
+      links: [
+        {
+          label: 'Powermark — Smartgrade UK (página oficial)',
+          href: 'https://www.smartgrade.co.uk/solutions/ai-auto-marking',
+        },
+        { label: 'Smartgrade', href: 'https://www.smartgrade.com' },
+        { label: 'Aircury', href: 'https://www.aircury.com' },
+      ],
+      cta: 'El caso largo (métricas propias, evaluación del modelo y operación en aula) está en preparación. Colaboración o demo: hola@raul-alvarez.es.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
         {
-          q: '¿Qué hace PowerMark?',
-          a: 'Automatiza parte de la corrección combinando visión por computador y PLN, manteniendo supervisión humana donde aplica.',
+          q: '¿Powermark y PowerMark son lo mismo?',
+          a: 'Powermark es el nombre comercial del producto Smartgrade para auto-corrección con IA. PowerMark es la línea de trabajo en Aircury (OCR y PLN) integrada con esa plataforma.',
         },
         {
-          q: '¿Es un producto público?',
-          a: 'Es una línea de producto interna de Aircury integrada con partners; el artículo ampliará alcance y limitaciones.',
+          q: '¿Qué precisión comunica Smartgrade?',
+          a: 'En su documentación pública indican objetivo de más del 94 % donde hay guías de corrección detalladas; citan un ensayo grande (HeadStart Reading y GPS, ~9.500 respuestas) con 97 % de acierto del IA frente a 94 % del marcado docente. La precisión puede bajar si la pregunta es ambigua o la rúbrica es menos estricta.',
+        },
+        {
+          q: '¿Cómo limitan riesgos habituales de la IA?',
+          a: 'Smartgrade describe puntuaciones de confianza por respuesta, revisión prioritaria del profesorado, muestreo aleatorio y comprobación experta; afirman no usar los datos para entrenar modelos y no enviar PII a LLMs externos.',
+        },
+        {
+          q: '¿Qué hiciste tú en PowerMark?',
+          a: 'Arquitectura y supervisión de pipelines de inferencia, calidad de datos y despliegue seguro alineado con equipos pedagógicos; el artículo extenso detallará alcance y límites.',
+        },
+        {
+          q: '¿Y los exámenes en papel?',
+          a: 'Según Smartgrade UK, la siguiente fase es marcar evaluaciones escaneadas en papel; ofrecen piloto y contacto comercial para participar.',
+        },
+      ],
+      screenshotsHeading: 'Capturas — Powermark (Smartgrade UK)',
+      screenshots: [
+        {
+          src: '/articles/powermark/powermark1.png',
+          alt: 'Smartgrade UK: hero de Powermark con titular sobre reducir horas de corrección y cuatro tarjetas de valor (precisión, carga de trabajo, seguridad, feedback).',
+          caption:
+            'Propuesta de valor — corrección en momentos, precisión en tiempo real (94–97 % citados), ahorro de tiempo (65–90 % según clientes), sin PII hacia modelos de IA, informes de clase/cohorte.',
+          width: 1373,
+          height: 966,
+        },
+        {
+          src: '/articles/powermark/powermark2.png',
+          alt: 'Smartgrade UK: sección «How does Powermark work?» con cuatro pasos (Marketplace, envío online, IA con baja confianza marcada, informes agregados).',
+          caption:
+            'Flujo — evaluación habilitada para IA, entrega online, marcado automático con respuestas dudosas arriba del informe, informes agregados y de debilidades.',
+          width: 1462,
+          height: 923,
         },
       ],
     },
     en: {
-      kicker: 'PowerMark · Aircury EdTech',
+      kicker: 'PowerMark · Aircury × Smartgrade (Powermark)',
       intro:
-        '**PowerMark** is **Aircury**’s AI-assisted grading stack: **OCR** and **NLP** for handwritten answers and tests, integrated with **Smartgrade**. I designed and oversaw inference pipelines, data quality, and safe rollout with pedagogical teams.',
-      tech: ['OCR', 'NLP', 'Generative AI', 'EdTech integrations', 'Observability'],
-      links: [{ label: 'Smartgrade', href: 'https://www.smartgrade.com' }],
-      cta: 'A deeper case study (metrics, model evals, classroom ops) is coming. For partnerships or a walkthrough: hola@raul-alvarez.es.',
+        'Within **Smartgrade**, **Powermark** is their **AI auto-marking** product: per Smartgrade’s UK marketing site, it targets a sharp drop in marking time (customers report **65–90 %** savings vs traditional marking), **real-time** marking for **HeadStart Primary** Reading and GPS or **custom online** papers, typically **94–97 %** accuracy, **no personally identifiable information** sent to AI models, **aggregated** class and cohort feedback, and **teacher moderation and override** (low-confidence answers surfaced first). At **Aircury** I designed and oversaw the **PowerMark** stack (**OCR** + **NLP**) integrated with Smartgrade for handwritten responses and tests—inference, data quality, and rollout with pedagogical teams.',
+      tech: [
+        'OCR',
+        'NLP',
+        'AI-assisted marking',
+        'Teacher moderation',
+        'Privacy & compliance',
+        'EdTech integration',
+        'Observability',
+      ],
+      links: [
+        {
+          label: 'Powermark — Smartgrade UK (official page)',
+          href: 'https://www.smartgrade.co.uk/solutions/ai-auto-marking',
+        },
+        { label: 'Smartgrade', href: 'https://www.smartgrade.com' },
+        { label: 'Aircury', href: 'https://www.aircury.com' },
+      ],
+      cta: 'A long-form case study (our own metrics, model evaluation, and classroom operations) is in preparation. Partnerships or a walkthrough: hola@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
         {
-          q: 'What does PowerMark do?',
-          a: 'It speeds up grading by combining computer vision and NLP while keeping human oversight where needed.',
+          q: 'Are Powermark and PowerMark the same thing?',
+          a: 'Powermark is Smartgrade’s product name for AI auto-marking. PowerMark is Aircury’s OCR+NLP work integrated with that platform.',
         },
         {
-          q: 'Is it a public product?',
-          a: 'It’s an Aircury product line integrated with partners; the long article will clarify scope and constraints.',
+          q: 'What accuracy does Smartgrade publish?',
+          a: 'They aim for 94%+ where marking guidance is detailed, and cite a large HeadStart Reading and GPS sample (~9,500 responses) at 97% AI accuracy vs 94% for teachers. Accuracy can fall into the 80–90% range when questions or guidance are weaker.',
+        },
+        {
+          q: 'How do they mitigate common AI risks?',
+          a: 'They describe per-answer confidence scoring, priority teacher review, random sampling with expert checks, and tight mark schemes; they state student data is not used for model training and PII is not passed to external LLMs.',
+        },
+        {
+          q: 'What was your role on PowerMark?',
+          a: 'I owned inference pipeline design and oversight, data quality, and safe rollout with pedagogical stakeholders; the full article will spell out scope and limits.',
+        },
+        {
+          q: 'What about paper assessments?',
+          a: 'Smartgrade UK positions scanned paper marking as the next Powermark phase and invites schools/MATs to join a pilot via their sales channel.',
+        },
+      ],
+      screenshotsHeading: 'Screenshots — Powermark (Smartgrade UK)',
+      screenshots: [
+        {
+          src: '/articles/powermark/powermark1.png',
+          alt: 'Smartgrade UK Powermark hero: headline on marking time and four value cards (accuracy, workload, secure AI, personalised feedback).',
+          caption:
+            'Value proposition — marking in moments, real-time accuracy (94–97% as stated on-page), time savings (65–90% per customer reports), no PII to AI models, class and cohort reporting.',
+          width: 1373,
+          height: 966,
+        },
+        {
+          src: '/articles/powermark/powermark2.png',
+          alt: 'Smartgrade UK “How does Powermark work?” with four steps: marketplace assessment, online submission, AI with low-confidence flags, aggregated teacher reports.',
+          caption:
+            'Flow — AI-enabled assessment from the Marketplace, online attempt, auto-marking with doubtful answers surfaced for review, aggregated and misconception-focused reports.',
+          width: 1462,
+          height: 923,
         },
       ],
     },

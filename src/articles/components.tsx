@@ -410,11 +410,24 @@ interface ArticleFigureProps {
   width?: number
   height?: number
   priority?: boolean
+  /** Merged with default figure classes (e.g. remove bottom margin inside grids). */
+  figureClassName?: string
 }
 
-export function ArticleFigure({ src, alt, title, caption, width = 1200, height = 675, priority = false }: ArticleFigureProps) {
+export function ArticleFigure({
+  src,
+  alt,
+  title,
+  caption,
+  width = 1200,
+  height = 675,
+  priority = false,
+  figureClassName = '',
+}: ArticleFigureProps) {
   return (
-    <figure className="rounded-lg overflow-hidden border border-border mb-6">
+    <figure
+      className={`rounded-lg overflow-hidden border border-border mb-6${figureClassName ? ` ${figureClassName}` : ''}`}
+    >
       <img
         src={src}
         alt={alt}

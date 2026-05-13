@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && npx tsx --tsconfig tsconfig.app.json scripts/generate-sitemap.ts && npx tsx --tsconfig tsconfig.app.json scripts/prerender.tsx && npx tsx --tsconfig tsconfig.app.json scripts/validate-prerender.ts",
-    "validate-llms-txt": "npx tsx --tsconfig tsconfig.app.json scripts/validate-llms-txt.ts",
-    "validate-articles": "npx tsx --tsconfig tsconfig.app.json scripts/validate-articles.ts",
-    "validate-articles:fix": "npx tsx --tsconfig tsconfig.app.json scripts/validate-articles.ts --fix",
+    "build": "tsc -b && vite build && tsx --tsconfig tsconfig.app.json scripts/generate-sitemap.ts && tsx --tsconfig tsconfig.app.json scripts/prerender.tsx && tsx --tsconfig tsconfig.app.json scripts/validate-prerender.ts",
+    "validate-llms-txt": "tsx --tsconfig tsconfig.app.json scripts/validate-llms-txt.ts",
+    "validate-articles": "tsx --tsconfig tsconfig.app.json scripts/validate-articles.ts",
+    "validate-articles:fix": "tsx --tsconfig tsconfig.app.json scripts/validate-articles.ts --fix",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -37,6 +37,7 @@
     "globals": "^16.5.0",
     "simple-icons": "^16.11.0",
     "tailwindcss": "^4.1.18",
+    "tsx": "^4.21.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
     "vite": "^7.2.4"

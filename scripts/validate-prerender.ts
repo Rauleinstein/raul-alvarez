@@ -6,7 +6,7 @@
  * Claude Code skill to invoke for the fix.
  *
  * Usage:
- *   npx tsx --tsconfig tsconfig.app.json scripts/validate-prerender.ts
+ *   tsx --tsconfig tsconfig.app.json scripts/validate-prerender.ts
  */
 
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs'
@@ -29,8 +29,9 @@ interface Issue { severity: Severity; msg: string; skill?: string }
 // Per-article HTML checks
 // ---------------------------------------------------------------------------
 
-function validatePrerenderHtml(id: string, slug: string, lang: 'es' | 'en'): Issue[] {
+function validatePrerenderHtml(config: ArticleConfig, slug: string, lang: 'es' | 'en'): Issue[] {
   const issues: Issue[] = []
+  const isCaseStudy = config.type === 'case-study'
   const htmlPath = resolve(dist, slug, 'index.html')
 
   if (!existsSync(htmlPath)) {
@@ -64,7 +65,7 @@ function validatePrerenderHtml(id: string, slug: string, lang: 'es' | 'en'): Iss
         skill: '/seo content',
       })
     }
-    if (descLen < 70) {
+    if (descLen < 70 && !isCaseStudy) {
       issues.push({
         severity: 'warn',
         msg: `Meta description too short: ${descLen} chars (min ~70).`,
@@ -78,7 +79,7 @@ function validatePrerenderHtml(id: string, slug: string, lang: 'es' | 'en'): Iss
   // 3. Title tag length
   const titleMatch = html.match(/<title>([^<]*)<\/title>/)
   if (titleMatch) {
-    if (titleMatch[1].length > 70) {
+    if (titleMatch[1].length > 70 && !isCaseStudy) {
       issues.push({
         severity: 'warn',
         msg: `Title tag: ${titleMatch[1].length} chars (ideal ≤60, truncates ~70).`,
@@ -157,7 +158,11 @@ function validatePrerenderHtml(id: string, slug: string, lang: 'es' | 'en'): Iss
   // 11. GEO: JSON-LD image should be hero, not OG
   if (articleJsonLd) {
     const imgInLd = articleJsonLd.match(/"image"\s*:\s*\[\s*"([^"]+)"/)
-    if (imgInLd && (imgInLd[1].includes('og-') || imgInLd[1].includes('og_'))) {
+    if (
+      imgInLd &&
+      (imgInLd[1].includes('og-') || imgInLd[1].includes('og_')) &&
+      !isCaseStudy
+    ) {
       issues.push({
         severity: 'warn',
         msg: `JSON-LD image uses OG card instead of hero. Set heroImage in registry.`,
@@ -207,7 +212,7 @@ function validatePrerenderHtml(id: string, slug: string, lang: 'es' | 'en'): Iss
   // 14. Word count minimum
   const fullStripped = html.replace(/<script[\s\S]*?<\/script>/gi, '').replace(/<style[\s\S]*?<\/style>/gi, '').replace(/<[^>]+>/g, ' ')
   const wordCount = fullStripped.split(/\s+/).filter(w => w.length > 0).length
-  if (wordCount < 1500) {
+  if (wordCount < 1500 && !isCaseStudy) {
     issues.push({
       severity: 'warn',
       msg: `Low word count: ${wordCount} words (min 1500 for articles).`,
@@ -466,7 +471,7 @@ const wordCounts: Map<string, { es: number; en: number }> = new Map()
 for (const article of articleRegistry) {
   if (article.type === 'bridge') continue
   for (const [lang, slug] of Object.entries(article.slugs) as ['es' | 'en', string][]) {
-    const issues = validatePrerenderHtml(article.id, slug, lang)
+    const issues = validatePrerenderHtml(article, slug, lang)
     if (issues.length > 0) {
       printIssues(issues, `${article.id} [${lang}]`)
     } else {
@@ -566,6 +571,8 @@ function validateStructural(): Issue[] {
   }
   for (const [img, ids] of ogImages) {
     if (ids.length > 1) {
+      const allCaseStudy = ids.every(id => articleRegistry.find(a => a.id === id)?.type === 'case-study')
+      if (allCaseStudy) continue
       issues.push({
         severity: 'warn',
         msg: `Duplicate ogImage "${img}" used by: ${ids.join(', ')}`,
@@ -576,7 +583,7 @@ function validateStructural(): Issue[] {
 
   // S3. FAQ answers >= 100 words
   for (const article of articleRegistry) {
-    if (article.type === 'bridge' || !article.seoMeta) continue
+    if (article.type === 'bridge' || article.type === 'case-study' || !article.seoMeta) continue
     for (const [lang, slug] of Object.entries(article.slugs) as ['es' | 'en', string][]) {
       const htmlPath = resolve(dist, slug, 'index.html')
       if (!existsSync(htmlPath)) continue

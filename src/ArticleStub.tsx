@@ -5,7 +5,7 @@ import { articleRegistry, type ArticleConfig } from './articles/registry'
 import { ARTICLE_STUB_BODIES } from './articles/stub-content'
 import { useArticleSeo } from './articles/use-article-seo'
 import { buildArticleJsonLd } from './articles/json-ld'
-import { ArticleLayout, ArticleHeader, ArticleFooter, FaqSection } from './articles/components'
+import { ArticleLayout, ArticleHeader, ArticleFooter, FaqSection, ArticleFigure } from './articles/components'
 import { LINKEDIN_URL } from './site'
 
 function parseBold(text: string): React.ReactNode[] {
@@ -90,6 +90,27 @@ function ArticleStubLoaded({ lang, article }: { lang: 'es' | 'en'; article: Arti
           </span>
         ))}
       </div>
+
+      {body.screenshotsHeading && body.screenshots && body.screenshots.length > 0 && (
+        <section className="mb-10" aria-labelledby={`stub-shots-${article.id}`}>
+          <h2 id={`stub-shots-${article.id}`} className="text-lg font-semibold text-foreground mb-4 scroll-mt-20">
+            {body.screenshotsHeading}
+          </h2>
+          <div className="grid gap-6 md:grid-cols-2">
+            {body.screenshots.map((shot) => (
+              <ArticleFigure
+                key={shot.src}
+                src={shot.src}
+                alt={shot.alt}
+                caption={shot.caption}
+                width={shot.width ?? 1280}
+                height={shot.height ?? 800}
+                figureClassName="mb-0"
+              />
+            ))}
+          </div>
+        </section>
+      )}
 
       {body.links.length > 0 && (
         <ul className="mb-10 space-y-2">

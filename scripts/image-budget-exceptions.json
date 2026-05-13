@@ -4,6 +4,11 @@
       "path": "raul-alvarez.png",
       "maxKb": 2500,
       "reason": "Full-size Person/JSON-LD master; UI uses WebP derivatives."
+    },
+    {
+      "path": "og-image.png",
+      "maxKb": 400,
+      "reason": "Primary OG/Twitter PNG fallback; WebP variant is preferred at runtime."
     }
   ]
 }
