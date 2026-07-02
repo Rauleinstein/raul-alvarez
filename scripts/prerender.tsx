@@ -24,7 +24,9 @@ import GlobalNav from '../src/GlobalNav.tsx';
 import { articleRegistry, type ArticleConfig } from '../src/articles/registry.ts';
 import { buildArticleJsonLd } from '../src/articles/json-ld.ts';
 import AboutPage from '../src/AboutPage.tsx';
+import PrivacyPolicy from '../src/PrivacyPolicy.tsx';
 import { aboutContent } from '../src/about-i18n.ts';
+import { privacyContent } from '../src/PrivacyPolicy.tsx';
 import { seo } from '../src/i18n.ts';
 import { aboutProfilePageJsonLd } from '../src/profile-jsonld.ts';
 import { LINKEDIN_URL } from '../src/site.ts';
@@ -210,6 +212,74 @@ for (const lang of ['es', 'en'] as const) {
 }
 
 // ---------------------------------------------------------------------------
+// Privacy — ES (/privacidad) + EN (/privacy)
+// ---------------------------------------------------------------------------
+
+interface PrivacyPageData {
+  slug: string;
+  html: string;
+}
+
+const privacyPages: PrivacyPageData[] = [];
+
+for (const lang of ['es', 'en'] as const) {
+  const t = privacyContent[lang];
+  const slug = t.slug;
+  const altSlug = t.altSlug;
+  const url = `https://raul-alvarez.es/${slug}`;
+  const altUrl = `https://raul-alvarez.es/${altSlug}`;
+  const altLang = lang === 'es' ? 'en' : 'es';
+  const ogLocale = lang === 'es' ? 'es_ES' : 'en_US';
+  const ogLocaleAlt = lang === 'es' ? 'en_US' : 'es_ES';
+
+  let renderedHtml: string;
+  try {
+    renderedHtml = stripReactSSRTags(renderToString(
+      <StaticRouter location={`/${slug}`}>
+        <GlobalNav />
+        <div>
+          <Suspense fallback={null}>
+            <Routes>
+              <Route path={`/${slug}`} element={<PrivacyPolicy lang={lang} />} />
+            </Routes>
+          </Suspense>
+        </div>
+      </StaticRouter>
+    ));
+  } catch (err) {
+    console.error(`[prerender] SSR failed for ${slug}, falling back to empty root:`, err);
+    renderedHtml = '';
+  }
+
+  const hreflangLinks = `<link rel="alternate" hreflang="${lang}" href="${url}" /><link rel="alternate" hreflang="${altLang}" href="${altUrl}" /><link rel="alternate" hreflang="x-default" href="https://raul-alvarez.es/privacidad" />`;
+
+  let result = indexHtml
+    .replace('<div id="root"></div>', `<div id="root">${renderedHtml}</div>`)
+    .replace('<html lang="es" class="dark">', `<html lang="${lang}" class="dark">`)
+    .replace(/<title>[^<]*<\/title>/, `<title>${esc(t.seo.title)}</title>`)
+    .replace(/<meta name="title" content="[^"]*" \/>/, `<meta name="title" content="${esc(t.seo.title)}" />`)
+    .replace(/<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${esc(t.seo.description)}" />`)
+    .replace(/<link rel="alternate" hreflang="[^"]*" href="[^"]*" \/>\s*/g, '')
+    .replace(/<link rel="canonical" href="[^"]*" \/>/, `<link rel="canonical" href="${url}" />${hreflangLinks}`)
+    .replace(/<meta property="og:url" content="[^"]*" \/>/, `<meta property="og:url" content="${url}" />`)
+    .replace(/<meta property="og:title" content="[^"]*" \/>/, `<meta property="og:title" content="${esc(t.seo.title)}" />`)
+    .replace(/<meta property="og:description" content="[^"]*" \/>/, `<meta property="og:description" content="${esc(t.seo.description)}" />`)
+    .replace(/<meta property="og:locale" content="es_ES" \/>/, `<meta property="og:locale" content="${ogLocale}" />`)
+    .replace(/<meta property="og:locale:alternate" content="en_US" \/>/, `<meta property="og:locale:alternate" content="${ogLocaleAlt}" />`)
+    .replace(/<meta name="twitter:url" content="[^"]*" \/>/, `<meta name="twitter:url" content="${url}" />`)
+    .replace(/<meta name="twitter:title" content="[^"]*" \/>/, `<meta name="twitter:title" content="${esc(t.seo.title)}" />`)
+    .replace(/<meta name="twitter:description" content="[^"]*" \/>/, `<meta name="twitter:description" content="${esc(t.seo.description)}" />`);
+
+  if (result.includes('name="robots"')) {
+    result = result.replace(/<meta name="robots" content="[^"]*" \/>/, '<meta name="robots" content="noindex, nofollow" />');
+  } else {
+    result = result.replace('</head>', '<meta name="robots" content="noindex, nofollow" /></head>');
+  }
+
+  privacyPages.push({ slug, html: result });
+}
+
+// ---------------------------------------------------------------------------
 // Article pages — build from registry
 // ---------------------------------------------------------------------------
 interface ArticlePage {
@@ -382,6 +452,11 @@ async function inlineCriticalCSS() {
     await writePage(html, resolve(distDir, slug, 'index.html'), `${slug}: dist/${slug}/index.html created`);
   }
 
+  // Privacy pages
+  for (const { slug, html } of privacyPages) {
+    await writePage(html, resolve(distDir, slug, 'index.html'), `${slug}: dist/${slug}/index.html created`);
+  }
+
   // Article pages
   for (const { slug, html } of articlePages) {
     await writePage(html, resolve(distDir, slug, 'index.html'), `${slug}: dist/${slug}/index.html created`);
@@ -434,6 +509,11 @@ validateHydrationStructure(enPage, 'home-en');
 
 // Validate about pages
 for (const { slug, html } of aboutPages) {
+  validateHydrationStructure(html, slug);
+}
+
+// Validate privacy pages
+for (const { slug, html } of privacyPages) {
   validateHydrationStructure(html, slug);
 }
 
