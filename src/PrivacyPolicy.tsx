@@ -1,7 +1,13 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ArticleLayout } from './articles/components'
-import { DISPLAY_NAME, EMAIL, SITE_HOST } from './site'
+import {
+  DISPLAY_NAME,
+  EMAIL,
+  GOOGLE_PLAY_DEVELOPER_ID,
+  GOOGLE_PLAY_DEVELOPER_URL,
+  SITE_HOST,
+} from './site'
 
 export const privacyContent = {
   es: {

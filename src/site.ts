@@ -5,6 +5,9 @@ export const SITE_NAME = 'raul-alvarez'
 export const DISPLAY_NAME = 'Raúl Álvarez Hinojosa'
 export const EMAIL = 'me@raul-alvarez.es'
 export const HANDLE = '@raulalhi'
+export const GOOGLE_PLAY_DEVELOPER_ID = 'RaulAlHi' as const
+export const GOOGLE_PLAY_DEVELOPER_URL =
+  `https://play.google.com/store/apps/developer?id=${GOOGLE_PLAY_DEVELOPER_ID}` as const
 export const LINKEDIN_URL = 'https://www.linkedin.com/in/raulalvarezhinojosa/'
 export const GITHUB_URL = 'https://github.com/Rauleinstein'
 
