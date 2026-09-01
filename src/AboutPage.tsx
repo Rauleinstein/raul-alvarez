@@ -4,7 +4,7 @@ import { MapPin, Mail, ExternalLink, Award, GraduationCap, Briefcase, ChevronRig
 import { aboutContent, type AboutLang } from './about-i18n'
 import { translations } from './i18n'
 import { aboutProfilePageJsonLd } from './profile-jsonld'
-import { DISPLAY_NAME, GITHUB_URL, LINKEDIN_URL } from './site'
+import { DISPLAY_NAME, GITHUB_URL, LINKEDIN_URL, getCvPdfHref } from './site'
 
 const SOCIAL_LINKS = [
   { name: 'LinkedIn', url: LINKEDIN_URL },
@@ -15,6 +15,7 @@ export default function AboutPage({ lang = 'es' }: { lang?: AboutLang }) {
   const t = aboutContent[lang]
   const homeT = translations[lang]
   const altSlug = t.altSlug
+  const cvPdfHref = getCvPdfHref(lang)
 
   useEffect(() => {
     document.documentElement.lang = lang
@@ -265,7 +266,7 @@ export default function AboutPage({ lang = 'es' }: { lang?: AboutLang }) {
           </a>
 
           <a
-            href="/raul_alvarez_cv.pdf"
+            href={cvPdfHref}
             download
             target="_blank"
             rel="noopener"

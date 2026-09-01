@@ -3,7 +3,7 @@ import { useLocation, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
 import { Mail, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Bot, Zap, Database, Layout, FolderGit2, Sparkles, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Lock, Network, Calendar, Percent, UserCheck, Image, TrendingUp, Timer, SkipForward, ThumbsUp, MessageCircle, Share2, ChevronRight, List, ArrowUp, Building2 } from 'lucide-react'
 import { translations, seo, type Lang } from './i18n'
-import { FORK_SOURCE_REPO, FORK_SOURCE_URL, LINKEDIN_URL } from './site'
+import { FORK_SOURCE_REPO, FORK_SOURCE_URL, LINKEDIN_URL, getCvPdfHref } from './site'
 import { useHomeSeo } from './articles/use-article-seo'
 import { getTechIcon } from './tech-icons'
 
@@ -1570,6 +1570,7 @@ function App() {
   const location = useLocation()
   const lang: Lang = location.pathname === '/en' ? 'en' : 'es'
   const t = translations[lang]
+  const cvPdfHref = getCvPdfHref(lang)
   const hydrated = useHydrated()
   useHeroStyles()
   const { displayText: roleText, roleIndex } = useTypewriterRotation(t.greetingRoles)
@@ -2456,7 +2457,7 @@ function App() {
                 {t.cta.contact}
               </a>
               <a
-                href="/raul_alvarez_cv.pdf"
+                href={cvPdfHref}
                 download
                 target="_blank"
                 rel="noopener"
