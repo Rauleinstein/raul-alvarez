@@ -71,7 +71,7 @@ function ArticleStubLoaded({ lang, article }: { lang: 'es' | 'en'; article: Arti
         editorId={`article-stub-${article.id}`}
         kicker={body.kicker}
         h1={article.titles[lang]}
-        subtitle={lang === 'es' ? 'Resumen ejecutivo del caso técnico.' : 'Executive summary of the case study.'}
+        subtitle={body.subtitle ?? (lang === 'es' ? 'Resumen ejecutivo del caso técnico.' : 'Executive summary of the case study.')}
         date={seoMeta.dateModified}
         dateISO={seoMeta.dateModified}
         readingTime={reading}
@@ -91,22 +91,47 @@ function ArticleStubLoaded({ lang, article }: { lang: 'es' | 'en'; article: Arti
         ))}
       </div>
 
+      {body.architectureHeading && body.architecture && body.architecture.length > 0 && (
+        <section className="mb-10" aria-labelledby={`stub-architecture-${article.id}`}>
+          <h2 id={`stub-architecture-${article.id}`} className="text-lg font-semibold text-foreground mb-3 scroll-mt-20">
+            {body.architectureHeading}
+          </h2>
+          {body.architectureIntro && (
+            <p className="text-sm text-muted-foreground leading-relaxed mb-4">{body.architectureIntro}</p>
+          )}
+          <div className="grid gap-4 md:grid-cols-2">
+            {body.architecture.map((item) => (
+              <article key={item.title} className="rounded-xl border border-border bg-card p-5">
+                <h3 className="text-sm font-semibold text-foreground mb-2">{item.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
       {body.screenshotsHeading && body.screenshots && body.screenshots.length > 0 && (
         <section className="mb-10" aria-labelledby={`stub-shots-${article.id}`}>
           <h2 id={`stub-shots-${article.id}`} className="text-lg font-semibold text-foreground mb-4 scroll-mt-20">
             {body.screenshotsHeading}
           </h2>
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid items-start gap-6 md:grid-cols-2">
             {body.screenshots.map((shot) => (
-              <ArticleFigure
-                key={shot.src}
-                src={shot.src}
-                alt={shot.alt}
-                caption={shot.caption}
-                width={shot.width ?? 1280}
-                height={shot.height ?? 800}
-                figureClassName="mb-0"
-              />
+              <article key={shot.src} className="rounded-xl border border-border bg-card p-3">
+                <ArticleFigure
+                  src={shot.src}
+                  alt={shot.alt}
+                  title={shot.title}
+                  caption={shot.caption}
+                  width={shot.width ?? 1280}
+                  height={shot.height ?? 800}
+                  figureClassName="mb-3"
+                />
+                {shot.title && <h3 className="text-sm font-semibold text-foreground mb-2">{shot.title}</h3>}
+                {shot.description && (
+                  <p className="px-1 pb-2 text-sm text-muted-foreground leading-relaxed">{shot.description}</p>
+                )}
+              </article>
             ))}
           </div>
         </section>

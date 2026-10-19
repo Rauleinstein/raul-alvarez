@@ -2,19 +2,31 @@
 export type StubScreenshot = {
   src: string
   alt: string
+  title?: string
+  description?: string
   caption: string
   width?: number
   height?: number
 }
 
+export type StubArchitecture = {
+  title: string
+  description: string
+}
+
 export type StubLangBlock = {
   kicker: string
+  subtitle?: string
   intro: string
   tech: string[]
   links: readonly { label: string; href: string }[]
   cta: string
   faqHeading: string
   faq: readonly { q: string; a: string }[]
+  /** Optional technology stack explanation. */
+  architectureHeading?: string
+  architectureIntro?: string
+  architecture?: readonly StubArchitecture[]
   /** Optional public-site captures (paths under `/public`). */
   screenshotsHeading?: string
   screenshots?: readonly StubScreenshot[]
@@ -285,10 +297,58 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
   },
   cityhunts: {
     es: {
-      kicker: 'CityHunts · Aventura urbana en tu móvil',
+      kicker: 'CityHunts · Aventura urbana autoguiada',
+      subtitle: 'Producto, arquitectura y flujos de juego de una plataforma de aventuras urbanas.',
       intro:
-        '**CityHunts** convierte una caminata por la ciudad en una aventura autoguiada: sigue pistas, resuelve retos ligeros y descubre relatos en lugares reales, a tu propio ritmo. Se juega desde el navegador del móvil; no hace falta descargar una app ni seguir a un guía. Contribuí a la arquitectura **React / Node.js** y al producto.',
-      tech: ['React', 'Node.js', 'Web móvil', 'Producto', 'UX de juego'],
+        '**CityHunts** convierte una caminata en una aventura interactiva: descubre rutas, visita lugares reales y resuelve pistas desde el móvil. No hace falta descargar una app ni seguir a un guía. Contribuí a la arquitectura y al producto; el stack actual combina una aplicación web en React con servicios backend de Supabase.',
+      tech: ['React 18', 'TypeScript', 'Vite', 'Supabase', 'Leaflet', 'Stripe', 'Web móvil'],
+      architectureHeading: 'Cómo está construido',
+      architectureIntro: 'Una aplicación web ligera conecta la exploración en el móvil con mapas, progreso de juego y servicios de creación y pago.',
+      architecture: [
+        { title: 'Aplicación web', description: 'React 18 y TypeScript, compilados con Vite. Tailwind CSS da estilo a la interfaz y React Router gestiona rutas como explorar, jugar y crear.' },
+        { title: 'Datos y servicios', description: 'Supabase aporta PostgreSQL, autenticación y almacenamiento. Sus Edge Functions gestionan procesos backend como generación de rutas y operaciones de pago.' },
+        { title: 'Rutas con lugares reales', description: 'Leaflet y React Leaflet muestran mapas y ubicaciones. Cada aventura enlaza pistas con puntos concretos que el jugador visita a pie.' },
+        { title: 'Creación y pagos', description: 'Stripe procesa los pagos de experiencias de pago y de la generación con IA. La generación y la gestión del checkout se coordinan mediante funciones backend.' },
+      ],
+      screenshotsHeading: 'Funciones del producto',
+      screenshots: [
+        {
+          src: '/articles/cityhunts/discover-hunts.webp',
+          alt: 'Página Explorar de CityHunts con búsqueda, controles de vista de cuadrícula y mapa, filtros y tarjetas de rutas.',
+          title: 'Explorar aventuras',
+          description: 'Busca rutas y filtra por destino. Cambia entre tarjetas y mapa; cada ficha muestra su ciudad, duración y dificultad.',
+          caption: 'Captura de la página pública de exploración.',
+          width: 1440,
+          height: 1200,
+        },
+        {
+          src: '/articles/cityhunts/hunt-detail.webp',
+          alt: 'Ficha de una aventura de CityHunts en Milán con portada, duración, cinco ubicaciones, punto de inicio y botón para empezar.',
+          title: 'Entender la ruta antes de jugar',
+          description: 'La ficha reúne la historia, el punto de partida, la duración, la dificultad y el número de ubicaciones antes de comenzar.',
+          caption: 'Ficha pública: The Secrets of the Visconti Serpent.',
+          width: 1440,
+          height: 1200,
+        },
+        {
+          src: '/articles/cityhunts/gameplay-challenge.webp',
+          alt: 'Pantalla de juego móvil con progreso, ubicación Duomo di Milano, una pista, botón de ayuda, campo de respuesta y acción para enviar.',
+          title: 'Resolver pistas en el lugar',
+          description: 'La pantalla de juego indica el progreso, guía al jugador hasta un lugar real y presenta una pregunta contextual. Se puede pedir una pista y enviar una respuesta.',
+          caption: 'Captura de una ruta pública gratuita en modo de juego.',
+          width: 880,
+          height: 960,
+        },
+        {
+          src: '/articles/cityhunts/ai-hunt-generator.webp',
+          alt: 'Generador de aventuras con IA con campos para ciudad, idioma, cantidad de paradas, dirección creativa y resumen del precio.',
+          title: 'Crear una aventura con IA',
+          description: 'Configura ciudad o zona, idioma, número de paradas y una dirección creativa opcional. El precio se calcula por parada; la generación continúa después del checkout.',
+          caption: 'Captura de la página pública de creación con IA.',
+          width: 1440,
+          height: 1200,
+        },
+      ],
       links: [
         { label: 'Visitar CityHunts', href: 'https://cityhunts.net/' },
         { label: 'Jugar la ruta de Granada', href: 'https://cityhunts.net/hunts/2c18ceea-ea38-47a7-b25b-c6b483691e2c/' },
@@ -300,14 +360,62 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { q: '¿Hay que instalar una app?', a: 'No. La experiencia se abre en el navegador del móvil.' },
         { q: '¿Se necesita reservar hora o contratar un guía?', a: 'No. Es una experiencia autoguiada que puedes empezar cuando te venga bien.' },
         { q: '¿Qué ofrece la ruta de Granada?', a: 'Un recorrido flexible por el centro y el Albaicín, con pistas y retos en lugares reales. La ruta dura aproximadamente 1–2 horas.' },
-        { q: '¿Qué parte desarrollaste?', a: 'Contribuí a la arquitectura React / Node.js y al producto. La página no atribuye métricas ni responsabilidades más específicas.' },
+        { q: '¿Qué parte desarrollaste?', a: 'Contribuí a la arquitectura y al producto. Esta página no atribuye métricas ni responsabilidades individuales más específicas.' },
       ],
     },
     en: {
-      kicker: 'CityHunts · A city adventure on your phone',
+      kicker: 'CityHunts · Self-guided city adventures',
+      subtitle: 'Product, architecture, and gameplay flows for a city-adventure platform.',
       intro:
-        '**CityHunts** turns a city walk into a self-guided adventure: follow clues, solve light challenges, and uncover stories at real places, at your own pace. Play in your mobile browser; no app download or live guide is required. I contributed to the **React / Node.js** architecture and product.',
-      tech: ['React', 'Node.js', 'Mobile web', 'Product', 'Game UX'],
+        '**CityHunts** turns a walk into an interactive adventure: discover routes, visit real places, and solve clues on your phone. No app download or live guide is required. I contributed to the architecture and product; the current stack pairs a React web app with Supabase backend services.',
+      tech: ['React 18', 'TypeScript', 'Vite', 'Supabase', 'Leaflet', 'Stripe', 'Mobile web'],
+      architectureHeading: 'How it is built',
+      architectureIntro: 'A lightweight web app connects mobile exploration with maps, game progress, and creation and payment services.',
+      architecture: [
+        { title: 'Web app', description: 'React 18 and TypeScript, built with Vite. Tailwind CSS styles the interface, and React Router handles routes for discovery, gameplay, and creation.' },
+        { title: 'Data and services', description: 'Supabase provides PostgreSQL, authentication, and storage. Its Edge Functions handle backend processes such as route generation and payment operations.' },
+        { title: 'Routes with real places', description: 'Leaflet and React Leaflet power maps and locations. Each adventure connects clues to specific places that players visit on foot.' },
+        { title: 'Creation and payments', description: 'Stripe processes payments for paid hunts and AI generation. Backend functions coordinate generation and checkout operations.' },
+      ],
+      screenshotsHeading: 'Product features',
+      screenshots: [
+        {
+          src: '/articles/cityhunts/discover-hunts.webp',
+          alt: 'CityHunts Explore page with search, grid and map view controls, filters, and hunt cards.',
+          title: 'Discover adventures',
+          description: 'Search routes and filter by destination. Switch between cards and map; each listing shows its city, duration, and difficulty.',
+          caption: 'Screenshot of the public hunt discovery page.',
+          width: 1440,
+          height: 1200,
+        },
+        {
+          src: '/articles/cityhunts/hunt-detail.webp',
+          alt: 'A CityHunts Milan adventure detail page showing its cover, duration, five locations, starting point, and start button.',
+          title: 'Preview a route before playing',
+          description: 'The detail page brings together the story, starting point, duration, difficulty, and number of locations before players begin.',
+          caption: 'Public detail page: The Secrets of the Visconti Serpent.',
+          width: 1440,
+          height: 1200,
+        },
+        {
+          src: '/articles/cityhunts/gameplay-challenge.webp',
+          alt: 'Mobile gameplay screen showing progress, the Duomo di Milano location, a clue, hint button, answer field, and submit action.',
+          title: 'Solve clues on location',
+          description: 'The game screen tracks progress, guides players to a real place, and presents a contextual question. Players can request a hint and submit an answer.',
+          caption: 'Screenshot of a public free hunt in gameplay.',
+          width: 880,
+          height: 960,
+        },
+        {
+          src: '/articles/cityhunts/ai-hunt-generator.webp',
+          alt: 'AI hunt generator with fields for city, language, number of stops, creative direction, and a price summary.',
+          title: 'Create a hunt with AI',
+          description: 'Choose a city or area, output language, number of stops, and optional creative direction. The price updates per stop; generation continues after checkout.',
+          caption: 'Screenshot of the public AI creation page.',
+          width: 1440,
+          height: 1200,
+        },
+      ],
       links: [
         { label: 'Visit CityHunts', href: 'https://cityhunts.net/' },
         { label: 'Play the Granada hunt', href: 'https://cityhunts.net/hunts/2c18ceea-ea38-47a7-b25b-c6b483691e2c/' },
@@ -319,7 +427,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { q: 'Do I need to install an app?', a: 'No. The experience runs in your mobile browser.' },
         { q: 'Do I need to book a time or hire a guide?', a: 'No. It is self-guided, so you can start when it suits you.' },
         { q: 'What is included in the Granada hunt?', a: 'A flexible route through central Granada and the Albaicín, with clues and challenges at real places. It takes about 1–2 hours.' },
-        { q: 'What did you work on?', a: 'I contributed to the React / Node.js architecture and product. This page does not claim specific metrics or a more detailed individual scope.' },
+        { q: 'What did you work on?', a: 'I contributed to the architecture and product. This page does not claim specific metrics or a more detailed individual scope.' },
       ],
     },
   },
