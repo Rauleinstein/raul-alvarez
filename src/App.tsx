@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useReducer, useRef } from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
-import { Mail, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Bot, Zap, Database, Layout, FolderGit2, Sparkles, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Lock, Network, Calendar, Percent, UserCheck, Image, TrendingUp, Timer, SkipForward, ThumbsUp, MessageCircle, Share2, ChevronRight, List, ArrowUp, Building2 } from 'lucide-react'
+import { Mail, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Bot, Zap, Database, Layout, FolderGit2, Sparkles, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Lock, Network, Calendar, Percent, UserCheck, Image, TrendingUp, Timer, SkipForward, ThumbsUp, MessageCircle, Share2, ChevronRight, List, ArrowUp } from 'lucide-react'
 import { translations, seo, type Lang } from './i18n'
 import { FORK_SOURCE_REPO, FORK_SOURCE_URL, LINKEDIN_URL, getCvPdfHref } from './site'
 import { useHomeSeo } from './articles/use-article-seo'
@@ -1712,7 +1712,7 @@ function App() {
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-2">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center shrink-0 border border-primary/25">
-                    <Building2 className="w-5 h-5 text-primary" aria-hidden />
+                    <img src="/logos/employers/aircury.svg" alt="" className="w-8 h-8 object-contain" width={32} height={32} loading="lazy" decoding="async" />
                   </div>
                   <h3 className="font-display text-2xl font-bold">{t.experience.aircury.company}</h3>
                 </div>
@@ -1962,7 +1962,7 @@ function App() {
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-2">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center shrink-0 border border-border">
-                    <Globe className="w-5 h-5 text-muted-foreground" aria-hidden />
+                    <img src="/logos/employers/chess24.png" alt="" className="w-7 h-7 object-contain" width={28} height={28} loading="lazy" decoding="async" />
                   </div>
                   <h3 className="font-display text-2xl font-bold">{t.experience.chess24.company}</h3>
                 </div>
@@ -1983,7 +1983,7 @@ function App() {
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-2">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center shrink-0 border border-border">
-                    <Package className="w-5 h-5 text-muted-foreground" aria-hidden />
+                    <img src="/logos/employers/bybubbly.png" alt="" className="w-7 h-7 object-contain" width={28} height={28} loading="lazy" decoding="async" />
                   </div>
                   <h3 className="font-display text-2xl font-bold">{t.experience.bybubbly.company}</h3>
                 </div>
@@ -2012,7 +2012,7 @@ function App() {
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-2">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center shrink-0 border border-border">
-                    <GraduationCap className="w-5 h-5 text-muted-foreground" aria-hidden />
+                    <img src="/logos/employers/rededuca.png" alt="" className="w-7 h-7 object-contain" width={28} height={28} loading="lazy" decoding="async" />
                   </div>
                   <h3 className="font-display text-2xl font-bold">{t.experience.rededuca.company}</h3>
                 </div>
