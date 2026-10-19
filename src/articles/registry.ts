@@ -41,6 +41,46 @@ export interface ArticleConfig {
 
 export const articleRegistry: ArticleConfig[] = [
   {
+    id: 'enrivo',
+    slugs: { es: 'enrivo', en: 'enrivo-en' },
+    titles: { es: 'Enrivo', en: 'Enrivo' },
+    seo: {
+      es: {
+        title: 'Enrivo — enriquecimiento de contactos con IA',
+        description: 'Caso de Enrivo: investigación de datos B2B con fuentes públicas, evidencia y aprobación humana antes de sincronizar con Mailchimp.',
+      },
+      en: {
+        title: 'Enrivo — AI contact enrichment for Mailchimp',
+        description: 'Enrivo case study: public-source B2B research with evidence and human approval before changes sync to Mailchimp.',
+      },
+    },
+    sectionLabels: { es: {}, en: {} },
+    type: 'case-study',
+    ragReady: false,
+    ogImage: OG,
+    heroImage: OG,
+    component: () => import('../ArticleStub.tsx'),
+    xDefaultSlug: 'enrivo',
+    seoMeta: {
+      datePublished: '2026-10-19',
+      dateModified: '2026-10-19',
+      keywords: ['Enrivo', 'Mailchimp', 'AI contact enrichment', 'B2B data', 'public sources', 'human review', 'PostgreSQL', 'Next.js', 'contact research', 'data quality'],
+      articleType: 'TechArticle',
+      articleTags: 'Enrivo,Mailchimp,AI,contact enrichment,B2B',
+      images: [OG],
+      about: [
+        { '@type': 'SoftwareApplication', name: 'Enrivo', url: 'https://enrivo.raul-alvarez.es/' },
+        { '@type': 'Thing', name: 'Human-reviewed contact enrichment' },
+      ],
+      citation: [{ '@type': 'WebSite', name: 'Enrivo', url: 'https://enrivo.raul-alvarez.es/' }],
+      mentions: [
+        { '@type': 'SoftwareApplication', name: 'Mailchimp' },
+        { '@type': 'SoftwareApplication', name: 'Next.js' },
+        { '@type': 'SoftwareApplication', name: 'PostgreSQL' },
+      ],
+    },
+  },
+  {
     id: 'custodio-digital',
     slugs: { es: 'custodio-digital', en: 'custodio-digital-en' },
     titles: { es: 'Custodio Digital', en: 'Custodio Digital' },
@@ -48,12 +88,12 @@ export const articleRegistry: ArticleConfig[] = [
       es: {
         title: 'Custodio Digital — custodia institucional de activos digitales | Raúl Álvarez',
         description:
-          'Caso técnico: Custodio Digital (spin-off Aircury), cadena de custodia, HSM, on-premise, RBAC, ENS/MiCA/RGPD y rol de CTO. Granada / remoto.',
+          'Caso de Custodio Digital: custodia institucional de activos digitales, trazabilidad, HSM, despliegue on-premise y rol de CTO.',
       },
       en: {
         title: 'Custodio Digital — institutional digital asset custody | Raúl Álvarez',
         description:
-          'Case study: Custodio Digital (Aircury spin-off), chain of custody, HSM, on-premise, RBAC, ENS/MiCA/GDPR, and CTO role. Granada / remote.',
+          'Custodio Digital case study: institutional digital-asset custody, traceability, HSM, on-premise deployment, and CTO role.',
       },
     },
     sectionLabels: { es: {}, en: {} },
@@ -65,7 +105,7 @@ export const articleRegistry: ArticleConfig[] = [
     xDefaultSlug: 'custodio-digital',
     seoMeta: {
       datePublished: '2026-05-12',
-      dateModified: '2026-05-13',
+      dateModified: '2026-10-19',
       keywords: [
         'Custodio Digital',
         'digital asset custody',
@@ -73,17 +113,14 @@ export const articleRegistry: ArticleConfig[] = [
         'ENS',
         'MiCA',
         'GDPR',
-        'RBAC',
-        'multisig',
         'Aircury',
         'Granada',
         'law enforcement custody',
         'institutional security',
-        'AWS',
         'CTO',
       ],
       articleType: 'TechArticle',
-      articleTags: 'custody,security,Aircury,Granada,RBAC,HSM',
+      articleTags: 'custody,security,Aircury,Granada,HSM,on-premise',
       images: [
         'https://raul-alvarez.es/articles/custodio-digital/home-hero.jpg',
         'https://raul-alvarez.es/articles/custodio-digital/features-chain.jpg',
@@ -109,24 +146,24 @@ export const articleRegistry: ArticleConfig[] = [
       es: {
         title: 'PowerMark — Powermark (Smartgrade UK), OCR+PLN y auto-corrección | Raúl Álvarez',
         description:
-          'PowerMark (Aircury) y Powermark (Smartgrade): auto-corrección con IA, OCR/PLN, moderación docente y capturas de la página oficial UK.',
+          'PowerMark en Aircury y Powermark en Smartgrade: OCR/PLN, marcado de evaluaciones online y revisión docente, sin métricas no verificadas.',
       },
       en: {
         title: 'PowerMark — Powermark (Smartgrade UK), OCR+NLP & AI marking | Raúl Álvarez',
         description:
-          'PowerMark (Aircury) and Smartgrade Powermark: AI auto-marking, OCR/NLP, teacher moderation, with screenshots from the official UK product page.',
+          'PowerMark at Aircury and Powermark at Smartgrade: OCR/NLP, online assessment marking, and teacher review, without unverified metrics.',
       },
     },
     sectionLabels: { es: {}, en: {} },
     type: 'case-study',
     ragReady: false,
-    ogImage: 'https://raul-alvarez.es/articles/powermark/powermark1.png',
-    heroImage: 'https://raul-alvarez.es/articles/powermark/powermark1.png',
+    ogImage: OG,
+    heroImage: OG,
     component: () => import('../ArticleStub.tsx'),
     xDefaultSlug: 'powermark',
     seoMeta: {
       datePublished: '2026-05-12',
-      dateModified: '2026-05-13',
+      dateModified: '2026-10-19',
       keywords: [
         'PowerMark',
         'Powermark',
@@ -142,10 +179,7 @@ export const articleRegistry: ArticleConfig[] = [
       ],
       articleType: 'TechArticle',
       articleTags: 'Powermark,Smartgrade,OCR,NLP,AI marking,Aircury,EdTech',
-      images: [
-        'https://raul-alvarez.es/articles/powermark/powermark1.png',
-        'https://raul-alvarez.es/articles/powermark/powermark2.png',
-      ],
+      images: [OG],
       about: [
         { '@type': 'SoftwareApplication', name: 'Smartgrade', url: 'https://www.smartgrade.com' },
         { '@type': 'SoftwareApplication', name: 'Powermark', url: 'https://www.smartgrade.co.uk/solutions/ai-auto-marking' },
@@ -222,12 +256,12 @@ export const articleRegistry: ArticleConfig[] = [
       es: {
         title: 'El Caso Munford — app Android (juego de crimen) | Raúl Álvarez',
         description:
-          'App Android para exposición y juego interactivo; enlace a Google Play y notas de producto.',
+          'App Android para una exposición fotográfica y un juego de crimen interactivo, documentada en el repositorio público.',
       },
       en: {
         title: 'El Caso Munford — Android crime-game app | Raúl Álvarez',
         description:
-          'Android app for a photography exhibition and interactive crime game; Play Store link.',
+          'Android app for a photography exhibition and interactive crime game, documented in the public repository.',
       },
     },
     sectionLabels: { es: {}, en: {} },
@@ -239,12 +273,12 @@ export const articleRegistry: ArticleConfig[] = [
     xDefaultSlug: 'el-caso-munford',
     seoMeta: {
       datePublished: '2026-05-12',
-      dateModified: '2026-05-12',
+      dateModified: '2026-10-19',
       keywords: [
         'El Caso Munford',
         'Android app',
         'crime game',
-        'Google Play',
+        'PhoneGap',
         'interactive narrative',
         'Raúl Álvarez',
         'Granada',
@@ -252,15 +286,15 @@ export const articleRegistry: ArticleConfig[] = [
         'mobile UX',
         'JavaScript',
       ],
-      articleType: 'Article',
+      articleType: 'TechArticle',
       articleTags: 'Android,crime game,narrative UX',
       images: [OG],
       about: [{ '@type': 'Thing', name: 'El Caso Munford Android app' }],
       citation: [
         {
           '@type': 'SoftwareApplication',
-          name: 'El Caso Munford',
-          url: 'https://play.google.com/store/apps/details?id=com.raulalvarez.munfordapp',
+          name: 'El Caso Munford source repository',
+          url: 'https://github.com/Rauleinstein/MumfordApp',
         },
       ],
       mentions: [
@@ -277,12 +311,12 @@ export const articleRegistry: ArticleConfig[] = [
       es: {
         title: 'Feria Libro Granada — web institucional | Raúl Álvarez',
         description:
-          'Caso: sitio de la Feria del Libro de Granada — contenidos, rendimiento y mantenimiento del proyecto web.',
+          'Caso: sitio de la Feria del Libro de Granada — programación cultural, contenidos y experiencia pública.',
       },
       en: {
         title: 'Granada Book Fair — institutional website | Raúl',
         description:
-          'Case: Granada Book Fair website — content structure, performance, and ongoing delivery for the public site.',
+          'Granada Book Fair case study: cultural programme, editorial content, and public website experience.',
       },
     },
     sectionLabels: { es: {}, en: {} },
@@ -294,22 +328,18 @@ export const articleRegistry: ArticleConfig[] = [
     xDefaultSlug: 'feria-libro-granada',
     seoMeta: {
       datePublished: '2026-05-12',
-      dateModified: '2026-05-12',
+      dateModified: '2026-10-19',
       keywords: [
         'Feria del Libro',
         'Granada',
-        'PHP',
         'web institucional',
         'editorial events',
         'content site',
-        'frontend',
         'ferialibrogranada',
-        'cultural web',
-        'responsive',
-        'SEO',
+        'cultural website',
       ],
       articleType: 'TechArticle',
-      articleTags: 'Granada,book-fair,PHP,web',
+      articleTags: 'Granada,book-fair,culture,web',
       images: [OG],
       about: [
         { '@type': 'Organization', name: 'Feria del Libro de Granada', url: 'https://ferialibrogranada.es' },
@@ -317,7 +347,6 @@ export const articleRegistry: ArticleConfig[] = [
       ],
       citation: [{ '@type': 'WebSite', name: 'Feria del Libro de Granada', url: 'https://ferialibrogranada.es' }],
       mentions: [
-        { '@type': 'Thing', name: 'PHP' },
         { '@type': 'Thing', name: 'Institutional web publishing' },
       ],
     },
@@ -345,7 +374,7 @@ export const articleRegistry: ArticleConfig[] = [
     xDefaultSlug: 'cgv-seguros',
     seoMeta: {
       datePublished: '2026-05-12',
-      dateModified: '2026-05-12',
+      dateModified: '2026-10-19',
       keywords: [
         'CGV Seguros',
         'insurance',
@@ -367,8 +396,8 @@ export const articleRegistry: ArticleConfig[] = [
       ],
       citation: [{ '@type': 'WebSite', name: 'CGV Seguros', url: 'https://cgvseguros.com' }],
       mentions: [
-        { '@type': 'Thing', name: 'Corporate web stack' },
-        { '@type': 'Thing', name: 'Content-led marketing site' },
+        { '@type': 'Thing', name: 'Insurance brokerage website' },
+        { '@type': 'Thing', name: 'Insurance services' },
       ],
     },
   },
@@ -395,7 +424,7 @@ export const articleRegistry: ArticleConfig[] = [
     xDefaultSlug: 'esdrujula-ediciones',
     seoMeta: {
       datePublished: '2026-05-12',
-      dateModified: '2026-05-12',
+      dateModified: '2026-10-19',
       keywords: [
         'Esdrújula',
         'editorial',
@@ -412,10 +441,10 @@ export const articleRegistry: ArticleConfig[] = [
       articleTags: 'publishing,books,web',
       images: [OG],
       about: [
-        { '@type': 'Organization', name: 'Esdrújula Ediciones', url: 'https://esdrujula.es' },
+        { '@type': 'Organization', name: 'Esdrújula Ediciones' },
         { '@type': 'Thing', name: 'Publisher digital presence' },
       ],
-      citation: [{ '@type': 'WebSite', name: 'Esdrújula Ediciones', url: 'https://esdrujula.es' }],
+      citation: [{ '@type': 'WebPage', name: 'Esdrújula Ediciones exhibitor profile', url: 'https://ferialibrogranada.es/expositor/esdrujula-libreria/' }],
       mentions: [
         { '@type': 'Thing', name: 'Editorial catalog' },
         { '@type': 'Thing', name: 'Brand-led web' },
@@ -445,7 +474,7 @@ export const articleRegistry: ArticleConfig[] = [
     xDefaultSlug: 'entradasytickets',
     seoMeta: {
       datePublished: '2026-05-12',
-      dateModified: '2026-05-12',
+      dateModified: '2026-10-19',
       keywords: [
         'EntradasyTickets',
         'ticketing',
@@ -497,7 +526,7 @@ export const articleRegistry: ArticleConfig[] = [
     xDefaultSlug: 'atlantis',
     seoMeta: {
       datePublished: '2026-05-12',
-      dateModified: '2026-05-12',
+      dateModified: '2026-10-19',
       keywords: [
         'Atlantis',
         'ETSIIT',
@@ -519,7 +548,7 @@ export const articleRegistry: ArticleConfig[] = [
       ],
       citation: [{ '@type': 'WebPage', name: 'ETSIIT UGR', url: 'https://etsiit.ugr.es' }],
       mentions: [
-        { '@type': 'Thing', name: 'Embedded systems' },
+        { '@type': 'Thing', name: 'Hardware prototype' },
         { '@type': 'Thing', name: 'Academic engineering project' },
       ],
     },
@@ -532,12 +561,12 @@ export const articleRegistry: ArticleConfig[] = [
       es: {
         title: 'Omega Protocol — juego móvil | Raúl Álvarez',
         description:
-          'Juego incremental de estrategia con atmósfera de horror cósmico; disponible en iOS y Android (v1.1.0).',
+          'Juego incremental móvil de estrategia y horror cósmico, con simulación continua y progreso sin conexión.',
       },
       en: {
         title: 'Omega Protocol — mobile strategy game | Raúl',
         description:
-          'Incremental strategy game with cosmic-horror tone; shipped on iOS and Android (v1.1.0).',
+          'Mobile incremental strategy game with cosmic horror, continuous simulation, and offline progress.',
       },
     },
     sectionLabels: { es: {}, en: {} },
@@ -549,7 +578,7 @@ export const articleRegistry: ArticleConfig[] = [
     xDefaultSlug: 'omega-protocol',
     seoMeta: {
       datePublished: '2026-05-12',
-      dateModified: '2026-05-12',
+      dateModified: '2026-10-19',
       keywords: [
         'Omega Protocol',
         'mobile game',
@@ -579,17 +608,17 @@ export const articleRegistry: ArticleConfig[] = [
   {
     id: 'dungeonkeeper',
     slugs: { es: 'dungeonkeeper', en: 'dungeonkeeper-en' },
-    titles: { es: 'DungeonKeeper', en: 'DungeonKeeper' },
+    titles: { es: 'MeepleHelper', en: 'MeepleHelper' },
     seo: {
       es: {
-        title: 'DungeonKeeper — kit digital de partida | Raúl',
+        title: 'MeepleHelper — asistente de juegos de mesa | Raúl Álvarez',
         description:
-          'Monorepo para partidas: app React Native/Expo, API Node/Express/MongoDB, admin Next.js, IA/voz y reglas en PDF.',
+          'Asistente de juegos de mesa con app React Native/Expo, API Node/Express, panel Next.js y búsqueda de reglamentos PDF.',
       },
       en: {
-        title: 'DungeonKeeper — digital tabletop kit | Raúl',
+        title: 'MeepleHelper — board-game assistant | Raúl Álvarez',
         description:
-          'Monorepo for tabletop play: React Native/Expo app, Node/Express/MongoDB API, Next.js admin, AI/voice, PDF rules.',
+          'Board-game assistant with a React Native/Expo app, Node/Express API, Next.js dashboard, and PDF rulebook search.',
       },
     },
     sectionLabels: { es: {}, en: {} },
@@ -601,14 +630,16 @@ export const articleRegistry: ArticleConfig[] = [
     xDefaultSlug: 'dungeonkeeper',
     seoMeta: {
       datePublished: '2026-05-12',
-      dateModified: '2026-05-12',
+      dateModified: '2026-10-19',
       keywords: [
+        'MeepleHelper',
         'DungeonKeeper',
         'React Native',
         'Expo',
         'Node.js',
         'Express',
         'MongoDB',
+        'Redis',
         'Next.js',
         'AI',
         'voice',
@@ -618,10 +649,10 @@ export const articleRegistry: ArticleConfig[] = [
       articleTags: 'monorepo,mobile,AI,tabletop',
       images: [OG],
       about: [
-        { '@type': 'SoftwareSourceCode', name: 'DungeonKeeper monorepo' },
+        { '@type': 'SoftwareApplication', name: 'MeepleHelper' },
         { '@type': 'Thing', name: 'Digital tabletop assistant' },
       ],
-      citation: [{ '@type': 'WebPage', name: 'DungeonKeeper portfolio case', url: 'https://raul-alvarez.es/dungeonkeeper' }],
+      citation: [{ '@type': 'WebPage', name: 'MeepleHelper portfolio case', url: 'https://raul-alvarez.es/dungeonkeeper' }],
       mentions: [
         { '@type': 'SoftwareApplication', name: 'React Native' },
         { '@type': 'SoftwareApplication', name: 'Next.js' },

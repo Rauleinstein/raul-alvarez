@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build && tsx --tsconfig tsconfig.app.json scripts/generate-sitemap.ts && tsx --tsconfig tsconfig.app.json scripts/prerender.tsx && tsx --tsconfig tsconfig.app.json scripts/validate-prerender.ts",
     "validate-llms-txt": "tsx --tsconfig tsconfig.app.json scripts/validate-llms-txt.ts",
     "validate-articles": "tsx --tsconfig tsconfig.app.json scripts/validate-articles.ts",
+    "validate-case-studies": "tsx --tsconfig tsconfig.app.json scripts/validate-case-studies.ts",
     "validate-articles:fix": "tsx --tsconfig tsconfig.app.json scripts/validate-articles.ts --fix",
     "fetch-project-logos": "tsx --tsconfig tsconfig.app.json scripts/fetch-project-logos.ts",
     "lint": "eslint .",

@@ -33,45 +33,59 @@ export type StubLangBlock = {
 }
 
 export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLangBlock }> = {
+  enrivo: {
+    es: {
+      kicker: 'Enrivo · enriquecimiento de contactos para Mailchimp',
+      intro:
+        '**Enrivo** investiga fuentes públicas para proponer empresa, cargo, sector y ubicación en contactos de Mailchimp. Cada sugerencia muestra evidencia y requiere aprobación antes de sincronizarse.',
+      tech: ['Next.js', 'TypeScript', 'PostgreSQL', 'Drizzle', 'Mailchimp OAuth', 'Tareas en segundo plano', 'Stripe'],
+      links: [{ label: 'Sitio público de Enrivo', href: 'https://enrivo.raul-alvarez.es/' }],
+      cta: 'Para conversar sobre enriquecimiento de datos con revisión humana, escribe a me@raul-alvarez.es.',
+      faqHeading: 'Preguntas frecuentes',
+      faq: [
+        { q: '¿Qué campos puede proponer Enrivo?', a: 'La web pública muestra empresa, cargo, sector y ubicación como ejemplos de campos enriquecibles.' },
+        { q: '¿Enrivo cambia Mailchimp automáticamente?', a: 'No. La persona revisa la evidencia y aprueba los cambios antes de sincronizarlos.' },
+        { q: '¿Está disponible para todo el público?', a: 'La web pública invita a solicitar acceso anticipado.' },
+      ],
+    },
+    en: {
+      kicker: 'Enrivo · contact enrichment for Mailchimp',
+      intro:
+        '**Enrivo** researches public sources to propose company, role, industry, and location data for Mailchimp contacts. Each suggestion shows evidence and needs approval before sync.',
+      tech: ['Next.js', 'TypeScript', 'PostgreSQL', 'Drizzle', 'Mailchimp OAuth', 'Background jobs', 'Stripe'],
+      links: [{ label: 'Enrivo public site', href: 'https://enrivo.raul-alvarez.es/' }],
+      cta: 'For a conversation about human-reviewed data enrichment, email me@raul-alvarez.es.',
+      faqHeading: 'FAQ',
+      faq: [
+        { q: 'Which fields can Enrivo suggest?', a: 'The public site shows company, job title, industry, and location as example fields.' },
+        { q: 'Does Enrivo change Mailchimp automatically?', a: 'No. A person reviews the evidence and approves changes before sync.' },
+        { q: 'Is it open to everyone?', a: 'The public site invites people to request early access.' },
+      ],
+    },
+  },
   'custodio-digital': {
     es: {
       kicker: 'Custodio Digital · custodio.digital',
       intro:
-        'Custodio Digital es un spin-off de **Aircury** orientado a **administraciones y fuerzas de seguridad**: cadena de custodia digital **inalterable**, claves únicas por dispositivo incautado (evita mezclar activos entre investigaciones), metadatos (imágenes, vídeo, geolocalización) en el registro, despliegue **on-premise** en el centro de datos del organismo e integración con **HSM**. El producto se declara alineado con **RGPD**, **MiCA**, **ISO/IEC 27001** y el **Esquema Nacional de Seguridad (ENS)**. Lideré el producto como **CTO** junto al equipo en Granada (sede en Calle Recogidas 35).',
+        'Custodio Digital es un spin-off de **Aircury** para la custodia institucional de activos digitales. El sitio público describe una cadena de custodia, claves únicas por dispositivo, despliegue on-premise e integración HSM. Lideré producto como **CTO** junto al equipo.',
       tech: [
-        'AWS',
         'HSM',
-        'RBAC',
-        'Multisig',
-        'Trazabilidad / auditoría',
+        'Cadena de custodia',
+        'Trazabilidad',
         'On-premise',
         'ENS · ISO 27001 · MiCA / RGPD',
-        'Symfony / Node',
       ],
       links: [
         { label: 'Sitio público', href: 'https://custodio.digital' },
         { label: 'Aircury', href: 'https://www.aircury.com' },
         { label: 'Contacto Custodio (info@custodio.digital)', href: 'mailto:info@custodio.digital' },
       ],
-      cta: 'Estoy redactando el caso técnico completo (arquitectura, amenazas mitigadas y lecciones). Si te interesa profundizar o una charla con el equipo, escribe a me@raul-alvarez.es.',
+      cta: 'Para hablar de producto y custodia digital institucional, escribe a me@raul-alvarez.es.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
-        {
-          q: '¿Qué problema resuelve Custodio Digital?',
-          a: 'Da trazabilidad verificable del decomiso a la transferencia final de criptoactivos y evidencias asociadas, con controles institucionales (roles, aprobaciones, custodia de claves en HSM) y opción on-premise.',
-        },
-        {
-          q: '¿Cuál fue tu rol?',
-          a: 'Como CTO lideré la visión de producto, la arquitectura técnica y la coordinación con stakeholders; el write-up largo detallará decisiones y trade-offs.',
-        },
-        {
-          q: '¿Hay documentación pública del caso?',
-          a: 'Esta página resume el caso técnico con capturas del sitio público; el artículo largo ampliará arquitectura y aprendizajes.',
-        },
-        {
-          q: '¿Dónde está la empresa?',
-          a: 'Según el sitio público, la sede está en Calle Recogidas 35, 1A, 18005 Granada, España, con contacto telefónico +34 623 002 236.',
-        },
+        { q: '¿Qué problema aborda?', a: 'Registrar y seguir activos digitales intervenidos y la evidencia asociada a cada fase de custodia.' },
+        { q: '¿Cuál fue tu papel?', a: 'Lideré producto como CTO junto al equipo.' },
+        { q: '¿Qué tecnologías se describen públicamente?', a: 'El sitio menciona HSM y despliegue on-premise. No atribuyo aquí una pila de software no publicada.' },
       ],
       screenshotsHeading: 'Capturas del sitio público',
       screenshots: [
@@ -101,41 +115,25 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
     en: {
       kicker: 'Custodio Digital · custodio.digital',
       intro:
-        'Custodio Digital is an **Aircury** spin-off built for **governments and law enforcement**: an **unalterable** digital chain of custody, **unique private keys per seized device** (so assets from different investigations do not mix), optional **metadata** (images, video, geolocation) in the record, **on-premise** deployment in the agency’s data centre, and **HSM** integration. The public positioning cites alignment with **GDPR**, **MiCA**, **ISO/IEC 27001**, and Spain’s **National Security Framework (ENS)**. I led the product as **CTO** with the Granada-based team (office at Calle Recogidas 35).',
+        'Custodio Digital is an **Aircury** spin-off for institutional digital-asset custody. Its public site describes a chain of custody, unique keys per device, on-premise deployment, and HSM integration. I led product as **CTO** with the team.',
       tech: [
-        'AWS',
         'HSM',
-        'RBAC',
-        'Multisig',
-        'Traceability / audit',
+        'Chain of custody',
+        'Traceability',
         'On-premise',
         'ENS · ISO 27001 · MiCA / GDPR',
-        'Symfony / Node',
       ],
       links: [
         { label: 'Public site', href: 'https://custodio.digital' },
         { label: 'Aircury', href: 'https://www.aircury.com' },
         { label: 'Custodio contact (info@custodio.digital)', href: 'mailto:info@custodio.digital' },
       ],
-      cta: 'A full technical write-up (architecture, threat model, and lessons learned) is in progress. For a deeper walkthrough, email me@raul-alvarez.es.',
+      cta: 'For a conversation about product and institutional digital custody, email me@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
-        {
-          q: 'What problem does Custodio solve?',
-          a: 'It provides verifiable traceability from seizure through final transfer of crypto assets and related evidence, with institutional controls (roles, approvals, HSM-backed keys) and optional on-premise hosting.',
-        },
-        {
-          q: 'What was your role?',
-          a: 'As CTO I owned product direction, technical architecture, and stakeholder alignment; the long-form case study will document concrete decisions.',
-        },
-        {
-          q: 'Is there public documentation yet?',
-          a: 'This page summarizes the case study with screenshots from the public marketing site; a longer article will add architecture detail.',
-        },
-        {
-          q: 'Where is the company based?',
-          a: 'Per the public site: Calle Recogidas 35, 1A, 18005 Granada, Spain; phone +34 623 002 236.',
-        },
+        { q: 'What problem does it address?', a: 'It records and tracks intervened digital assets and evidence linked to each custody stage.' },
+        { q: 'What was your role?', a: 'I led product as CTO with the team.' },
+        { q: 'Which technologies are public?', a: 'The site mentions HSM and on-premise deployment. I do not claim an unpublished software stack here.' },
       ],
       screenshotsHeading: 'Screenshots from the public site',
       screenshots: [
@@ -167,7 +165,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
     es: {
       kicker: 'PowerMark · Aircury × Smartgrade (Powermark)',
       intro:
-        'En el ecosistema **Smartgrade**, **Powermark** es su herramienta de **auto-corrección con IA**: según su página pública en Reino Unido, orienta a reducir el tiempo de corrección (clientes citan ahorros del **65 % al 90 %** frente al marcado manual), marca en tiempo real evaluaciones **HeadStart Primary** Reading y GPS u otras **online personalizadas**, con precisión declarada típicamente **94–97 %**, sin enviar **datos identificables** de alumnos a los modelos, con **informes agregados** para clase/cohorte y **moderación y anulación** por el profesorado (respuestas de baja confianza destacadas). En **Aircury** diseñé y supervisé la pila **PowerMark** (**OCR** + **PLN**) integrada con Smartgrade para respuestas manuscritas y test: inferencia, calidad de datos y despliegue con equipos pedagógicos.',
+        '**PowerMark** fue una línea de trabajo de IA educativa en Aircury, integrada con Smartgrade. Diseñé y supervisé el trabajo de OCR y PLN para evaluación asistida. La página pública actual de Smartgrade describe marcado online y revisión docente; no atribuyo cifras de precisión ni ahorros.',
       tech: [
         'OCR',
         'PLN / NLP',
@@ -175,7 +173,6 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         'Moderación docente',
         'Privacidad y cumplimiento',
         'Integración EdTech',
-        'Observabilidad',
       ],
       links: [
         {
@@ -185,54 +182,19 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { label: 'Smartgrade', href: 'https://www.smartgrade.com' },
         { label: 'Aircury', href: 'https://www.aircury.com' },
       ],
-      cta: 'El caso largo (métricas propias, evaluación del modelo y operación en aula) está en preparación. Colaboración o demo: me@raul-alvarez.es.',
+      cta: 'Para hablar de evaluación asistida y sistemas EdTech, escribe a me@raul-alvarez.es.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
-        {
-          q: '¿Powermark y PowerMark son lo mismo?',
-          a: 'Powermark es el nombre comercial del producto Smartgrade para auto-corrección con IA. PowerMark es la línea de trabajo en Aircury (OCR y PLN) integrada con esa plataforma.',
-        },
-        {
-          q: '¿Qué precisión comunica Smartgrade?',
-          a: 'En su documentación pública indican objetivo de más del 94 % donde hay guías de corrección detalladas; citan un ensayo grande (HeadStart Reading y GPS, ~9.500 respuestas) con 97 % de acierto del IA frente a 94 % del marcado docente. La precisión puede bajar si la pregunta es ambigua o la rúbrica es menos estricta.',
-        },
-        {
-          q: '¿Cómo limitan riesgos habituales de la IA?',
-          a: 'Smartgrade describe puntuaciones de confianza por respuesta, revisión prioritaria del profesorado, muestreo aleatorio y comprobación experta; afirman no usar los datos para entrenar modelos y no enviar PII a LLMs externos.',
-        },
-        {
-          q: '¿Qué hiciste tú en PowerMark?',
-          a: 'Arquitectura y supervisión de pipelines de inferencia, calidad de datos y despliegue seguro alineado con equipos pedagógicos; el artículo extenso detallará alcance y límites.',
-        },
-        {
-          q: '¿Y los exámenes en papel?',
-          a: 'Según Smartgrade UK, la siguiente fase es marcar evaluaciones escaneadas en papel; ofrecen piloto y contacto comercial para participar.',
-        },
-      ],
-      screenshotsHeading: 'Capturas — Powermark (Smartgrade UK)',
-      screenshots: [
-        {
-          src: '/articles/powermark/powermark1.png',
-          alt: 'Smartgrade UK: hero de Powermark con titular sobre reducir horas de corrección y cuatro tarjetas de valor (precisión, carga de trabajo, seguridad, feedback).',
-          caption:
-            'Propuesta de valor — corrección en momentos, precisión en tiempo real (94–97 % citados), ahorro de tiempo (65–90 % según clientes), sin PII hacia modelos de IA, informes de clase/cohorte.',
-          width: 1373,
-          height: 966,
-        },
-        {
-          src: '/articles/powermark/powermark2.png',
-          alt: 'Smartgrade UK: sección «How does Powermark work?» con cuatro pasos (Marketplace, envío online, IA con baja confianza marcada, informes agregados).',
-          caption:
-            'Flujo — evaluación habilitada para IA, entrega online, marcado automático con respuestas dudosas arriba del informe, informes agregados y de debilidades.',
-          width: 1462,
-          height: 923,
-        },
+        { q: '¿Powermark y PowerMark son lo mismo?', a: 'Powermark es el producto público de Smartgrade. PowerMark es el trabajo de Aircury descrito en este portfolio.' },
+        { q: '¿Qué documenta la página pública actual?', a: 'Smartgrade presenta marcado de evaluaciones online y revisión docente de respuestas señaladas.' },
+        { q: '¿El marcado de papel está disponible?', a: 'La página pública lo describe como una fase futura, no como una capacidad disponible.' },
+        { q: '¿Cuál fue tu contribución?', a: 'Diseñé y supervisé trabajo de OCR y PLN, integración, calidad de datos y entrega.' },
       ],
     },
     en: {
       kicker: 'PowerMark · Aircury × Smartgrade (Powermark)',
       intro:
-        'Within **Smartgrade**, **Powermark** is their **AI auto-marking** product: per Smartgrade’s UK marketing site, it targets a sharp drop in marking time (customers report **65–90 %** savings vs traditional marking), **real-time** marking for **HeadStart Primary** Reading and GPS or **custom online** papers, typically **94–97 %** accuracy, **no personally identifiable information** sent to AI models, **aggregated** class and cohort feedback, and **teacher moderation and override** (low-confidence answers surfaced first). At **Aircury** I designed and oversaw the **PowerMark** stack (**OCR** + **NLP**) integrated with Smartgrade for handwritten responses and tests—inference, data quality, and rollout with pedagogical teams.',
+        '**PowerMark** was an education-AI workstream at Aircury, integrated with Smartgrade. I designed and oversaw OCR and NLP work for assisted assessment. Smartgrade’s current public page describes online marking and teacher review. I make no accuracy or time-saving claims.',
       tech: [
         'OCR',
         'NLP',
@@ -240,7 +202,6 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         'Teacher moderation',
         'Privacy & compliance',
         'EdTech integration',
-        'Observability',
       ],
       links: [
         {
@@ -250,48 +211,13 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { label: 'Smartgrade', href: 'https://www.smartgrade.com' },
         { label: 'Aircury', href: 'https://www.aircury.com' },
       ],
-      cta: 'A long-form case study (our own metrics, model evaluation, and classroom operations) is in preparation. Partnerships or a walkthrough: me@raul-alvarez.es.',
+      cta: 'For a conversation about assisted assessment and EdTech systems, email me@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
-        {
-          q: 'Are Powermark and PowerMark the same thing?',
-          a: 'Powermark is Smartgrade’s product name for AI auto-marking. PowerMark is Aircury’s OCR+NLP work integrated with that platform.',
-        },
-        {
-          q: 'What accuracy does Smartgrade publish?',
-          a: 'They aim for 94%+ where marking guidance is detailed, and cite a large HeadStart Reading and GPS sample (~9,500 responses) at 97% AI accuracy vs 94% for teachers. Accuracy can fall into the 80–90% range when questions or guidance are weaker.',
-        },
-        {
-          q: 'How do they mitigate common AI risks?',
-          a: 'They describe per-answer confidence scoring, priority teacher review, random sampling with expert checks, and tight mark schemes; they state student data is not used for model training and PII is not passed to external LLMs.',
-        },
-        {
-          q: 'What was your role on PowerMark?',
-          a: 'I owned inference pipeline design and oversight, data quality, and safe rollout with pedagogical stakeholders; the full article will spell out scope and limits.',
-        },
-        {
-          q: 'What about paper assessments?',
-          a: 'Smartgrade UK positions scanned paper marking as the next Powermark phase and invites schools/MATs to join a pilot via their sales channel.',
-        },
-      ],
-      screenshotsHeading: 'Screenshots — Powermark (Smartgrade UK)',
-      screenshots: [
-        {
-          src: '/articles/powermark/powermark1.png',
-          alt: 'Smartgrade UK Powermark hero: headline on marking time and four value cards (accuracy, workload, secure AI, personalised feedback).',
-          caption:
-            'Value proposition — marking in moments, real-time accuracy (94–97% as stated on-page), time savings (65–90% per customer reports), no PII to AI models, class and cohort reporting.',
-          width: 1373,
-          height: 966,
-        },
-        {
-          src: '/articles/powermark/powermark2.png',
-          alt: 'Smartgrade UK “How does Powermark work?” with four steps: marketplace assessment, online submission, AI with low-confidence flags, aggregated teacher reports.',
-          caption:
-            'Flow — AI-enabled assessment from the Marketplace, online attempt, auto-marking with doubtful answers surfaced for review, aggregated and misconception-focused reports.',
-          width: 1462,
-          height: 923,
-        },
+        { q: 'Are Powermark and PowerMark the same?', a: 'Powermark is Smartgrade’s public product. PowerMark is the Aircury work described in this portfolio.' },
+        { q: 'What does the current public page describe?', a: 'Smartgrade presents online assessment marking and teacher review of flagged answers.' },
+        { q: 'Is paper marking available?', a: 'The public page describes it as a future phase, not an available feature.' },
+        { q: 'What did you contribute?', a: 'I designed and oversaw OCR and NLP work, integration, data quality, and delivery.' },
       ],
     },
   },
@@ -354,12 +280,12 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { label: 'Jugar la ruta de Granada', href: 'https://cityhunts.net/hunts/2c18ceea-ea38-47a7-b25b-c6b483691e2c/' },
         { label: 'Explorar rutas de Granada', href: 'https://cityhunts.net/granada/' },
       ],
-      cta: 'En Granada, la ruta se disfruta en unas 1–2 horas, con flexibilidad para parar y explorar. CityHunts también ofrece creación de aventuras personalizadas con IA.',
+      cta: 'CityHunts permite empezar una aventura desde el navegador del móvil y explorar a ritmo propio.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
         { q: '¿Hay que instalar una app?', a: 'No. La experiencia se abre en el navegador del móvil.' },
         { q: '¿Se necesita reservar hora o contratar un guía?', a: 'No. Es una experiencia autoguiada que puedes empezar cuando te venga bien.' },
-        { q: '¿Qué ofrece la ruta de Granada?', a: 'Un recorrido flexible por el centro y el Albaicín, con pistas y retos en lugares reales. La ruta dura aproximadamente 1–2 horas.' },
+        { q: '¿Qué ofrece la ruta de Granada?', a: 'Un recorrido por el centro y el Albaicín, con pistas y retos en lugares reales.' },
         { q: '¿Qué parte desarrollaste?', a: 'Contribuí a la arquitectura y al producto. Esta página no atribuye métricas ni responsabilidades individuales más específicas.' },
       ],
     },
@@ -421,12 +347,12 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { label: 'Play the Granada hunt', href: 'https://cityhunts.net/hunts/2c18ceea-ea38-47a7-b25b-c6b483691e2c/' },
         { label: 'Explore Granada hunts', href: 'https://cityhunts.net/granada/' },
       ],
-      cta: 'The Granada hunt takes about 1–2 hours, with room to pause and explore. CityHunts also offers AI-powered creation for custom adventures.',
+      cta: 'CityHunts lets players start an adventure in a phone browser and explore at their own pace.',
       faqHeading: 'FAQ',
       faq: [
         { q: 'Do I need to install an app?', a: 'No. The experience runs in your mobile browser.' },
         { q: 'Do I need to book a time or hire a guide?', a: 'No. It is self-guided, so you can start when it suits you.' },
-        { q: 'What is included in the Granada hunt?', a: 'A flexible route through central Granada and the Albaicín, with clues and challenges at real places. It takes about 1–2 hours.' },
+        { q: 'What is included in the Granada hunt?', a: 'A route through central Granada and the Albaicín, with clues and challenges at real places.' },
         { q: 'What did you work on?', a: 'I contributed to the architecture and product. This page does not claim specific metrics or a more detailed individual scope.' },
       ],
     },
@@ -435,37 +361,37 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
     es: {
       kicker: 'El Caso Munford · Android',
       intro:
-        'App Android para una exposición fotográfica con **juego de crimen** interactivo: narrativa, pruebas y recorrido físico. Proyecto creativo-técnico previo a mi foco actual en IA.',
-      tech: ['Android', 'JavaScript', 'UX narrativa'],
+        'App Android para una exposición fotográfica con **juego de crimen** interactivo. La interfaz acompaña al visitante por una historia presencial con pistas y audio.',
+      tech: ['Android', 'JavaScript', 'PhoneGap / Cordova', 'Audio'],
       links: [
         {
-          label: 'Google Play',
-          href: 'https://play.google.com/store/apps/details?id=com.raulalvarez.munfordapp',
+          label: 'Repositorio público en GitHub',
+          href: 'https://github.com/Rauleinstein/MumfordApp',
         },
       ],
-      cta: 'Un caso retro con aprendizajes de publicación y mantenimiento llegará aquí. Curiosidad técnica: me@raul-alvarez.es.',
+      cta: 'Para hablar de narrativa interactiva y experiencias móviles, escribe a me@raul-alvarez.es.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
-        { q: '¿Sigue disponible en Play Store?', a: 'Sí; el artículo largo cubrirá stack, decisiones y métricas si aplica.' },
-        { q: '¿Relación con tu trabajo actual?', a: 'Es parte de mi trayectoria de producto digital; hoy lidero IA en Aircury.' },
+        { q: '¿Se puede descargar desde una tienda?', a: 'No afirmo que la ficha de tienda siga activa. El repositorio público conserva el proyecto.' },
+        { q: '¿Qué muestra el historial?', a: 'Iteraciones en controles, navegación, texto, puntuación y reproducción de audio.' },
       ],
     },
     en: {
       kicker: 'El Caso Munford · Android',
       intro:
-        'Android app for a photography exhibition with an interactive **crime game**: narrative, clues, and a physical walkthrough. A creative-technical project before my current AI focus.',
-      tech: ['Android', 'JavaScript', 'Narrative UX'],
+        'Android app for a photography exhibition with an interactive **crime game**. The interface guides visitors through an in-person story with clues and audio.',
+      tech: ['Android', 'JavaScript', 'PhoneGap / Cordova', 'Audio'],
       links: [
         {
-          label: 'Google Play',
-          href: 'https://play.google.com/store/apps/details?id=com.raulalvarez.munfordapp',
+          label: 'Public GitHub repository',
+          href: 'https://github.com/Rauleinstein/MumfordApp',
         },
       ],
-      cta: 'A retro case study on shipping and maintenance is planned. Questions: me@raul-alvarez.es.',
+      cta: 'For a conversation about interactive narrative and mobile experiences, email me@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
-        { q: 'Is it still on the Play Store?', a: 'Yes; the long article will cover stack and metrics where relevant.' },
-        { q: 'How does it relate to today’s work?', a: 'It’s part of my digital product path; I now lead AI at Aircury.' },
+        { q: 'Can visitors download it from an app store?', a: 'I do not claim that a store listing remains active. The public repository preserves the project.' },
+        { q: 'What does the history show?', a: 'Iterations on controls, navigation, text, scoring, and audio playback.' },
       ],
     },
   },
@@ -473,27 +399,27 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
     es: {
       kicker: 'Feria del Libro de Granada · ferialibrogranada.es',
       intro:
-        'Desarrollo y evolución del **sitio institucional** de la feria: agenda, noticias y contenidos para público general. Prioricé **rendimiento**, claridad de información y un front mantenible junto al stack **PHP** del proyecto.',
-      tech: ['PHP', 'Frontend', 'Contenidos', 'Web pública'],
+        'Desarrollo del **sitio institucional** de la feria, con agenda, noticias y contenidos para público general. Este caso se centra en la experiencia pública y no atribuye un stack técnico.',
+      tech: ['Web pública', 'Eventos culturales', 'Contenidos'],
       links: [{ label: 'Sitio de la feria', href: 'https://ferialibrogranada.es' }],
-      cta: 'Este resumen sustituye métricas internas por un enfoque de portfolio. Para colaboraciones similares: me@raul-alvarez.es.',
+      cta: 'Para hablar de sitios culturales y publicación de contenidos, escribe a me@raul-alvarez.es.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
         { q: '¿Qué alcance cubría?', a: 'Implementación web orientada a difusión del evento y soporte a contenidos editoriales.' },
-        { q: '¿Stack concreto?', a: 'PHP y capa de presentación según el proyecto; el artículo largo detallará módulos si aplica.' },
+        { q: '¿Qué stack se utilizó?', a: 'No atribuyo tecnologías que no pude verificar en un repositorio accesible.' },
       ],
     },
     en: {
       kicker: 'Granada Book Fair · ferialibrogranada.es',
       intro:
-        'Delivery and iteration on the fair’s **public website**: schedule, news, and editorial content for a broad audience. Focus on **performance**, clear IA, and a maintainable **PHP**-based front.',
-      tech: ['PHP', 'Frontend', 'Content', 'Public web'],
+        'I developed the fair’s **institutional website**, with a schedule, news, and content for a broad audience. This case focuses on the public experience and does not claim a technical stack.',
+      tech: ['Public web', 'Cultural events', 'Content'],
       links: [{ label: 'Fair website', href: 'https://ferialibrogranada.es' }],
-      cta: 'Portfolio-safe summary without undisclosed metrics. Similar work: me@raul-alvarez.es.',
+      cta: 'For a conversation about cultural websites and content publishing, email me@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
         { q: 'What was in scope?', a: 'Web delivery supporting event communication and editorial publishing.' },
-        { q: 'Which stack?', a: 'PHP plus presentation layer as used in the project; a longer write-up can name modules if useful.' },
+        { q: 'Which stack was used?', a: 'I do not name technologies that I could not verify in an accessible repository.' },
       ],
     },
   },
@@ -501,55 +427,55 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
     es: {
       kicker: 'CGV Seguros · cgvseguros.com',
       intro:
-        'Sitio **corporativo** para mediación de seguros: mensaje claro de servicios, confianza y contacto. Trabajo de **maquetación**, estructura de contenidos y despliegue estable del proyecto web.',
-      tech: ['Web', 'Corporate', 'Contenidos'],
+        'Sitio **corporativo** para una correduría de seguros. La web presenta sus áreas de cobertura, su propuesta de asesoramiento y vías de contacto.',
+      tech: ['Web', 'Seguros', 'Contenidos'],
       links: [{ label: 'CGV Seguros', href: 'https://cgvseguros.com' }],
-      cta: 'Notas ampliadas bajo petición (arquitectura de información, accesibilidad). me@raul-alvarez.es.',
+      cta: 'Para hablar de proyectos web corporativos, escribe a me@raul-alvarez.es.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
-        { q: '¿Tipo de proyecto?', a: 'Web orientada a presencia comercial y captación de consultas, no producto asegurador propio.' },
-        { q: '¿Integraciones?', a: 'Este stub resume el caso; integraciones concretas se documentan si el cliente lo autoriza.' },
+        { q: '¿Qué presenta el sitio?', a: 'Áreas de cobertura, información sobre la correduría y opciones de contacto.' },
+        { q: '¿Se publican resultados comerciales?', a: 'No. Este caso no atribuye cifras de captación ni conversiones.' },
       ],
     },
     en: {
       kicker: 'CGV Seguros · cgvseguros.com',
       intro:
-        '**Corporate** brokerage site: clear services narrative, trust signals, and contact paths. **Layout**, content structure, and stable delivery for the public web.',
-      tech: ['Web', 'Corporate', 'Content'],
+        '**Corporate** website for an insurance brokerage. It presents areas of cover, its advisory offer, and contact options.',
+      tech: ['Web', 'Insurance', 'Content'],
       links: [{ label: 'CGV Seguros', href: 'https://cgvseguros.com' }],
-      cta: 'Extended notes on IA and accessibility available on request. me@raul-alvarez.es.',
+      cta: 'For a conversation about corporate web projects, email me@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
-        { q: 'What kind of build?', a: 'Marketing-oriented corporate web for an insurance mediation business.' },
-        { q: 'Third-party integrations?', a: 'Summarized here; specifics only with client approval.' },
+        { q: 'What does the site present?', a: 'Areas of cover, information about the brokerage, and ways to get in touch.' },
+        { q: 'Are commercial results published?', a: 'No. This case makes no lead-generation or conversion claims.' },
       ],
     },
   },
   'esdrujula-ediciones': {
     es: {
-      kicker: 'Esdrújula Ediciones · esdrujula.es',
+      kicker: 'Esdrújula Ediciones · editorial independiente',
       intro:
-        'Web para **editorial**: catálogo, noticias y tono de marca alineado con lectores. Equilibrio entre **identidad visual** legible y rendimiento en dispositivos móviles.',
+        'Web para una **editorial independiente**, con catálogo y noticias. La ficha pública de la Feria describe además muestras de lectura para acercar las obras al público.',
       tech: ['Web', 'Editorial', 'UX lectura'],
-      links: [{ label: 'Esdrújula Ediciones', href: 'https://esdrujula.es' }],
-      cta: 'Si buscas un perfil técnico para publishing digital, escribe a me@raul-alvarez.es.',
+      links: [{ label: 'Ficha en la Feria del Libro de Granada', href: 'https://ferialibrogranada.es/expositor/esdrujula-libreria/' }],
+      cta: 'Para hablar de sitios editoriales y descubrimiento de catálogo, escribe a me@raul-alvarez.es.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
-        { q: '¿Incluye tienda online?', a: 'Este caso resume el sitio editorial público; comercio electrónico detallado no forma parte de este stub.' },
-        { q: '¿CMS?', a: 'El detalle de CMS o flujo editorial puede ampliarse en conversación bajo NDA si aplica.' },
+        { q: '¿Qué contenido presenta?', a: 'Catálogo, colecciones, autores y noticias; la ficha pública de la Feria menciona capítulos de muestra.' },
+        { q: '¿Qué CMS o stack utiliza?', a: 'No atribuyo una plataforma técnica sin un repositorio accesible o una fuente pública fiable.' },
       ],
     },
     en: {
-      kicker: 'Esdrújula Ediciones · esdrujula.es',
+      kicker: 'Esdrújula Ediciones · independent publisher',
       intro:
-        'Publisher **website**: catalog, news, and brand tone for readers. Balance of **visual identity** and mobile-friendly performance.',
+        'Website for an **independent publisher**, with a catalogue and news. The fair’s public profile also describes reading samples that help readers explore the books.',
       tech: ['Web', 'Publishing', 'Reading UX'],
-      links: [{ label: 'Esdrújula Ediciones', href: 'https://esdrujula.es' }],
-      cta: 'For digital publishing engineering roles, me@raul-alvarez.es.',
+      links: [{ label: 'Granada Book Fair exhibitor profile', href: 'https://ferialibrogranada.es/expositor/esdrujula-libreria/' }],
+      cta: 'For a conversation about publisher websites and catalogue discovery, email me@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
-        { q: 'Was e-commerce in scope?', a: 'This stub covers the public editorial site; deeper commerce scope isn’t claimed here.' },
-        { q: 'Which CMS?', a: 'Can be discussed under NDA if still relevant to stakeholders.' },
+        { q: 'What content does it present?', a: 'The catalogue, collections, authors, and news. The fair profile mentions sample chapters.' },
+        { q: 'Which CMS or stack does it use?', a: 'I do not name a platform without an accessible repository or reliable public source.' },
       ],
     },
   },
@@ -588,7 +514,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         '**Proyecto académico** (2º premio, Desafío Tecnológico ETSIIT): prototipo orientado al **control de asistencia** en eventos, combinando hardware y lógica de sistema. Base de mi trayectoria en **ingeniería** antes del salto a producto web a escala.',
       tech: ['Hardware', 'Prototipo', 'Eventos', 'UGR'],
       links: [{ label: 'ETSIIT — Universidad de Granada', href: 'https://etsiit.ugr.es' }],
-      cta: 'Documentación del reto académico enlazada desde la escuela; preguntas técnicas retrospectivas: me@raul-alvarez.es.',
+      cta: 'No encontré una ficha pública del prototipo. Para hablar del proyecto descrito en el portfolio, escribe a me@raul-alvarez.es.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
         { q: '¿Hay demo pública?', a: 'Fue un reto académico; material público depende de archivo universitario.' },
@@ -601,7 +527,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         '**Academic** project (2nd prize, ETSIIT technology challenge): prototype for **event attendance** tracking, mixing hardware concerns with system logic. Early **engineering** foundation before large-scale web product work.',
       tech: ['Hardware', 'Prototype', 'Events', 'UGR'],
       links: [{ label: 'ETSIIT — University of Granada', href: 'https://etsiit.ugr.es' }],
-      cta: 'Challenge documentation lives with the school; retrospective questions: me@raul-alvarez.es.',
+      cta: 'I found no public prototype page. For a conversation about the project described in this portfolio, email me@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
         { q: 'Is there a public demo?', a: 'It was a student challenge; public artifacts depend on university archives.' },
@@ -613,55 +539,57 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
     es: {
       kicker: 'Omega Protocol · omega-protocol.net',
       intro:
-        '**Omega Protocol** es un juego **incremental / de estrategia** con atmósfera de **horror cósmico**, disponible en **iOS y Android** (referencia de versión pública **v1.1.0** según el sitio del proyecto). Combina progresión a largo plazo, decisiones tácticas y narrativa sombría.',
-      tech: ['Incremental', 'Strategy', 'Mobile', 'Cosmic horror'],
+        '**Omega Protocol** es un juego móvil incremental de estrategia y horror cósmico. El jugador dirige una IA que explora los restos del universo y automatiza su producción.',
+      tech: ['React Native', 'Expo', 'TypeScript', 'Zustand', 'AsyncStorage', 'AdMob'],
       links: [{ label: 'Sitio del juego', href: 'https://omega-protocol.net' }],
-      cta: 'Información factual tomada del sitio público; no reclamo métricas de negocio. Contacto: me@raul-alvarez.es.',
+      cta: 'Para hablar de simulación, diseño de juegos móviles y monetización sin cifras no verificadas, escribe a me@raul-alvarez.es.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
-        { q: '¿Es free-to-play?', a: 'Detalles de monetización y tiendas en el sitio oficial del juego.' },
-        { q: '¿Tu rol fue solo desarrollo?', a: 'Este caso resume participación a alto nivel; el detalle por disciplina se puede ampliar bajo interés mutuo.' },
+        { q: '¿En qué plataformas está disponible?', a: 'El sitio oficial enlaza las versiones móviles del juego.' },
+        { q: '¿Qué reto técnico destaca?', a: 'El historial muestra la evolución hacia un motor de simulación continua y progreso sin conexión con límites.' },
       ],
     },
     en: {
       kicker: 'Omega Protocol · omega-protocol.net',
       intro:
-        '**Omega Protocol** is an **incremental strategy** game with **cosmic-horror** tone, shipped on **iOS and Android** (public **v1.1.0** reference per the project site). Long-horizon progression, tactical choices, and a dark narrative frame.',
-      tech: ['Incremental', 'Strategy', 'Mobile', 'Cosmic horror'],
+        '**Omega Protocol** is a mobile incremental strategy game with a cosmic-horror setting. Players guide an AI through the remains of the universe and automate its production.',
+      tech: ['React Native', 'Expo', 'TypeScript', 'Zustand', 'AsyncStorage', 'AdMob'],
       links: [{ label: 'Game website', href: 'https://omega-protocol.net' }],
-      cta: 'Facts sourced from the public site; no undisclosed business metrics. me@raul-alvarez.es.',
+      cta: 'For a conversation about simulation, mobile game design, and monetisation without unsupported figures, email me@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
-        { q: 'Monetization model?', a: 'See the official game site and store listings for authoritative detail.' },
-        { q: 'Exact role breakdown?', a: 'High-level portfolio summary only; happy to clarify scope in conversation.' },
+        { q: 'Which platforms are available?', a: 'The official site links to the mobile game listings.' },
+        { q: 'Which technical challenge stands out?', a: 'The history shows a move to continuous simulation and bounded offline progress.' },
       ],
     },
   },
   dungeonkeeper: {
     es: {
-      kicker: 'DungeonKeeper · monorepo privado',
+      kicker: 'MeepleHelper · anteriormente DungeonKeeper',
       intro:
-        '**DungeonKeeper** es un kit digital para **partidas de rol en mesa**: aplicación **React Native / Expo** para jugadores, **API Node (Express)** con **MongoDB**, panel **Next.js** para administración, asistentes de **IA y voz**, y **reglas en PDF** integradas en el flujo. Pensado como producto cohesionado en un **monorepo**, no como scripts sueltos.',
-      tech: ['React Native', 'Expo', 'Node.js', 'Express', 'MongoDB', 'Next.js', 'IA / voz'],
+        '**MeepleHelper**, antes DungeonKeeper, ayuda a preparar y gestionar partidas de juegos de mesa. Incluye una app móvil, un asistente de voz y búsqueda de reglas en manuales PDF con referencias a su fuente.',
+      tech: ['React Native', 'Expo', 'Node.js', 'Express', 'TypeScript', 'MongoDB', 'Redis', 'Next.js', 'RAG / PDF'],
       links: [],
-      cta: 'No enlazo repositorio público (enlace previo no disponible). Resumen basado en README interno; ampliación bajo confidencialidad si interesa. me@raul-alvarez.es.',
+      cta: 'El repositorio no es público, así que no enlazo código ni datos operativos. Para conversar sobre el proyecto, escribe a me@raul-alvarez.es.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
-        { q: '¿Hay demo o capturas públicas?', a: 'Este stub es portfolio-safe; material visual se comparte con acuerdo explícito.' },
-        { q: '¿Qué parte es IA?', a: 'Asistentes y voz orientados a facilitar la sesión; detalle técnico en conversación.' },
+        { q: '¿Cómo ayuda con las reglas?', a: 'Procesa reglamentos PDF y recupera respuestas con referencias al contenido fuente.' },
+        { q: '¿Qué incluye la arquitectura?', a: 'App React Native/Expo, API Node.js/Express, datos MongoDB y Redis, y un panel Next.js.' },
+        { q: '¿Dónde está el código?', a: 'El repositorio es privado; este caso comparte un resumen de alto nivel.' },
       ],
     },
     en: {
-      kicker: 'DungeonKeeper · private monorepo',
+      kicker: 'MeepleHelper · formerly DungeonKeeper',
       intro:
-        '**DungeonKeeper** is a digital kit for **tabletop RPG sessions**: **React Native / Expo** player app, **Node (Express)** API on **MongoDB**, **Next.js** admin, **AI and voice** helpers, and **PDF rules** wired into the flow. Built as one coherent **monorepo** rather than ad-hoc scripts.',
-      tech: ['React Native', 'Expo', 'Node.js', 'Express', 'MongoDB', 'Next.js', 'AI / voice'],
+        '**MeepleHelper**, formerly DungeonKeeper, helps people prepare and manage board-game sessions. It combines a mobile app, voice assistant, and PDF rulebook search with source references.',
+      tech: ['React Native', 'Expo', 'Node.js', 'Express', 'TypeScript', 'MongoDB', 'Redis', 'Next.js', 'RAG / PDF'],
       links: [],
-      cta: 'No public GitHub link (prior URL was unavailable). Summary reflects a README-style brief; NDA-friendly deep dives on request. me@raul-alvarez.es.',
+      cta: 'The repository is private, so I do not link code or operational data. For a conversation about the project, email me@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
-        { q: 'Public demo or screenshots?', a: 'This stub stays portfolio-safe; visuals only with explicit agreement.' },
-        { q: 'Where does AI show up?', a: 'Session assistance and voice UX; technical depth in direct conversation.' },
+        { q: 'How does it help with rules?', a: 'It processes PDF rulebooks and retrieves answers with references to source content.' },
+        { q: 'What does the architecture include?', a: 'A React Native/Expo app, Node.js/Express API, MongoDB and Redis data, and a Next.js dashboard.' },
+        { q: 'Where is the code?', a: 'The repository is private. This case shares a high-level summary.' },
       ],
     },
   },

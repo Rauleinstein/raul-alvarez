@@ -287,7 +287,7 @@ export default function GlobalNav() {
   // Banner message (right-aligned, near lang pill)
   const bannerMessage = showBanner ? (
     <div
-      className="flex items-center gap-2.5 text-sm"
+      className="hidden sm:flex items-center gap-2.5 text-sm"
       style={animateBanner ? fade('0.4s') : undefined}
     >
       <span className="text-muted-foreground hidden lg:inline">{t.ui.languageBanner}</span>
@@ -315,13 +315,13 @@ export default function GlobalNav() {
           className="absolute inset-0 bg-background/80 backdrop-blur-md border-b border-border"
           style={animateBar ? fade('0.35s') : undefined}
         />
-        <div className="relative pt-4 pb-3 px-6 pl-14 xl:pl-6 flex items-center justify-between">
+        <div className="relative pt-4 pb-3 px-6 pl-14 xl:pl-6 flex items-center justify-between gap-2">
           {/* Left: back link on inner pages, empty on home (pl-14 leaves room for ToC hamburger on mobile) */}
-          <div className="min-w-0 flex items-center">
+          <div className="min-w-0 flex flex-1 items-center">
             {!isHome && (
               <nav
                 aria-label="Breadcrumb"
-                className="inline-flex items-center gap-1.5 text-sm"
+                className="inline-flex min-w-0 max-w-full items-center gap-1.5 text-sm"
                 style={animateBackLink ? fade('0.4s') : undefined}
               >
                 <Link
@@ -336,7 +336,7 @@ export default function GlobalNav() {
                     <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0" />
                     <button
                       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                      className={`hover:text-foreground transition-colors cursor-pointer truncate ${activeSectionLabel ? 'text-muted-foreground' : 'text-foreground font-medium'}`}
+                      className={`min-w-0 max-w-[100px] sm:max-w-[180px] hover:text-foreground transition-colors cursor-pointer truncate ${activeSectionLabel ? 'text-muted-foreground' : 'text-foreground font-medium'}`}
                     >
                       {pageTitle}
                     </button>

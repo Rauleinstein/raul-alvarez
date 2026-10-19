@@ -62,6 +62,8 @@
     { "source": "/about", "destination": "/about/index.html" },
     { "source": "/privacidad", "destination": "/privacidad/index.html" },
     { "source": "/privacy", "destination": "/privacy/index.html" },
+    { "source": "/enrivo", "destination": "/enrivo/index.html" },
+    { "source": "/enrivo-en", "destination": "/enrivo-en/index.html" },
     { "source": "/custodio-digital", "destination": "/custodio-digital/index.html" },
     { "source": "/custodio-digital-en", "destination": "/custodio-digital-en/index.html" },
     { "source": "/powermark", "destination": "/powermark/index.html" },

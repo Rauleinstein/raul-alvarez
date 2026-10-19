@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { ExternalLink } from 'lucide-react'
 import { articleRegistry, type ArticleConfig } from './articles/registry'
 import { ARTICLE_STUB_BODIES } from './articles/stub-content'
+import { CASE_STUDY_NARRATIVES } from './articles/case-study-narratives'
 import { useArticleSeo } from './articles/use-article-seo'
 import { buildArticleJsonLd } from './articles/json-ld'
 import { ArticleLayout, ArticleHeader, ArticleFooter, FaqSection, ArticleFigure } from './articles/components'
@@ -16,6 +17,7 @@ function parseBold(text: string): React.ReactNode[] {
 
 function ArticleStubLoaded({ lang, article }: { lang: 'es' | 'en'; article: ArticleConfig }) {
   const body = ARTICLE_STUB_BODIES[article.id][lang]
+  const narrative = CASE_STUDY_NARRATIVES[article.id][lang]
   const seoMeta = article.seoMeta!
 
   const jsonLd = useMemo(() => {
@@ -63,7 +65,20 @@ function ArticleStubLoaded({ lang, article }: { lang: 'es' | 'en'; article: Arti
     xDefaultSlug: article.xDefaultSlug ?? article.slugs.es,
   })
 
-  const reading = lang === 'es' ? '2 min' : '2 min read'
+  const readingText = [
+    body.intro,
+    body.cta,
+    narrative.lead,
+    ...narrative.sections.map((section) => `${section.title} ${section.body}`),
+    body.architectureHeading ?? '',
+    body.architectureIntro ?? '',
+    ...(body.architecture ?? []).map((section) => `${section.title} ${section.description}`),
+    body.screenshotsHeading ?? '',
+    ...(body.screenshots ?? []).map((screenshot) => `${screenshot.title ?? ''} ${screenshot.description ?? ''} ${screenshot.caption}`),
+    ...body.faq.map((item) => `${item.q} ${item.a}`),
+  ].join(' ')
+  const readingMinutes = Math.max(2, Math.ceil(readingText.trim().split(/\s+/).length / 220))
+  const reading = lang === 'es' ? `${readingMinutes} min` : `${readingMinutes} min read`
 
   return (
     <ArticleLayout lang={lang}>
@@ -82,6 +97,21 @@ function ArticleStubLoaded({ lang, article }: { lang: 'es' | 'en'; article: Arti
       <div className="prose prose-invert max-w-none mb-10 text-muted-foreground leading-relaxed">
         <p>{parseBold(body.intro)}</p>
       </div>
+
+      <section className="mb-10" aria-labelledby={`stub-story-${article.id}`}>
+        <h2 id={`stub-story-${article.id}`} className="text-lg font-semibold text-foreground mb-3 scroll-mt-20">
+          {narrative.heading}
+        </h2>
+        <p className="text-sm text-muted-foreground leading-relaxed mb-4">{narrative.lead}</p>
+        <div className="grid gap-4 md:grid-cols-2">
+          {narrative.sections.map((section) => (
+            <article key={section.title} className="rounded-xl border border-border bg-card p-5">
+              <h3 className="text-sm font-semibold text-foreground mb-2">{section.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{section.body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
 
       <div className="flex flex-wrap gap-2 mb-8">
         {body.tech.map((t) => (
@@ -138,21 +168,26 @@ function ArticleStubLoaded({ lang, article }: { lang: 'es' | 'en'; article: Arti
       )}
 
       {body.links.length > 0 && (
-        <ul className="mb-10 space-y-2">
-          {body.links.map((l) => (
-            <li key={l.href}>
-              <a
-                href={l.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
-              >
-                {l.label}
-                <ExternalLink className="h-4 w-4 shrink-0" aria-hidden />
-              </a>
-            </li>
-          ))}
-        </ul>
+        <section className="mb-10" aria-labelledby={`stub-links-${article.id}`}>
+          <h2 id={`stub-links-${article.id}`} className="text-lg font-semibold text-foreground mb-3 scroll-mt-20">
+            {narrative.linksHeading}
+          </h2>
+          <ul className="space-y-2">
+            {body.links.map((l) => (
+              <li key={l.href}>
+                <a
+                  href={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+                >
+                  {l.label}
+                  <ExternalLink className="h-4 w-4 shrink-0" aria-hidden />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
 
       <div className="rounded-2xl border border-border bg-card p-6 mb-12">

@@ -26,6 +26,7 @@ const FIX_MODE = process.argv.includes('--fix')
 
 /** Map article id → source file (relative to root) */
 const SOURCE_MAP: Record<string, string> = {
+  'enrivo': 'src/ArticleStub.tsx',
   'custodio-digital': 'src/ArticleStub.tsx',
   'powermark': 'src/ArticleStub.tsx',
   'cityhunts': 'src/ArticleStub.tsx',
