@@ -15,6 +15,8 @@ Static-first portfolio with Spanish and English routes, lazy-loaded case-study p
 **Highlights**
 
 - **Bilingual** — `/` and `/en` for the home CV; `/sobre-mi` / `/about`; `/privacidad` / `/privacy`
+- **Automatic English homepage** — On initial entry to `/`, a UK browser timezone (including `Europe/London`) or English as the primary browser language opens `/en`. This is a local hint, not IP geolocation; no location permissions or external lookup. Query strings and fragments survive. Explicit page routes remain unchanged. Using the language selector disables automatic selection on later visits in that browser (when localStorage is available).
+- **Language tests** — `node --import tsx --test tests/language-detection.test.ts`
 - **Case studies** — Registered in `src/articles/registry.ts`; content via `ArticleStub` + shared SEO helpers (`json-ld`, `use-article-seo`)
 - **Performance & SEO** — Pre-render + hydrate, `llms.txt` validation script, article validation, sitemap generation
 - **Identity** — Centralized in `src/site.ts` (canonical URL, email, social links)

@@ -1,6 +1,7 @@
 import { StrictMode, lazy, Suspense, useState, useEffect, useRef, type ReactNode, type ComponentType } from 'react'
 import { hydrateRoot, createRoot } from 'react-dom/client'
-import { BrowserRouter, Routes, Route, useLocation, Link } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation, useNavigate, Link } from 'react-router-dom'
+import { getAutomaticLanguagePath } from './language-detection'
 import { Analytics } from '@vercel/analytics/react'
 import './index.css'
 import App from './App.tsx'
@@ -70,6 +71,23 @@ function GlobalMusic() {
   )
 }
 
+function AutomaticLanguage() {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const checked = useRef(false)
+  useEffect(() => {
+    if (checked.current) return
+    checked.current = true
+    let hasManualChoice = false
+    try { hasManualChoice = localStorage.getItem('site-language-manual') === '1' } catch { /* Storage may be blocked. */ }
+    let timeZone = ''
+    try { timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone } catch { /* Use browser language instead. */ }
+    const path = getAutomaticLanguagePath(location.pathname, navigator.languages?.length ? navigator.languages : [navigator.language], timeZone, hasManualChoice)
+    if (path) navigate(`${path}${location.search}${location.hash}`, { replace: true })
+  }, [location, navigate])
+  return null
+}
+
 function ConditionalNav() {
   return <GlobalNav />
 }
@@ -132,6 +150,7 @@ const root = document.getElementById('root')!
 const app = (
   <StrictMode>
     <BrowserRouter>
+      <AutomaticLanguage />
       <ConditionalNav />
       <PageTransition>
         <Suspense fallback={null}>

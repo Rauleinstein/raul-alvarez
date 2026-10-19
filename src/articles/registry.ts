@@ -171,12 +171,12 @@ export const articleRegistry: ArticleConfig[] = [
     titles: { es: 'CityHunts', en: 'CityHunts' },
     seo: {
       es: {
-        title: 'CityHunts — experiencias urbanas gamificadas | Raúl Álvarez',
-        description: 'CityHunts (2025): producto móvil React/Node y narrativa en la ciudad.',
+        title: 'CityHunts — experiencias urbanas autoguiadas | Raúl Álvarez',
+        description: 'CityHunts convierte paseos por ciudades en aventuras: pistas, retos y relatos en lugares reales, desde el móvil y sin guía.',
       },
       en: {
-        title: 'CityHunts — gamified city experiences | Raúl Álvarez',
-        description: 'CityHunts (2025): mobile product with React/Node and urban narrative.',
+        title: 'CityHunts — self-guided city adventures | Raúl Álvarez',
+        description: 'CityHunts turns city walks into adventures with clues, challenges and stories at real landmarks, played on your phone without a guide.',
       },
     },
     sectionLabels: { es: {}, en: {} },

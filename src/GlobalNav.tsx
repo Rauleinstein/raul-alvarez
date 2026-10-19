@@ -2,6 +2,17 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Sun, Moon, House, X, ChevronRight } from 'lucide-react'
 import { translations, type Lang } from './i18n'
+import { getAutomaticLanguagePath } from './language-detection'
+
+function rememberManualLanguage() {
+  try { localStorage.setItem('site-language-manual', '1') } catch { /* Storage may be blocked. */ }
+}
+
+function prefersEnglish() {
+  let timeZone = ''
+  try { timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone } catch { /* Use browser language instead. */ }
+  return getAutomaticLanguagePath('/', navigator.languages?.length ? navigator.languages : [navigator.language], timeZone, false) === '/en'
+}
 import { getAltPaths, getPageTitles, getSectionLabels, getEsSlugs } from './articles/registry'
 
 /**
@@ -149,7 +160,7 @@ function useLanguageBanner(lang: Lang) {
     if (typeof navigator === 'undefined') return
     if (stored) return // already 'shown' or 'dismissed'
 
-    const browserPrefersEn = !navigator.language.toLowerCase().startsWith('es')
+    const browserPrefersEn = prefersEnglish()
     const mismatch = (lang === 'es' && browserPrefersEn) || (lang === 'en' && !browserPrefersEn)
     if (!mismatch) return
 
@@ -163,7 +174,7 @@ function useLanguageBanner(lang: Lang) {
   // Auto-dismiss if user switches language via toggle
   useEffect(() => {
     if (!visible) return
-    const browserPrefersEn = !navigator.language.toLowerCase().startsWith('es')
+    const browserPrefersEn = prefersEnglish()
     const mismatch = (lang === 'es' && browserPrefersEn) || (lang === 'en' && !browserPrefersEn)
     if (!mismatch) {
       sessionStorage.setItem(BANNER_DISMISSED_KEY, 'dismissed')
@@ -216,6 +227,7 @@ function NavControls({ altPath, altLabel, lang, isDark, toggleTheme }: {
     <div className="flex items-center gap-2">
       <Link
         to={altPath}
+        onClick={rememberManualLanguage}
         className="inline-flex items-center justify-center gap-1.5 w-[4.5rem] h-10 rounded-full bg-card border border-border text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors"
       >
         {lang === 'es' ? <FlagES className="w-3.5 h-3.5" /> : <FlagEN className="w-3.5 h-3.5" />}
@@ -263,6 +275,7 @@ export default function GlobalNav() {
   if (!isHome) backLinkShown.current = true
 
   const switchLang = () => {
+    rememberManualLanguage()
     dismiss()
     navigate(altPath)
   }
