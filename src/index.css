@@ -592,14 +592,16 @@ button, a, [role="button"], summary { cursor: pointer; }
   text-align: center;
 }
 
-/* Project badge stays inside the heading row on narrow cards. */
+/* Project badges wrap as whole pills when the title leaves too little room. */
 .project-card-badge {
+  width: max-content;
+  max-width: 100%;
   min-width: 0;
-  max-width: 55%;
-  flex-shrink: 1;
+  flex-shrink: 0;
+  margin-left: auto;
   white-space: normal;
-  overflow-wrap: anywhere;
-  text-align: right;
+  overflow-wrap: normal;
+  word-break: normal;
   line-height: 1.25;
 }
 

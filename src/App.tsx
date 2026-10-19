@@ -2100,7 +2100,7 @@ function App() {
                           <Package className="w-5 h-5 text-muted-foreground" aria-hidden />
                         )}
                       </div>
-                      <div className="flex flex-1 min-w-0 items-start justify-between gap-2">
+                      <div className="flex flex-1 min-w-0 flex-wrap items-start justify-between gap-2">
                         <h3 className="font-display text-lg font-bold text-foreground min-w-0">{project.title}</h3>
                         <span className="badge project-card-badge px-2 py-0.5 bg-primary/10 text-primary">{project.badge}</span>
                       </div>
