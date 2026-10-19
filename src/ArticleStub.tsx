@@ -145,7 +145,7 @@ function ArticleStubLoaded({ lang, article }: { lang: 'es' | 'en'; article: Arti
           <h2 id={`stub-shots-${article.id}`} className="text-lg font-semibold text-foreground mb-4 scroll-mt-20">
             {body.screenshotsHeading}
           </h2>
-          <div className="grid items-start gap-6 md:grid-cols-2">
+          <div className={`grid items-start gap-6${body.screenshots.length > 1 ? ' md:grid-cols-2' : ''}`}>
             {body.screenshots.map((shot) => (
               <article key={shot.src} className="rounded-xl border border-border bg-card p-3">
                 <ArticleFigure

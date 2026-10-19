@@ -1,3 +1,7 @@
+import { createElement } from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { MemoryRouter } from 'react-router-dom'
+import ArticleStub from '../src/ArticleStub'
 import { articleRegistry } from '../src/articles/registry'
 import { ARTICLE_STUB_BODIES } from '../src/articles/stub-content'
 import { CASE_STUDY_NARRATIVES } from '../src/articles/case-study-narratives'
@@ -27,10 +31,20 @@ assert(!/play\.google\.com\/store\/apps\/details\?id=com\.raulalvarez\.munfordap
 const powermarkCopy = JSON.stringify({ body: ARTICLE_STUB_BODIES.powermark, narrative: CASE_STUDY_NARRATIVES.powermark })
 assert(!/\b(?:65|90|94|97|9,500)\s?%?\b/.test(powermarkCopy), 'PowerMark copy must not publish unverified performance metrics')
 
+// Atlantis has no accessible prototype image or repository; request an owner-supplied asset.
+const screenshotExceptions = new Map([['atlantis', 'No public prototype screenshot was found']])
+
 for (const id of ids) {
   for (const lang of ['es', 'en'] as const) {
     const body = ARTICLE_STUB_BODIES[id]?.[lang]
     assert(body, `${id} is missing ${lang} page copy`)
+    const screenshots = body.screenshots ?? []
+    assert(screenshots.length > 0 || screenshotExceptions.has(id), `${id} (${lang}) needs a project screenshot`)
+    for (const screenshot of screenshots) {
+      assert(screenshot.src.startsWith('/articles/'), `${id} (${lang}) screenshot must use a local article asset`)
+      assert(screenshot.alt.trim(), `${id} (${lang}) screenshot needs alt text`)
+      assert(screenshot.caption.trim(), `${id} (${lang}) screenshot needs a caption`)
+    }
     const narrative = CASE_STUDY_NARRATIVES[id]?.[lang]
     assert(narrative, `${id} is missing ${lang} case narrative`)
     assert(narrative.heading.trim(), `${id} (${lang}) is missing its case-story heading`)
@@ -42,5 +56,36 @@ for (const id of ids) {
     }
   }
 }
+
+function renderArticle(slug: string, lang: 'es' | 'en') {
+  return renderToStaticMarkup(
+    createElement(
+      MemoryRouter,
+      { initialEntries: [`/${slug}`] },
+      createElement(ArticleStub, { lang }),
+    ),
+  )
+}
+
+function screenshotGridClasses(markup: string, articleId: string) {
+  const sectionStart = markup.indexOf(`aria-labelledby="stub-shots-${articleId}"`)
+  assert(sectionStart >= 0, `${articleId} render must include its screenshot section`)
+  const sectionEnd = markup.indexOf('</section>', sectionStart)
+  const section = markup.slice(sectionStart, sectionEnd)
+  const grid = section.match(/<div class="grid items-start gap-6([^"]*)">/)
+  assert(grid, `${articleId} screenshot section must include its gallery grid`)
+  return grid[1]
+}
+
+const enrivoHtml = renderArticle('enrivo', 'es')
+assert(
+  !screenshotGridClasses(enrivoHtml, 'enrivo').includes('md:grid-cols-2'),
+  'A single screenshot should use the full article width, not leave an empty desktop column',
+)
+const cityhuntsHtml = renderArticle('cityhunts', 'es')
+assert(
+  screenshotGridClasses(cityhuntsHtml, 'cityhunts').includes('md:grid-cols-2'),
+  'Multiple screenshots should retain the two-column desktop gallery',
+)
 
 console.log(`Validated ${ids.length} bilingual case studies and their story sections.`)

@@ -47,6 +47,18 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { q: '¿Enrivo cambia Mailchimp automáticamente?', a: 'No. La persona revisa la evidencia y aprueba los cambios antes de sincronizarlos.' },
         { q: '¿Está disponible para todo el público?', a: 'La web pública invita a solicitar acceso anticipado.' },
       ],
+      screenshotsHeading: 'Captura del producto',
+      screenshots: [
+        {
+          src: '/articles/enrivo/enrivo.png',
+          alt: 'Vista pública de Enrivo con un perfil de contacto de muestra y sus fuentes de evidencia.',
+          title: 'Revisar una sugerencia',
+          description: 'La página ilustra cómo una persona puede comprobar los datos propuestos y revisar las fuentes antes de aprobar la sincronización.',
+          caption: 'Vista de producto publicada por Enrivo. El contacto y sus contadores son datos ilustrativos, no métricas de uso.',
+          width: 1827,
+          height: 964,
+        },
+      ],
     },
     en: {
       kicker: 'Enrivo · contact enrichment for Mailchimp',
@@ -60,6 +72,18 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { q: 'Which fields can Enrivo suggest?', a: 'The public site shows company, job title, industry, and location as example fields.' },
         { q: 'Does Enrivo change Mailchimp automatically?', a: 'No. A person reviews the evidence and approves changes before sync.' },
         { q: 'Is it open to everyone?', a: 'The public site invites people to request early access.' },
+      ],
+      screenshotsHeading: 'Product preview',
+      screenshots: [
+        {
+          src: '/articles/enrivo/enrivo.png',
+          alt: 'Enrivo public-site preview with a sample contact profile and its evidence sources.',
+          title: 'Review an enrichment suggestion',
+          description: 'The page illustrates how a person can check proposed data and review its sources before approving a sync.',
+          caption: 'Product preview from Enrivo’s public site. The contact and counters are illustrative, not usage metrics.',
+          width: 1827,
+          height: 964,
+        },
       ],
     },
   },
@@ -190,6 +214,18 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { q: '¿El marcado de papel está disponible?', a: 'La página pública lo describe como una fase futura, no como una capacidad disponible.' },
         { q: '¿Cuál fue tu contribución?', a: 'Diseñé y supervisé trabajo de OCR y PLN, integración, calidad de datos y entrega.' },
       ],
+      screenshotsHeading: 'Referencia pública del producto',
+      screenshots: [
+        {
+          src: '/articles/powermark/powermark2.png',
+          alt: 'Página pública actual de Smartgrade Powermark sobre evaluación online y revisión docente de respuestas señaladas.',
+          title: 'Referencia pública de Smartgrade',
+          description: 'La página actual describe Powermark. Se muestra como contexto, no como captura de la implementación anterior de PowerMark en Aircury.',
+          caption: 'Captura de la página pública de Smartgrade; no es una pantalla de la versión anterior de PowerMark desarrollada en Aircury.',
+          width: 1462,
+          height: 923,
+        },
+      ],
     },
     en: {
       kicker: 'PowerMark · Aircury × Smartgrade (Powermark)',
@@ -218,6 +254,18 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { q: 'What does the current public page describe?', a: 'Smartgrade presents online assessment marking and teacher review of flagged answers.' },
         { q: 'Is paper marking available?', a: 'The public page describes it as a future phase, not an available feature.' },
         { q: 'What did you contribute?', a: 'I designed and oversaw OCR and NLP work, integration, data quality, and delivery.' },
+      ],
+      screenshotsHeading: 'Public product reference',
+      screenshots: [
+        {
+          src: '/articles/powermark/powermark2.png',
+          alt: 'Smartgrade’s current public Powermark page about online assessment and teacher review of flagged answers.',
+          title: 'Smartgrade public reference',
+          description: 'The current page describes Powermark. It provides context, not a screenshot of Aircury’s earlier PowerMark implementation.',
+          caption: 'Capture of Smartgrade’s public page; it is not a screen from the earlier PowerMark work at Aircury.',
+          width: 1462,
+          height: 923,
+        },
       ],
     },
   },
@@ -375,6 +423,18 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { q: '¿Se puede descargar desde una tienda?', a: 'No afirmo que la ficha de tienda siga activa. El repositorio público conserva el proyecto.' },
         { q: '¿Qué muestra el historial?', a: 'Iteraciones en controles, navegación, texto, puntuación y reproducción de audio.' },
       ],
+      screenshotsHeading: 'Pantalla de la app',
+      screenshots: [
+        {
+          src: '/articles/munford/intro.png',
+          alt: 'Pantalla de bienvenida de El Caso Munford con la introducción del juego, el botón Empezar y el elenco.',
+          title: 'Introducción al juego',
+          description: 'La pantalla presenta la experiencia de misterio antes de iniciar la exposición interactiva.',
+          caption: 'Captura del HTML del repositorio en vista web. Se usó un stub local de MobileAccessibility; no se simuló el comportamiento nativo de Cordova.',
+          width: 390,
+          height: 844,
+        },
+      ],
     },
     en: {
       kicker: 'El Caso Munford · Android',
@@ -393,6 +453,18 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { q: 'Can visitors download it from an app store?', a: 'I do not claim that a store listing remains active. The public repository preserves the project.' },
         { q: 'What does the history show?', a: 'Iterations on controls, navigation, text, scoring, and audio playback.' },
       ],
+      screenshotsHeading: 'App screen',
+      screenshots: [
+        {
+          src: '/articles/munford/intro.png',
+          alt: 'El Caso Munford welcome screen with the game introduction, a start button, and the cast.',
+          title: 'Game introduction',
+          description: 'The screen introduces the mystery experience before the interactive exhibition begins.',
+          caption: 'Browser capture of the repository’s HTML. A local MobileAccessibility stub was used; native Cordova behavior was not simulated.',
+          width: 390,
+          height: 844,
+        },
+      ],
     },
   },
   'feria-libro-granada': {
@@ -408,6 +480,18 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { q: '¿Qué alcance cubría?', a: 'Implementación web orientada a difusión del evento y soporte a contenidos editoriales.' },
         { q: '¿Qué stack se utilizó?', a: 'No atribuyo tecnologías que no pude verificar en un repositorio accesible.' },
       ],
+      screenshotsHeading: 'Referencia del sitio público actual',
+      screenshots: [
+        {
+          src: '/articles/feria-libro-granada/homepage.webp',
+          alt: 'Portada pública actual de la Feria del Libro de Granada con navegación a expositores y programación y una ilustración central.',
+          title: 'Portada actual de la feria',
+          description: 'La versión pública actual presenta la feria con una ilustración y accesos a expositores, programación y búsqueda.',
+          caption: 'Captura de referencia del sitio público actual; no documenta la implementación original del proyecto.',
+          width: 1440,
+          height: 900,
+        },
+      ],
     },
     en: {
       kicker: 'Granada Book Fair · ferialibrogranada.es',
@@ -420,6 +504,18 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
       faq: [
         { q: 'What was in scope?', a: 'Web delivery supporting event communication and editorial publishing.' },
         { q: 'Which stack was used?', a: 'I do not name technologies that I could not verify in an accessible repository.' },
+      ],
+      screenshotsHeading: 'Current public-site reference',
+      screenshots: [
+        {
+          src: '/articles/feria-libro-granada/homepage.webp',
+          alt: 'The current public Granada Book Fair homepage, with navigation to exhibitors and programming and a central illustration.',
+          title: 'Current fair homepage',
+          description: 'The current public page introduces the fair through an illustration and links to exhibitors, programming, and search.',
+          caption: 'Reference capture of the current public site; it does not document the original project implementation.',
+          width: 1440,
+          height: 900,
+        },
       ],
     },
   },
@@ -436,6 +532,18 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { q: '¿Qué presenta el sitio?', a: 'Áreas de cobertura, información sobre la correduría y opciones de contacto.' },
         { q: '¿Se publican resultados comerciales?', a: 'No. Este caso no atribuye cifras de captación ni conversiones.' },
       ],
+      screenshotsHeading: 'Referencia del sitio público actual',
+      screenshots: [
+        {
+          src: '/articles/cgv-seguros/homepage.webp',
+          alt: 'Portada pública actual de CGV Seguros con logotipo, navegación y presentación de la correduría.',
+          title: 'Portada de CGV Seguros',
+          description: 'La página presenta su oferta de seguros para particulares y empresas.',
+          caption: 'Captura de referencia del sitio público actual; no acredita la implementación original del proyecto.',
+          width: 1280,
+          height: 640,
+        },
+      ],
     },
     en: {
       kicker: 'CGV Seguros · cgvseguros.com',
@@ -448,6 +556,18 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
       faq: [
         { q: 'What does the site present?', a: 'Areas of cover, information about the brokerage, and ways to get in touch.' },
         { q: 'Are commercial results published?', a: 'No. This case makes no lead-generation or conversion claims.' },
+      ],
+      screenshotsHeading: 'Current public-site reference',
+      screenshots: [
+        {
+          src: '/articles/cgv-seguros/homepage.webp',
+          alt: 'Current public CGV Seguros homepage with its logo, navigation, and brokerage introduction.',
+          title: 'CGV Seguros homepage',
+          description: 'The page presents insurance services for individuals and businesses.',
+          caption: 'Reference capture of the current public site; it does not prove the original project implementation.',
+          width: 1280,
+          height: 640,
+        },
       ],
     },
   },
@@ -464,6 +584,18 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { q: '¿Qué contenido presenta?', a: 'Catálogo, colecciones, autores y noticias; la ficha pública de la Feria menciona capítulos de muestra.' },
         { q: '¿Qué CMS o stack utiliza?', a: 'No atribuyo una plataforma técnica sin un repositorio accesible o una fuente pública fiable.' },
       ],
+      screenshotsHeading: 'Ficha pública de la Feria',
+      screenshots: [
+        {
+          src: '/articles/esdrujula-ediciones/exhibitor-page.png',
+          alt: 'Perfil público de Esdrújula Librería en el sitio de la Feria del Libro de Granada, con su logotipo y descripción editorial.',
+          title: 'Perfil de expositor',
+          description: 'Esta captura procede del directorio de la Feria; no es el sitio original de la editorial.',
+          caption: 'Ficha pública de expositor; referencia contextual, no captura de la web original de Esdrújula.',
+          width: 1440,
+          height: 900,
+        },
+      ],
     },
     en: {
       kicker: 'Esdrújula Ediciones · independent publisher',
@@ -476,6 +608,18 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
       faq: [
         { q: 'What content does it present?', a: 'The catalogue, collections, authors, and news. The fair profile mentions sample chapters.' },
         { q: 'Which CMS or stack does it use?', a: 'I do not name a platform without an accessible repository or reliable public source.' },
+      ],
+      screenshotsHeading: 'Public fair profile',
+      screenshots: [
+        {
+          src: '/articles/esdrujula-ediciones/exhibitor-page.png',
+          alt: 'Esdrújula Librería’s public profile on the Granada Book Fair site, with its logo and publisher description.',
+          title: 'Exhibitor profile',
+          description: 'This capture comes from the fair directory; it is not the publisher’s original website.',
+          caption: 'Public exhibitor profile for context; not a screenshot of Esdrújula’s original website.',
+          width: 1440,
+          height: 900,
+        },
       ],
     },
   },
@@ -492,6 +636,18 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { q: '¿Pasarela de pago?', a: 'Este resumen no detalla proveedores; el caso largo puede hacerlo con permiso.' },
         { q: '¿Solo frontend?', a: 'El alcance exacto por fase se describe en entrevista; aquí solo un resumen de portfolio.' },
       ],
+      screenshotsHeading: 'Referencia de la página pública actual',
+      screenshots: [
+        {
+          src: '/articles/entradasytickets/homepage-hero.webp',
+          alt: 'Portada pública actual de EntradasyTickets con la cabecera y el evento Rainbowdolls Sevilla 2027.',
+          title: 'Evento destacado',
+          description: 'La captura muestra un evento destacado en la página pública actual.',
+          caption: 'Captura de referencia del sitio público actual, recortada para excluir el control de cookies; no acredita la implementación original.',
+          width: 1440,
+          height: 622,
+        },
+      ],
     },
     en: {
       kicker: 'EntradasyTickets · entradasytickets.com',
@@ -504,6 +660,18 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
       faq: [
         { q: 'Payment providers?', a: 'Not specified in this stub; a deeper case needs stakeholder approval.' },
         { q: 'Full-stack scope?', a: 'Exact phase-by-phase scope is interview material; this page is a portfolio summary.' },
+      ],
+      screenshotsHeading: 'Current public-site reference',
+      screenshots: [
+        {
+          src: '/articles/entradasytickets/homepage-hero.webp',
+          alt: 'Current public EntradasyTickets homepage with the header and Rainbowdolls Sevilla 2027 event.',
+          title: 'Featured event',
+          description: 'The capture shows a featured event on the current public page.',
+          caption: 'Reference capture of the current public site, cropped to remove the cookie control; it does not prove the original implementation.',
+          width: 1440,
+          height: 622,
+        },
       ],
     },
   },
@@ -548,6 +716,18 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { q: '¿En qué plataformas está disponible?', a: 'El sitio oficial enlaza las versiones móviles del juego.' },
         { q: '¿Qué reto técnico destaca?', a: 'El historial muestra la evolución hacia un motor de simulación continua y progreso sin conexión con límites.' },
       ],
+      screenshotsHeading: 'Pantalla del juego',
+      screenshots: [
+        {
+          src: '/articles/omega-protocol/gameplay.jpg',
+          alt: 'Pantalla móvil de Omega Protocol con ranuras de habilidades, habilidades desbloqueadas y niveles representados con estrellas.',
+          title: 'Gestionar habilidades',
+          description: 'La pestaña de equipo muestra habilidades disponibles, rangos y ranuras bloqueadas.',
+          caption: 'Captura de una pantalla del juego móvil procedente del repositorio del proyecto.',
+          width: 576,
+          height: 1280,
+        },
+      ],
     },
     en: {
       kicker: 'Omega Protocol · omega-protocol.net',
@@ -560,6 +740,18 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
       faq: [
         { q: 'Which platforms are available?', a: 'The official site links to the mobile game listings.' },
         { q: 'Which technical challenge stands out?', a: 'The history shows a move to continuous simulation and bounded offline progress.' },
+      ],
+      screenshotsHeading: 'Game screen',
+      screenshots: [
+        {
+          src: '/articles/omega-protocol/gameplay.jpg',
+          alt: 'Omega Protocol mobile screen with skill slots, unlocked skills, and star-based ranks.',
+          title: 'Manage skills',
+          description: 'The equipment tab shows available skills, ranks, and locked slots.',
+          caption: 'Capture of a mobile-game screen from the project repository.',
+          width: 576,
+          height: 1280,
+        },
       ],
     },
   },
@@ -577,6 +769,18 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { q: '¿Qué incluye la arquitectura?', a: 'App React Native/Expo, API Node.js/Express, datos MongoDB y Redis, y un panel Next.js.' },
         { q: '¿Dónde está el código?', a: 'El repositorio es privado; este caso comparte un resumen de alto nivel.' },
       ],
+      screenshotsHeading: 'Interfaz móvil',
+      screenshots: [
+        {
+          src: '/articles/meeplehelper/game-selection.jpg',
+          alt: 'Pantalla de selección de juegos de MeepleHelper con buscador, filtros de favoritos y recientes y una lista de juegos.',
+          title: 'Elegir un juego',
+          description: 'La pantalla permite buscar juegos de mesa y consultar la lista disponible antes de abrir una sesión.',
+          caption: 'Captura de la interfaz móvil del proyecto, con títulos y miniaturas tal como aparecen en la app.',
+          width: 576,
+          height: 1280,
+        },
+      ],
     },
     en: {
       kicker: 'MeepleHelper · formerly DungeonKeeper',
@@ -590,6 +794,18 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { q: 'How does it help with rules?', a: 'It processes PDF rulebooks and retrieves answers with references to source content.' },
         { q: 'What does the architecture include?', a: 'A React Native/Expo app, Node.js/Express API, MongoDB and Redis data, and a Next.js dashboard.' },
         { q: 'Where is the code?', a: 'The repository is private. This case shares a high-level summary.' },
+      ],
+      screenshotsHeading: 'Mobile interface',
+      screenshots: [
+        {
+          src: '/articles/meeplehelper/game-selection.jpg',
+          alt: 'MeepleHelper game-selection screen with search, favourites and recent filters, and a list of games.',
+          title: 'Choose a game',
+          description: 'The screen lets players search for board games and review the list before opening a session.',
+          caption: 'Capture of the project’s mobile interface, showing titles and thumbnails as they appear in the app.',
+          width: 576,
+          height: 1280,
+        },
       ],
     },
   },
