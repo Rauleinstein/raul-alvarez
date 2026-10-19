@@ -15,7 +15,7 @@ export const translations = {
   es: {
     greeting: 'que alinean',
     greetingRoles: ['AI Architect', 'AI Solutions Engineer', 'Head of AI @ Aircury'],
-    email: 'hola@raul-alvarez.es',
+    email: 'me@raul-alvarez.es',
     cvPdfLabel: 'Descargar CV (PDF)',
     cvPdfAria: 'Descargar currículum en PDF',
     role: 'IA, sistemas y producto en entornos exigentes.',
@@ -451,7 +451,7 @@ export const translations = {
   en: {
     greeting: 'who align',
     greetingRoles: ['AI Architect', 'AI Solutions Engineer', 'Head of AI @ Aircury'],
-    email: 'hola@raul-alvarez.es',
+    email: 'me@raul-alvarez.es',
     cvPdfLabel: 'Download CV (PDF)',
     cvPdfAria: 'Download curriculum vitae as PDF',
     role: 'AI, systems, and product in demanding environments.',

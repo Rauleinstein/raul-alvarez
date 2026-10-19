@@ -117,7 +117,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { label: 'Aircury', href: 'https://www.aircury.com' },
         { label: 'Custodio contact (info@custodio.digital)', href: 'mailto:info@custodio.digital' },
       ],
-      cta: 'A full technical write-up (architecture, threat model, and lessons learned) is in progress. For a deeper walkthrough, email hola@raul-alvarez.es.',
+      cta: 'A full technical write-up (architecture, threat model, and lessons learned) is in progress. For a deeper walkthrough, email me@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
         {
@@ -185,7 +185,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { label: 'Smartgrade', href: 'https://www.smartgrade.com' },
         { label: 'Aircury', href: 'https://www.aircury.com' },
       ],
-      cta: 'El caso largo (métricas propias, evaluación del modelo y operación en aula) está en preparación. Colaboración o demo: hola@raul-alvarez.es.',
+      cta: 'El caso largo (métricas propias, evaluación del modelo y operación en aula) está en preparación. Colaboración o demo: me@raul-alvarez.es.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
         {
@@ -250,7 +250,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         { label: 'Smartgrade', href: 'https://www.smartgrade.com' },
         { label: 'Aircury', href: 'https://www.aircury.com' },
       ],
-      cta: 'A long-form case study (our own metrics, model evaluation, and classroom operations) is in preparation. Partnerships or a walkthrough: hola@raul-alvarez.es.',
+      cta: 'A long-form case study (our own metrics, model evaluation, and classroom operations) is in preparation. Partnerships or a walkthrough: me@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
         {
@@ -443,7 +443,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
           href: 'https://play.google.com/store/apps/details?id=com.raulalvarez.munfordapp',
         },
       ],
-      cta: 'Un caso retro con aprendizajes de publicación y mantenimiento llegará aquí. Curiosidad técnica: hola@raul-alvarez.es.',
+      cta: 'Un caso retro con aprendizajes de publicación y mantenimiento llegará aquí. Curiosidad técnica: me@raul-alvarez.es.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
         { q: '¿Sigue disponible en Play Store?', a: 'Sí; el artículo largo cubrirá stack, decisiones y métricas si aplica.' },
@@ -461,7 +461,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
           href: 'https://play.google.com/store/apps/details?id=com.raulalvarez.munfordapp',
         },
       ],
-      cta: 'A retro case study on shipping and maintenance is planned. Questions: hola@raul-alvarez.es.',
+      cta: 'A retro case study on shipping and maintenance is planned. Questions: me@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
         { q: 'Is it still on the Play Store?', a: 'Yes; the long article will cover stack and metrics where relevant.' },
@@ -476,7 +476,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         'Desarrollo y evolución del **sitio institucional** de la feria: agenda, noticias y contenidos para público general. Prioricé **rendimiento**, claridad de información y un front mantenible junto al stack **PHP** del proyecto.',
       tech: ['PHP', 'Frontend', 'Contenidos', 'Web pública'],
       links: [{ label: 'Sitio de la feria', href: 'https://ferialibrogranada.es' }],
-      cta: 'Este resumen sustituye métricas internas por un enfoque de portfolio. Para colaboraciones similares: hola@raul-alvarez.es.',
+      cta: 'Este resumen sustituye métricas internas por un enfoque de portfolio. Para colaboraciones similares: me@raul-alvarez.es.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
         { q: '¿Qué alcance cubría?', a: 'Implementación web orientada a difusión del evento y soporte a contenidos editoriales.' },
@@ -489,7 +489,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         'Delivery and iteration on the fair’s **public website**: schedule, news, and editorial content for a broad audience. Focus on **performance**, clear IA, and a maintainable **PHP**-based front.',
       tech: ['PHP', 'Frontend', 'Content', 'Public web'],
       links: [{ label: 'Fair website', href: 'https://ferialibrogranada.es' }],
-      cta: 'Portfolio-safe summary without undisclosed metrics. Similar work: hola@raul-alvarez.es.',
+      cta: 'Portfolio-safe summary without undisclosed metrics. Similar work: me@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
         { q: 'What was in scope?', a: 'Web delivery supporting event communication and editorial publishing.' },
@@ -504,7 +504,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         'Sitio **corporativo** para mediación de seguros: mensaje claro de servicios, confianza y contacto. Trabajo de **maquetación**, estructura de contenidos y despliegue estable del proyecto web.',
       tech: ['Web', 'Corporate', 'Contenidos'],
       links: [{ label: 'CGV Seguros', href: 'https://cgvseguros.com' }],
-      cta: 'Notas ampliadas bajo petición (arquitectura de información, accesibilidad). hola@raul-alvarez.es.',
+      cta: 'Notas ampliadas bajo petición (arquitectura de información, accesibilidad). me@raul-alvarez.es.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
         { q: '¿Tipo de proyecto?', a: 'Web orientada a presencia comercial y captación de consultas, no producto asegurador propio.' },
@@ -517,7 +517,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         '**Corporate** brokerage site: clear services narrative, trust signals, and contact paths. **Layout**, content structure, and stable delivery for the public web.',
       tech: ['Web', 'Corporate', 'Content'],
       links: [{ label: 'CGV Seguros', href: 'https://cgvseguros.com' }],
-      cta: 'Extended notes on IA and accessibility available on request. hola@raul-alvarez.es.',
+      cta: 'Extended notes on IA and accessibility available on request. me@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
         { q: 'What kind of build?', a: 'Marketing-oriented corporate web for an insurance mediation business.' },
@@ -532,7 +532,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         'Web para **editorial**: catálogo, noticias y tono de marca alineado con lectores. Equilibrio entre **identidad visual** legible y rendimiento en dispositivos móviles.',
       tech: ['Web', 'Editorial', 'UX lectura'],
       links: [{ label: 'Esdrújula Ediciones', href: 'https://esdrujula.es' }],
-      cta: 'Si buscas un perfil técnico para publishing digital, escribe a hola@raul-alvarez.es.',
+      cta: 'Si buscas un perfil técnico para publishing digital, escribe a me@raul-alvarez.es.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
         { q: '¿Incluye tienda online?', a: 'Este caso resume el sitio editorial público; comercio electrónico detallado no forma parte de este stub.' },
@@ -545,7 +545,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         'Publisher **website**: catalog, news, and brand tone for readers. Balance of **visual identity** and mobile-friendly performance.',
       tech: ['Web', 'Publishing', 'Reading UX'],
       links: [{ label: 'Esdrújula Ediciones', href: 'https://esdrujula.es' }],
-      cta: 'For digital publishing engineering roles, hola@raul-alvarez.es.',
+      cta: 'For digital publishing engineering roles, me@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
         { q: 'Was e-commerce in scope?', a: 'This stub covers the public editorial site; deeper commerce scope isn’t claimed here.' },
@@ -560,7 +560,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         'Plataforma de **venta de entradas**: descubrimiento de eventos, flujo de compra y operación web. Enfoque en **fiabilidad** del recorrido de usuario y mantenimiento del front.',
       tech: ['E-commerce', 'Ticketing', 'Web'],
       links: [{ label: 'EntradasyTickets', href: 'https://entradasytickets.com' }],
-      cta: 'Sin cifras confidenciales; el interés comercial o técnico se ve en conversación. hola@raul-alvarez.es.',
+      cta: 'Sin cifras confidenciales; el interés comercial o técnico se ve en conversación. me@raul-alvarez.es.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
         { q: '¿Pasarela de pago?', a: 'Este resumen no detalla proveedores; el caso largo puede hacerlo con permiso.' },
@@ -573,7 +573,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         '**Ticketing** platform: event discovery, purchase flow, and dependable web operations. Emphasis on **reliable** UX and sustainable front-end delivery.',
       tech: ['E-commerce', 'Ticketing', 'Web'],
       links: [{ label: 'EntradasyTickets', href: 'https://entradasytickets.com' }],
-      cta: 'No undisclosed business metrics here. hola@raul-alvarez.es.',
+      cta: 'No undisclosed business metrics here. me@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
         { q: 'Payment providers?', a: 'Not specified in this stub; a deeper case needs stakeholder approval.' },
@@ -588,7 +588,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         '**Proyecto académico** (2º premio, Desafío Tecnológico ETSIIT): prototipo orientado al **control de asistencia** en eventos, combinando hardware y lógica de sistema. Base de mi trayectoria en **ingeniería** antes del salto a producto web a escala.',
       tech: ['Hardware', 'Prototipo', 'Eventos', 'UGR'],
       links: [{ label: 'ETSIIT — Universidad de Granada', href: 'https://etsiit.ugr.es' }],
-      cta: 'Documentación del reto académico enlazada desde la escuela; preguntas técnicas retrospectivas: hola@raul-alvarez.es.',
+      cta: 'Documentación del reto académico enlazada desde la escuela; preguntas técnicas retrospectivas: me@raul-alvarez.es.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
         { q: '¿Hay demo pública?', a: 'Fue un reto académico; material público depende de archivo universitario.' },
@@ -601,7 +601,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         '**Academic** project (2nd prize, ETSIIT technology challenge): prototype for **event attendance** tracking, mixing hardware concerns with system logic. Early **engineering** foundation before large-scale web product work.',
       tech: ['Hardware', 'Prototype', 'Events', 'UGR'],
       links: [{ label: 'ETSIIT — University of Granada', href: 'https://etsiit.ugr.es' }],
-      cta: 'Challenge documentation lives with the school; retrospective questions: hola@raul-alvarez.es.',
+      cta: 'Challenge documentation lives with the school; retrospective questions: me@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
         { q: 'Is there a public demo?', a: 'It was a student challenge; public artifacts depend on university archives.' },
@@ -616,7 +616,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         '**Omega Protocol** es un juego **incremental / de estrategia** con atmósfera de **horror cósmico**, disponible en **iOS y Android** (referencia de versión pública **v1.1.0** según el sitio del proyecto). Combina progresión a largo plazo, decisiones tácticas y narrativa sombría.',
       tech: ['Incremental', 'Strategy', 'Mobile', 'Cosmic horror'],
       links: [{ label: 'Sitio del juego', href: 'https://omega-protocol.net' }],
-      cta: 'Información factual tomada del sitio público; no reclamo métricas de negocio. Contacto: hola@raul-alvarez.es.',
+      cta: 'Información factual tomada del sitio público; no reclamo métricas de negocio. Contacto: me@raul-alvarez.es.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
         { q: '¿Es free-to-play?', a: 'Detalles de monetización y tiendas en el sitio oficial del juego.' },
@@ -629,7 +629,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         '**Omega Protocol** is an **incremental strategy** game with **cosmic-horror** tone, shipped on **iOS and Android** (public **v1.1.0** reference per the project site). Long-horizon progression, tactical choices, and a dark narrative frame.',
       tech: ['Incremental', 'Strategy', 'Mobile', 'Cosmic horror'],
       links: [{ label: 'Game website', href: 'https://omega-protocol.net' }],
-      cta: 'Facts sourced from the public site; no undisclosed business metrics. hola@raul-alvarez.es.',
+      cta: 'Facts sourced from the public site; no undisclosed business metrics. me@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
         { q: 'Monetization model?', a: 'See the official game site and store listings for authoritative detail.' },
@@ -644,7 +644,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         '**DungeonKeeper** es un kit digital para **partidas de rol en mesa**: aplicación **React Native / Expo** para jugadores, **API Node (Express)** con **MongoDB**, panel **Next.js** para administración, asistentes de **IA y voz**, y **reglas en PDF** integradas en el flujo. Pensado como producto cohesionado en un **monorepo**, no como scripts sueltos.',
       tech: ['React Native', 'Expo', 'Node.js', 'Express', 'MongoDB', 'Next.js', 'IA / voz'],
       links: [],
-      cta: 'No enlazo repositorio público (enlace previo no disponible). Resumen basado en README interno; ampliación bajo confidencialidad si interesa. hola@raul-alvarez.es.',
+      cta: 'No enlazo repositorio público (enlace previo no disponible). Resumen basado en README interno; ampliación bajo confidencialidad si interesa. me@raul-alvarez.es.',
       faqHeading: 'Preguntas frecuentes',
       faq: [
         { q: '¿Hay demo o capturas públicas?', a: 'Este stub es portfolio-safe; material visual se comparte con acuerdo explícito.' },
@@ -657,7 +657,7 @@ export const ARTICLE_STUB_BODIES: Record<string, { es: StubLangBlock; en: StubLa
         '**DungeonKeeper** is a digital kit for **tabletop RPG sessions**: **React Native / Expo** player app, **Node (Express)** API on **MongoDB**, **Next.js** admin, **AI and voice** helpers, and **PDF rules** wired into the flow. Built as one coherent **monorepo** rather than ad-hoc scripts.',
       tech: ['React Native', 'Expo', 'Node.js', 'Express', 'MongoDB', 'Next.js', 'AI / voice'],
       links: [],
-      cta: 'No public GitHub link (prior URL was unavailable). Summary reflects a README-style brief; NDA-friendly deep dives on request. hola@raul-alvarez.es.',
+      cta: 'No public GitHub link (prior URL was unavailable). Summary reflects a README-style brief; NDA-friendly deep dives on request. me@raul-alvarez.es.',
       faqHeading: 'FAQ',
       faq: [
         { q: 'Public demo or screenshots?', a: 'This stub stays portfolio-safe; visuals only with explicit agreement.' },

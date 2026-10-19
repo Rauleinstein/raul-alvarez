@@ -70,7 +70,7 @@ export const aboutContent = {
       },
       {
         q: '¿Cómo te contacto?',
-        a: 'Email hola@raul-alvarez.es o LinkedIn (enlace abajo).',
+        a: 'Email me@raul-alvarez.es o LinkedIn (enlace abajo).',
       },
       {
         q: '¿Trabajas remoto?',
@@ -78,7 +78,7 @@ export const aboutContent = {
       },
     ],
     connectHeading: 'Conectar',
-    email: 'hola@raul-alvarez.es',
+    email: 'me@raul-alvarez.es',
   },
   en: {
     slug: 'about',
@@ -148,7 +148,7 @@ export const aboutContent = {
       },
       {
         q: 'How can I contact you?',
-        a: 'Email hola@raul-alvarez.es or LinkedIn (link below).',
+        a: 'Email me@raul-alvarez.es or LinkedIn (link below).',
       },
       {
         q: 'Do you work remotely?',
@@ -156,6 +156,6 @@ export const aboutContent = {
       },
     ],
     connectHeading: 'Connect',
-    email: 'hola@raul-alvarez.es',
+    email: 'me@raul-alvarez.es',
   },
 } as const

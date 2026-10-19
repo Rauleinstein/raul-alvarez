@@ -106,7 +106,7 @@ Object.defineProperty(window, '__raulSite', {
     stack: 'React 19 + TypeScript + Vite + Tailwind v4 + Motion',
     render: 'Pre-rendered HTML + critical CSS inlined + client hydration',
     perf: () => { const n = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming; console.table({ TTFB: `${Math.round(n.responseStart - n.requestStart)}ms`, DOMContentLoaded: `${Math.round(n.domContentLoadedEventEnd - n.startTime)}ms`, Load: `${Math.round(n.loadEventEnd - n.startTime)}ms` }); },
-    hire_me: 'hola@raul-alvarez.es',
+    hire_me: 'me@raul-alvarez.es',
     linkedin: 'linkedin.com/in/raulalvarezhinojosa',
     github: 'github.com/Rauleinstein',
   }),
