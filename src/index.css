@@ -592,6 +592,17 @@ button, a, [role="button"], summary { cursor: pointer; }
   text-align: center;
 }
 
+/* Project badge stays inside the heading row on narrow cards. */
+.project-card-badge {
+  min-width: 0;
+  max-width: 55%;
+  flex-shrink: 1;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: right;
+  line-height: 1.25;
+}
+
 /* Typewriter cursor blink animation */
 @keyframes blink {
   0%, 100% { opacity: 1; }

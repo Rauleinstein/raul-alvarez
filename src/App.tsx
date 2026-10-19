@@ -2101,8 +2101,8 @@ function App() {
                         )}
                       </div>
                       <div className="flex flex-1 min-w-0 items-start justify-between gap-2">
-                        <h3 className="font-display text-lg font-bold text-foreground">{project.title}</h3>
-                        <span className="badge px-2 py-0.5 bg-primary/10 text-primary shrink-0">{project.badge}</span>
+                        <h3 className="font-display text-lg font-bold text-foreground min-w-0">{project.title}</h3>
+                        <span className="badge project-card-badge px-2 py-0.5 bg-primary/10 text-primary">{project.badge}</span>
                       </div>
                     </div>
                     <p className="text-sm text-muted-foreground mb-4 flex-1">{parseBold(project.desc)}</p>
