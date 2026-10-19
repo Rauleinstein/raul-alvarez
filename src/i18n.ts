@@ -80,6 +80,14 @@ export const translations = {
       viewPrototype: 'Ver enlace',
       items: [
         {
+          title: 'Enrivo',
+          badge: 'IA · Mailchimp',
+          badgeBuilding: '',
+          desc: 'Investiga fuentes públicas para sugerir empresa, cargo, sector y ubicación. Revisa cada sugerencia antes de sincronizarla con Mailchimp.',
+          tech: ['IA', 'Mailchimp', 'Enriquecimiento', 'Revisión humana'],
+          link: 'enrivo.raul-alvarez.es',
+        },
+        {
           title: 'CityHunts',
           badge: '2025',
           badgeBuilding: '',
@@ -502,6 +510,14 @@ export const translations = {
       viewCode: 'View code',
       viewPrototype: 'Open link',
       items: [
+        {
+          title: 'Enrivo',
+          badge: 'AI · Mailchimp',
+          badgeBuilding: '',
+          desc: 'Researches public sources to suggest missing company, role, industry and location data. Review every suggestion before syncing it to Mailchimp.',
+          tech: ['AI', 'Mailchimp', 'Contact enrichment', 'Human review'],
+          link: 'enrivo.raul-alvarez.es',
+        },
         {
           title: 'CityHunts',
           badge: '2025',
