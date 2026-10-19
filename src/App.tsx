@@ -2060,6 +2060,7 @@ function App() {
               tech: readonly string[]
               link: string
               logoSrc?: string
+              logoSrcDark?: string
               caseStudyUrl?: string
               caseStudyLabel?: string
             }[]).map((project, i) => {
@@ -2073,15 +2074,28 @@ function App() {
                     <div className="flex items-start gap-3 mb-3">
                       <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center shrink-0 border border-border overflow-hidden">
                         {project.logoSrc ? (
-                          <img
-                            src={project.logoSrc}
-                            alt=""
-                            className="w-full h-full object-contain p-1.5"
-                            loading="lazy"
-                            width={40}
-                            height={40}
-                            decoding="async"
-                          />
+                          <>
+                            <img
+                              src={project.logoSrc}
+                              alt=""
+                              className={`w-full h-full object-contain p-1.5${project.logoSrcDark ? ' project-card-logo-light' : ''}`}
+                              loading="lazy"
+                              width={40}
+                              height={40}
+                              decoding="async"
+                            />
+                            {project.logoSrcDark && (
+                              <img
+                                src={project.logoSrcDark}
+                                alt=""
+                                className="w-full h-full object-contain p-1.5 project-card-logo-dark"
+                                loading="lazy"
+                                width={40}
+                                height={40}
+                                decoding="async"
+                              />
+                            )}
+                          </>
                         ) : (
                           <Package className="w-5 h-5 text-muted-foreground" aria-hidden />
                         )}

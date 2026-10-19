@@ -360,6 +360,19 @@ button, a, [role="button"], summary { cursor: pointer; }
   }
 }
 
+/* Project-card logos with explicit theme variants (the theme toggle uses .dark, not Tailwind's media variant). */
+.project-card-logo-dark {
+  display: none;
+}
+
+.dark .project-card-logo-light {
+  display: none;
+}
+
+.dark .project-card-logo-dark {
+  display: block;
+}
+
 /* Custom scrollbar - dark mode aware */
 .custom-scrollbar {
   /* Firefox & modern browsers */
